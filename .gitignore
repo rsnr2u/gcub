@@ -1,0 +1,11 @@
+api/vendor/
+api/writable/*
+!api/writable/.gitkeep
+api/.env
+api/env
+gcub/node_modules/
+gcub/dist/
+gcub/.env
+.vscode/
+.idea/
+*.log

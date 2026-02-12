@@ -1,0 +1,52 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.slider-image {
+    transition: opacity 1s ease-in-out;
+}
+
+/* Owl Carousel Navigation Styles */
+.owl-prev,
+.owl-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: #fff !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    color: #E61111 !important;
+    font-size: 16px !important;
+    transition: all 0.3s ease !important;
+    z-index: 10;
+}
+
+.owl-prev:hover,
+.owl-next:hover {
+    background: #E61111 !important;
+    color: #fff !important;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.owl-prev {
+    left: -45px;
+}
+
+.owl-next {
+    right: -45px;
+}
+
+.owl-carousel .owl-stage-outer {
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.owl-carousel .item {
+    border-radius: 12px;
+    overflow: hidden;
+}
