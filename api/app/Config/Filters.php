@@ -111,7 +111,9 @@ class Filters extends BaseFilters
     public array $filters = [
         'apiAuth' => [
             'before' => [
-                'api/admin/*',
+                'api/admin/stats',
+                'api/admin/profile/*',
+                'api/admin/settings/update',
                 'api/users/*',
                 'api/roles/*',
                 'api/permissions/*',
@@ -119,11 +121,11 @@ class Filters extends BaseFilters
                 'api/banking-services/create',
                 'api/banking-services/update/*',
                 'api/banking-services/delete/*',
-                'api/products/create',
-                'api/products/update/*',
-                'api/products/delete/*',
                 // Add more protected routes as needed
             ]
         ]
     ];
+
+
+
 }
