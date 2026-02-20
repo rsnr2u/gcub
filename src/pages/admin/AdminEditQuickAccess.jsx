@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditQuickAccess = () => {
     const { id } = useParams();
@@ -78,7 +76,7 @@ const AdminEditQuickAccess = () => {
     const fetchItem = async () => {
         setLoading(true);
         try {
-            const res = await apiFetch(`/quick-access/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/quick-access/show/${id}`);
             const data = await res.json();
             setFormData({
                 title: data.title || '',
@@ -99,8 +97,8 @@ const AdminEditQuickAccess = () => {
 
         try {
             const url = isEdit
-                ? `/quick-access/update/${id}`
-                : `${BASE_URL}/api/quick-access/create`;
+                ? `http://localhost:8080/api/quick-access/update/${id}`
+                : 'http://localhost:8080/api/quick-access/create';
 
             const res = await fetch(url, {
                 method: 'POST',

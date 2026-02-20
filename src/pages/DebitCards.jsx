@@ -46,7 +46,7 @@ const DebitCards = () => {
                             </div>
                             <div className="bg-white/10 p-3 rounded">
                                 <p className="text-xs text-white uppercase opacity-70">Call</p>
-                                <p className="font-mono font-bold">1800 425 8873</p>
+                                <p className="font-mono font-bold">1800-425-8873</p>
                             </div>
                         </div>
 

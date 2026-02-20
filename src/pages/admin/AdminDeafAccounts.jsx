@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch } from '../../utils/api';
-
 
 const AdminDeafAccounts = () => {
     const [accounts, setAccounts] = useState([]);
@@ -14,7 +12,7 @@ const AdminDeafAccounts = () => {
 
     const fetchAccounts = async () => {
         try {
-            const res = await apiFetch('/deaf-accounts');
+            const res = await fetch('http://localhost:8080/api/deaf-accounts');
             const data = await res.json();
             setAccounts(Array.isArray(data) ? data : []);
             setLoading(false);
@@ -27,7 +25,7 @@ const AdminDeafAccounts = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this account list?')) return;
         try {
-            const response = await apiFetch(`/deaf-accounts/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`http://localhost:8080/api/deaf-accounts/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Deleted successfully.' });
                 fetchAccounts();

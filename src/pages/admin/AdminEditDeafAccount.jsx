@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminEditDeafAccount = () => {
     const navigate = useNavigate();
@@ -28,7 +26,7 @@ const AdminEditDeafAccount = () => {
 
     const fetchBranches = async () => {
         try {
-            const res = await apiFetch('/branches');
+            const res = await fetch('http://localhost:8080/api/branches');
             const data = await res.json();
             setBranches(Array.isArray(data) ? data : []);
         } catch (err) { console.error('Error fetching branches:', err); }
@@ -36,7 +34,7 @@ const AdminEditDeafAccount = () => {
 
     const fetchAccountDetails = async () => {
         try {
-            const res = await apiFetch(`/deaf-accounts/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/deaf-accounts/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -58,8 +56,8 @@ const AdminEditDeafAccount = () => {
         setMessage({ text: '', type: '' });
 
         const url = isEdit
-            ? `/deaf-accounts/update/${id}`
-            : `${BASE_URL}/api/deaf-accounts/create`;
+            ? `http://localhost:8080/api/deaf-accounts/update/${id}`
+            : 'http://localhost:8080/api/deaf-accounts/create';
 
         try {
             const res = await fetch(url, {

@@ -1,4 +1,41 @@
+import { useState, useEffect } from 'react';
+
 const Downloads = () => {
+    const [downloads, setDownloads] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const categories = [
+        { title: 'Account Opening Forms', icon: 'fas fa-user-plus', color: 'border-[#E61111]' },
+        { title: 'Loan Applications', icon: 'fas fa-hand-holding-usd', color: 'border-yellow-400' },
+        { title: 'Services & Requests', icon: 'fas fa-cogs', color: 'border-gray-400' },
+        { title: 'Other', icon: 'fas fa-folder-open', color: 'border-blue-400' }
+    ];
+
+    useEffect(() => {
+        fetchDownloads();
+    }, []);
+
+    const fetchDownloads = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/downloads');
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                setDownloads(data);
+            }
+        } catch (error) {
+            console.error('Error fetching downloads:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const groupedDownloads = downloads.reduce((acc, item) => {
+        const cat = item.category || 'Other';
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(item);
+        return acc;
+    }, {});
+
     return (
         <div className="downloads-page">
             {/* Hero Section */}
@@ -11,30 +48,25 @@ const Downloads = () => {
             </section>
 
             {/* Downloads Grid */}
-            <section className="py-16 bg-gray-50">
+            <section className="py-16 bg-gray-50 min-h-[400px]">
                 <div className="container mx-auto px-4 md:px-6">
-
-                    {/* Category: Account Opening */}
-                    <DownloadCategory title="Account Opening Forms" icon="fas fa-user-plus" borderColor="border-[#E61111]" items={[
-                        { title: 'Savings Account Form', sub: 'For Individual & Joint Accounts' },
-                        { title: 'Current Account Form', sub: 'For Business & Proprietorship' },
-                        { title: 'Fixed Deposit Form', sub: 'Term Deposit Application' }
-                    ]} />
-
-                    {/* Category: Loans */}
-                    <DownloadCategory title="Loan Applications" icon="fas fa-hand-holding-usd" borderColor="border-yellow-400" items={[
-                        { title: 'Gold Loan Application', sub: 'Quick processing form' },
-                        { title: 'Housing Loan App', sub: 'For Home Purchase/Construction' },
-                        { title: 'Personal Loan App', sub: 'Salary/Business based' }
-                    ]} />
-
-                    {/* Category: Services & Others */}
-                    <DownloadCategory title="Services & Requests" icon="fas fa-cogs" borderColor="border-gray-400" items={[
-                        { title: 'KYC Update Form', sub: 'Customer Identification Update' },
-                        { title: 'RTGS/NEFT Form', sub: 'Fund Transfer Application' },
-                        { title: 'Nomination Form', sub: 'DA-1 Nomination Registration' }
-                    ]} />
-
+                    {loading ? (
+                        <div className="text-center py-20 text-gray-500">Loading document repository...</div>
+                    ) : (
+                        categories.map((cat) => {
+                            const items = groupedDownloads[cat.title] || [];
+                            if (items.length === 0) return null;
+                            return (
+                                <DownloadCategory
+                                    key={cat.title}
+                                    title={cat.title}
+                                    icon={cat.icon}
+                                    borderColor={cat.color}
+                                    items={items}
+                                />
+                            );
+                        })
+                    )}
                 </div>
             </section>
         </div>
@@ -47,13 +79,18 @@ const DownloadCategory = ({ title, icon, borderColor, items }) => (
             <i className={`${icon} text-gray-400 text-lg`}></i> {title}
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
-            {items.map((item, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border border-gray-100 flex items-start gap-4">
-                    <div className="text-red-500 text-3xl"><i className="fas fa-file-pdf"></i></div>
-                    <div className="flex-1">
+            {items.map((item) => (
+                <div key={item.id} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border border-gray-100 flex items-start gap-4 h-full">
+                    <div className="text-red-500 text-3xl flex-shrink-0"><i className="fas fa-file-pdf"></i></div>
+                    <div className="flex-1 flex flex-col">
                         <h4 className="font-bold text-gray-800 mb-1">{item.title}</h4>
-                        <p className="text-xs text-gray-500 mb-3">{item.sub}</p>
-                        <a href="#" className="inline-flex items-center text-sm font-medium text-[#003399] hover:underline">
+                        <p className="text-xs text-gray-500 mb-3 flex-1">{item.description}</p>
+                        <a
+                            href={item.file_path ? `${(import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '')}/${item.file_path.replace(/^\//, '')}` : '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center text-sm font-medium text-[#003399] hover:underline"
+                        >
                             Download <i className="fas fa-download ml-2 text-xs"></i>
                         </a>
                     </div>

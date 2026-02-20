@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const Header = () => {
     const [activeMenu, setActiveMenu] = useState(null);
@@ -41,7 +39,7 @@ const Header = () => {
     useEffect(() => {
         const fetchMenuData = async () => {
             try {
-                const productsRes = await apiFetch('/products');
+                const productsRes = await fetch('http://localhost:8080/api/products');
                 const products = await productsRes.json();
 
                 let depositsData = [];
@@ -81,13 +79,13 @@ const Header = () => {
                     depositsData = products.filter(p => p && p.category === 'Deposits' && p.status === 'active').map(p => ({
                         name: p.name,
                         path: `/product/${p.slug}`,
-                        image: p.icon_type === 'img' ? `assets/images/cards/${p.icon_value}` : 'assets/images/gcublogo.png'
+                        image: p.icon_type === 'img' ? `/assets/images/cards/${p.icon_value}` : '/assets/images/gcublogo.png'
                     }));
 
                     loansData = products.filter(p => p && p.category === 'Loans' && p.status === 'active').map(p => ({
                         name: p.name,
                         path: `/product/${p.slug}`,
-                        image: p.icon_type === 'img' ? `assets/images/cards/${p.icon_value}` : 'assets/images/gcublogo.png'
+                        image: p.icon_type === 'img' ? `/assets/images/cards/${p.icon_value}` : '/assets/images/gcublogo.png'
                     }));
 
                     // Combine dynamic services from products table with static ones
@@ -122,7 +120,7 @@ const Header = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const response = await apiFetch('/admin/settings');
+                const response = await fetch('http://localhost:8080/api/admin/settings');
                 const data = await response.json();
                 if (data) {
                     setSettings(prevSettings => ({
@@ -143,7 +141,7 @@ const Header = () => {
             { name: 'About Us', path: '/about' },
             { name: "Chairman's Desk", path: '/chairman-desk' },
             { name: 'Board of Directors', path: '/board-directors' },
-            { name: 'Management', path: '/management' },
+            { name: 'Board of Management', path: '/management' },
             { name: 'Annual Reports', path: '/financial-reports' },
             { name: 'Highlights', path: '/highlights' },
             { name: 'Awards & Recognitions', path: '/awards-recognitions' },
@@ -179,7 +177,7 @@ const Header = () => {
                     <div className="flex items-center gap-3 md:gap-4">
                         <Link to="/">
                             <img
-                                src={settings.site_logo ? (settings.site_logo.startsWith('/') ? `${BASE_URL}${ settings.site_logo }` : settings.site_logo) : "assets/images/gcublogo.png"}
+                                src={settings.site_logo ? (settings.site_logo.startsWith('/') ? `http://localhost:8080${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png"}
                                 alt="GCUB Logo"
                                 className="h-8 md:h-12 object-contain"
                             />
@@ -310,6 +308,7 @@ const Header = () => {
                         </li>
 
                         <li><Link to="/interest-rates" className="hover:text-yellow-300 transition-colors duration-200">Interest Rates</Link></li>
+                        <li><Link to="/gallery" className="hover:text-yellow-300 transition-colors duration-200">Gallery</Link></li>
                         <li><Link to="/contact" className="hover:text-yellow-300 transition-colors duration-200">Contact</Link></li>
                         <li><Link to="/downloads" className="hover:text-yellow-300 transition-colors duration-200">Downloads</Link></li>
                         <li><Link to="/branch-locator" className="hover:text-yellow-300 transition-colors duration-200">Branch Locator</Link></li>
@@ -392,6 +391,7 @@ const Header = () => {
                                 </li>
 
                                 <li><Link to="/interest-rates" className="block py-1 text-white hover:text-yellow-300 text-lg border-b border-blue-700/50">Interest Rates</Link></li>
+                                <li><Link to="/gallery" className="block py-1 text-white hover:text-yellow-300 text-lg border-b border-blue-700/50">Gallery</Link></li>
                                 <li><Link to="/downloads" className="block py-1 text-white hover:text-yellow-300 text-lg border-b border-blue-700/50">Downloads</Link></li>
                                 <li><Link to="/contact" className="block py-1 text-white hover:text-yellow-300 text-lg border-b border-blue-700/50">Contact Us</Link></li>
                             </ul>

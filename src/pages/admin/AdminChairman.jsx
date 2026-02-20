@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminChairman = ({ isEmbedded = false }) => {
     const [loading, setLoading] = useState(true);
@@ -26,7 +24,7 @@ const AdminChairman = ({ isEmbedded = false }) => {
 
     const fetchProfile = async () => {
         try {
-            const res = await apiFetch('/chairman');
+            const res = await fetch('http://localhost:8080/api/chairman');
             const data = await res.json();
 
             // Logic: If data exists, take the first one (most recent usually due to sorting, or just the single one expected)
@@ -47,7 +45,7 @@ const AdminChairman = ({ isEmbedded = false }) => {
                     display_order: profile.display_order,
                     image: null
                 });
-                setPreviewImage(profile.image_path ? `${BASE_URL}/${profile.image_path}` : null);
+                setPreviewImage(profile.image_path ? `http://localhost:8080/${profile.image_path}` : null);
             }
             setLoading(false);
         } catch (error) {
@@ -77,8 +75,8 @@ const AdminChairman = ({ isEmbedded = false }) => {
         });
 
         const url = editingId
-            ? `/chairman/update/${editingId}`
-            : `${BASE_URL}/api/chairman/create`;
+            ? `http://localhost:8080/api/chairman/update/${editingId}`
+            : 'http://localhost:8080/api/chairman/create';
 
         try {
             const res = await fetch(url, {

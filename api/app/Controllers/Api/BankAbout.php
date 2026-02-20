@@ -28,7 +28,7 @@ class BankAbout extends ResourceController
 
         $data = [
             'metadata' => $metadata,
-            'timeline' => $timelineModel->orderBy('sort_order', 'ASC')->findAll(),
+            'timeline' => $timelineModel->orderBy('sort_order', 'ASC')->orderBy('year', 'ASC')->findAll(),
             'core_values' => $valuesModel->orderBy('sort_order', 'ASC')->findAll(),
             'network' => $networkModel->orderBy('sort_order', 'ASC')->findAll(),
         ];
@@ -63,22 +63,49 @@ class BankAbout extends ResourceController
     public function addTimeline()
     {
         $model = new BankTimelineModel();
-        $data = [
-            'year' => $this->request->getVar('year'),
-            'title' => $this->request->getVar('title'),
-            'description' => $this->request->getVar('description'),
-            'sort_order' => $this->request->getVar('sort_order') ?? 0
-        ];
-        $model->insert($data);
-        return $this->respondCreated(['status' => 'success', 'id' => $model->insertID()]);
+
+        $data = $this->request->getJSON(true);
+        if (!$data) {
+            $data = [
+                'year' => $this->request->getVar('year'),
+                'title' => $this->request->getVar('title'),
+                'description' => $this->request->getVar('description'),
+                'sort_order' => $this->request->getVar('sort_order') ?? 0
+            ];
+        }
+
+        if ($model->insert($data)) {
+            return $this->respondCreated(['status' => 'success', 'id' => $model->insertID()]);
+        }
+        return $this->fail($model->errors());
     }
 
     public function updateTimeline($id = null)
     {
         $model = new BankTimelineModel();
-        $data = $this->request->getRawInput();
-        $model->update($id, $data);
-        return $this->respond(['status' => 'success']);
+
+        $data = $this->request->getJSON(true);
+        if (!$data) {
+            $data = $this->request->getRawInput();
+            if (empty($data)) {
+                $data = [
+                    'year' => $this->request->getVar('year'),
+                    'title' => $this->request->getVar('title'),
+                    'description' => $this->request->getVar('description'),
+                    'sort_order' => $this->request->getVar('sort_order')
+                ];
+            }
+        }
+
+        // Clean up empty fields if they come from getVar fallback
+        $data = array_filter($data, function ($value) {
+            return $value !== null;
+        });
+
+        if ($model->update($id, $data)) {
+            return $this->respond(['status' => 'success']);
+        }
+        return $this->fail($model->errors());
     }
 
     public function deleteTimeline($id = null)
@@ -92,20 +119,43 @@ class BankAbout extends ResourceController
     public function addValue()
     {
         $model = new BankCoreValuesModel();
-        $data = [
-            'title' => $this->request->getVar('title'),
-            'sort_order' => $this->request->getVar('sort_order') ?? 0
-        ];
-        $model->insert($data);
-        return $this->respondCreated(['status' => 'success', 'id' => $model->insertID()]);
+
+        $data = $this->request->getJSON(true);
+        if (!$data) {
+            $data = [
+                'title' => $this->request->getVar('title'),
+                'sort_order' => $this->request->getVar('sort_order') ?? 0
+            ];
+        }
+
+        if ($model->insert($data)) {
+            return $this->respondCreated(['status' => 'success', 'id' => $model->insertID()]);
+        }
+        return $this->fail($model->errors());
     }
 
     public function updateValue($id = null)
     {
         $model = new BankCoreValuesModel();
-        $data = $this->request->getRawInput();
-        $model->update($id, $data);
-        return $this->respond(['status' => 'success']);
+
+        $data = $this->request->getJSON(true);
+        if (!$data) {
+            $data = $this->request->getRawInput();
+            if (empty($data)) {
+                $data = [
+                    'title' => $this->request->getVar('title'),
+                    'sort_order' => $this->request->getVar('sort_order')
+                ];
+            }
+        }
+
+        $data = array_filter($data, function ($v) {
+            return $v !== null; });
+
+        if ($model->update($id, $data)) {
+            return $this->respond(['status' => 'success']);
+        }
+        return $this->fail($model->errors());
     }
 
     public function deleteValue($id = null)
@@ -119,21 +169,45 @@ class BankAbout extends ResourceController
     public function addNetwork()
     {
         $model = new BankNetworkModel();
-        $data = [
-            'region_name' => $this->request->getVar('region_name'),
-            'branch_count' => $this->request->getVar('branch_count'),
-            'sort_order' => $this->request->getVar('sort_order') ?? 0
-        ];
-        $model->insert($data);
-        return $this->respondCreated(['status' => 'success', 'id' => $model->insertID()]);
+
+        $data = $this->request->getJSON(true);
+        if (!$data) {
+            $data = [
+                'region_name' => $this->request->getVar('region_name'),
+                'branch_count' => $this->request->getVar('branch_count'),
+                'sort_order' => $this->request->getVar('sort_order') ?? 0
+            ];
+        }
+
+        if ($model->insert($data)) {
+            return $this->respondCreated(['status' => 'success', 'id' => $model->insertID()]);
+        }
+        return $this->fail($model->errors());
     }
 
     public function updateNetwork($id = null)
     {
         $model = new BankNetworkModel();
-        $data = $this->request->getRawInput();
-        $model->update($id, $data);
-        return $this->respond(['status' => 'success']);
+
+        $data = $this->request->getJSON(true);
+        if (!$data) {
+            $data = $this->request->getRawInput();
+            if (empty($data)) {
+                $data = [
+                    'region_name' => $this->request->getVar('region_name'),
+                    'branch_count' => $this->request->getVar('branch_count'),
+                    'sort_order' => $this->request->getVar('sort_order')
+                ];
+            }
+        }
+
+        $data = array_filter($data, function ($v) {
+            return $v !== null; });
+
+        if ($model->update($id, $data)) {
+            return $this->respond(['status' => 'success']);
+        }
+        return $this->fail($model->errors());
     }
 
     public function deleteNetwork($id = null)

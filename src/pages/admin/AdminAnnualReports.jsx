@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminAnnualReports = () => {
     const [reports, setReports] = useState([]);
@@ -16,8 +14,8 @@ const AdminAnnualReports = () => {
     const fetchData = async () => {
         try {
             const [reportsRes, indicatorsRes] = await Promise.all([
-                apiFetch('/annual-reports'),
-                apiFetch('/financial-indicators')
+                fetch('http://localhost:8080/api/annual-reports'),
+                fetch('http://localhost:8080/api/financial-indicators')
             ]);
             const reportsData = await reportsRes.json();
             const indicatorsData = await indicatorsRes.json();
@@ -34,7 +32,7 @@ const AdminAnnualReports = () => {
     const handleDeleteReport = async (id) => {
         if (!window.confirm('Delete this report?')) return;
         try {
-            const response = await apiFetch(`/annual-reports/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`http://localhost:8080/api/annual-reports/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Report deleted.' });
                 fetchData();
@@ -45,7 +43,7 @@ const AdminAnnualReports = () => {
     const handleDeleteIndicator = async (id) => {
         if (!window.confirm('Delete this indicator?')) return;
         try {
-            const response = await apiFetch(`/financial-indicators/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`http://localhost:8080/api/financial-indicators/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Indicator deleted.' });
                 fetchData();
@@ -102,7 +100,7 @@ const AdminAnnualReports = () => {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <a href={`${BASE_URL}/${report.file_path}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#003399] text-xs font-bold border border-gray-200 px-3 py-1.5 rounded-lg transition hover:bg-blue-50 hover:border-blue-100">
+                                            <a href={`http://localhost:8080/${report.file_path}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#003399] text-xs font-bold border border-gray-200 px-3 py-1.5 rounded-lg transition hover:bg-blue-50 hover:border-blue-100">
                                                 Download PDF <i className="fas fa-download ml-1"></i>
                                             </a>
                                             <Link to={`/admin/annual-reports/edit/${report.id}`} className="text-gray-300 hover:text-[#003399] p-2 transition">

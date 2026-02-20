@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { organizationSchema, createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch } from '../utils/api';
-
 
 const Ombudsman = () => {
     const [ombudsmanList, setOmbudsmanList] = useState([]);
@@ -14,7 +12,7 @@ const Ombudsman = () => {
 
     const fetchOmbudsman = async () => {
         try {
-            const response = await apiFetch('/ombudsman');
+            const response = await fetch('http://localhost:8080/api/ombudsman');
             const data = await response.json();
             setOmbudsmanList(Array.isArray(data) ? data : []);
         } catch (error) {

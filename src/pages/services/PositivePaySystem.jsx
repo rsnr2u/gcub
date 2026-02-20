@@ -89,10 +89,6 @@ const PositivePaySystem = () => {
                                         <i className="fas fa-university text-3xl text-blue-600 mb-4"></i>
                                         <h4 className="font-bold text-slate-800">Any Branch</h4>
                                     </div>
-                                    <div className="p-6 border border-slate-100 rounded-3xl text-center hover:bg-slate-50 transition cursor-default">
-                                        <i className="fas fa-envelope-open-text text-3xl text-blue-600 mb-4"></i>
-                                        <h4 className="font-bold text-slate-800">SMS Banking</h4>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -113,9 +109,9 @@ const PositivePaySystem = () => {
                             <h3 className="text-xl font-bold text-slate-800 mb-6">Need Assistance?</h3>
                             <p className="text-sm text-slate-600 mb-6">If you have any questions about how to use the Positive Pay System, don't hesitate to reach out.</p>
                             <div className="space-y-4">
-                                <a href="tel:18004258873" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-slate-200 group hover:border-blue-900 transition">
+                                <a href="tel:1800-425-8873" className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-slate-200 group hover:border-blue-900 transition">
                                     <i className="fas fa-phone-alt text-blue-600 group-hover:text-blue-900"></i>
-                                    <span className="font-bold text-slate-800">1800 425 8873</span>
+                                    <span className="font-bold text-slate-800">1800-425-8873</span>
                                 </a>
                             </div>
                         </div>

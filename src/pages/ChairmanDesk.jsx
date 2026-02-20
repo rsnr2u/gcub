@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const ChairmanDesk = () => {
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
     const [chairman, setChairman] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchChairman = async () => {
             try {
-                const response = await apiFetch('/chairman');
+                const response = await fetch(`${apiBaseUrl}/api/chairman`);
                 const data = await response.json();
 
                 if (Array.isArray(data) && data.length > 0) {
@@ -69,10 +68,10 @@ const ChairmanDesk = () => {
                                 <div className="bg-white border border-gray-100 shadow-sm overflow-hidden p-2 rounded-lg">
                                     <div className="aspect-[4/5] overflow-hidden bg-gray-50 mb-6">
                                         <img
-                                            src={chairman.image_path ? `${BASE_URL}/${chairman.image_path}` : "assets/images/management/default.png"}
+                                            src={chairman.image_path ? `${apiBaseUrl}/${chairman.image_path}` : "/assets/images/management/default.png"}
                                             alt={chairman.name}
                                             className="w-full h-full object-cover object-top"
-                                            onError={(e) => e.target.src = "assets/images/management/default.png"}
+                                            onError={(e) => e.target.src = "/assets/images/management/default.png"}
                                         />
                                     </div>
                                     <div className="text-center pb-6">

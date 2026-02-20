@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import SchemaOrg, { createFinancialProductSchema, createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch } from '../utils/api';
-
 
 const ProductDetail = () => {
     const { slug } = useParams();
@@ -16,7 +14,7 @@ const ProductDetail = () => {
             setLoading(true);
             try {
                 // Fetch specific product by slug
-                const prodResponse = await apiFetch(`/products/show/${slug}`);
+                const prodResponse = await fetch(`http://localhost:8080/api/products/show/${slug}`);
                 if (!prodResponse.ok) {
                     setProduct(null);
                     return;
@@ -25,7 +23,7 @@ const ProductDetail = () => {
                 setProduct(currentProduct);
 
                 // Fetch all products for sidebar
-                const allResponse = await apiFetch('/products');
+                const allResponse = await fetch('http://localhost:8080/api/products');
                 if (allResponse.ok) {
                     const allData = await allResponse.json();
                     if (Array.isArray(allData)) {
@@ -136,10 +134,10 @@ const ProductDetail = () => {
                         {/* Banner Image */}
                         <div className="mb-8 rounded-lg overflow-hidden shadow-sm border border-gray-100">
                             <img
-                                src={`assets/images/banner/${product.image_path || 'default_banner.jpg'}`}
+                                src={`/assets/images/banner/${product.image_path || 'default_banner.jpg'}`}
                                 alt={product.name}
                                 className="w-full h-auto object-cover max-h-[400px]"
-                                onError={(e) => e.target.src = 'assets/images/savings_account/banner.png'}
+                                onError={(e) => e.target.src = '/assets/images/savings_account/banner.png'}
                             />
                         </div>
 
@@ -256,7 +254,7 @@ const ProductDetail = () => {
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-700"></div>
                                 <h3 className="text-2xl font-bold mb-4 relative z-10">Start Your Journey</h3>
                                 <p className="text-blue-100 mb-8 relative z-10 font-light">Open an account today and experience banking services tailored for your lifestyle.</p>
-                                <button className="w-full bg-white text-[#003399] font-bold py-4 rounded-xl hover:bg-blue-50 transition shadow-lg relative z-10 uppercase tracking-widest text-sm">Apply Now</button>
+                                <Link to="/contact" className="w-full bg-white text-[#003399] font-bold py-4 rounded-xl hover:bg-blue-50 transition shadow-lg relative z-10 uppercase tracking-widest text-sm text-center block">Apply Now</Link>
                             </div>
 
                             {/* Explore More */}

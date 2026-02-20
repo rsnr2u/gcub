@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch } from '../../utils/api';
-
 
 const AdminAwards = () => {
     const [awards, setAwards] = useState([]);
@@ -14,7 +12,7 @@ const AdminAwards = () => {
 
     const fetchAwards = async () => {
         try {
-            const res = await apiFetch('/awards');
+            const res = await fetch('http://localhost:8080/api/awards');
             const data = await res.json();
             console.log('Awards Data:', data); // Debugging
             setAwards(Array.isArray(data) ? data : []);
@@ -28,7 +26,7 @@ const AdminAwards = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this award?')) return;
         try {
-            const response = await apiFetch(`/awards/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`http://localhost:8080/api/awards/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Award deleted.' });
                 fetchAwards();

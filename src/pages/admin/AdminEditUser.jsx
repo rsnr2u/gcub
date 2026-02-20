@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminEditUser = () => {
     const navigate = useNavigate();
@@ -29,7 +27,7 @@ const AdminEditUser = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await apiFetch('/roles');
+            const res = await fetch('http://localhost:8080/api/roles');
             const data = await res.json();
             setRoles(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -40,7 +38,7 @@ const AdminEditUser = () => {
     const fetchUser = async () => {
         setLoading(true);
         try {
-            const res = await apiFetch(`/users/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/users/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -65,8 +63,8 @@ const AdminEditUser = () => {
 
         try {
             const url = isEdit
-                ? `/users/update/${id}`
-                : `${BASE_URL}/api/users/create`;
+                ? `http://localhost:8080/api/users/update/${id}`
+                : 'http://localhost:8080/api/users/create';
 
             const res = await fetch(url, {
                 method: 'POST',

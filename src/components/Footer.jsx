@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const Footer = () => {
     const [settings, setSettings] = useState({
@@ -19,7 +17,7 @@ const Footer = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await apiFetch('/admin/settings');
+            const response = await fetch('http://localhost:8080/api/admin/settings');
             const data = await response.json();
             if (data) {
                 setSettings(prevSettings => ({
@@ -46,7 +44,7 @@ const Footer = () => {
                     <div className="space-y-4">
                         <div className='bg-white p-2 rounded-md'>
                             <img
-                                src={settings.site_dark_logo ? (settings.site_dark_logo.startsWith('/') ? `${BASE_URL}${ settings.site_dark_logo }` : settings.site_dark_logo) : (settings.site_logo ? (settings.site_logo.startsWith('/') ? `${BASE_URL}${ settings.site_logo }` : settings.site_logo) : "assets/images/gcublogo.png")}
+                                src={settings.site_dark_logo ? (settings.site_dark_logo.startsWith('/') ? `http://localhost:8080${settings.site_dark_logo}` : settings.site_dark_logo) : (settings.site_logo ? (settings.site_logo.startsWith('/') ? `http://localhost:8080${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png")}
                                 alt="GCUB Logo"
                                 className="h-10 object-contain"
                             />
@@ -84,10 +82,10 @@ const Footer = () => {
                     <div>
                         <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Disclosures</h4>
                         <ul className="space-y-2">
-                            <li><Link to="/dicgc-certificate" className="hover:text-white transition"><i className="fas fa-shield-alt mr-2 text-[#E61111]"></i> DICGC Certificate</Link></li>
-                            <li><Link to="/ombudsman" className="hover:text-white transition"><i className="fas fa-gavel mr-2 text-[#E61111]"></i> Ombudsman</Link></li>
-                            <li><Link to="/iso-certified" className="hover:text-white transition"><i className="fas fa-certificate mr-2 text-[#E61111]"></i> ISO Certified</Link></li>
-                            <li><Link to="/deaf-accounts" className="hover:text-white transition"><i className="fas fa-file-alt mr-2 text-[#E61111]"></i> DEAF Accounts</Link></li>
+                            <li><Link to="/dicgc-certificate" className="hover:text-white transition">DICGC Certificate</Link></li>
+                            <li><Link to="/ombudsman" className="hover:text-white transition">Ombudsman</Link></li>
+                            <li><Link to="/iso-certified" className="hover:text-white transition">ISO Certified</Link></li>
+                            <li><Link to="/deaf-accounts" className="hover:text-white transition">DEAF Accounts</Link></li>
                         </ul>
                     </div>
 
@@ -95,12 +93,12 @@ const Footer = () => {
                     <div>
                         <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Quick Links</h4>
                         <ul className="space-y-2">
-                            <li><Link to="/emi-calculator" className="hover:text-white transition"><i className="fas fa-calculator mr-2 text-[#E61111]"></i> EMI Calculator</Link></li>
-                            <li><Link to="/interest-rates" className="hover:text-white transition"><i className="fas fa-percent mr-2 text-[#E61111]"></i> Interest Rates</Link></li>
-                            <li><Link to="/missed-call-banking" className="hover:text-white transition"><i className="fas fa-headset mr-2 text-[#E61111]"></i> Missed Call Banking</Link></li>
-                            <li><Link to="/holiday-list" className="hover:text-white transition"><i className="fas fa-calendar-alt mr-2 text-[#E61111]"></i> Holiday List</Link></li>
-                            <li><Link to="/kyc-norms" className="hover:text-white transition"><i className="fas fa-file-contract mr-2 text-[#E61111]"></i> KYC Norms</Link></li>
-                            <li><Link to="/customer-service-charges" className="hover:text-white transition"><i className="fas fa-rupee-sign mr-2 text-[#E61111]"></i> Service Charges</Link></li>
+                            <li><Link to="/emi-calculator" className="hover:text-white transition">EMI Calculator</Link></li>
+                            <li><Link to="/interest-rates" className="hover:text-white transition">Interest Rates</Link></li>
+                            <li><Link to="/missed-call-banking" className="hover:text-white transition">Missed Call Banking</Link></li>
+                            <li><Link to="/holiday-list" className="hover:text-white transition">Holiday List</Link></li>
+                            <li><Link to="/kyc-norms" className="hover:text-white transition">KYC Norms</Link></li>
+                            <li><Link to="/customer-service-charges" className="hover:text-white transition">Service Charges</Link></li>
                             <li><Link to="/downloads" className="hover:text-white transition">Downloads</Link></li>
                         </ul>
                     </div>

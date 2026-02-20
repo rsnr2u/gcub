@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditHighlight = () => {
     const { id } = useParams();
@@ -17,7 +15,7 @@ const AdminEditHighlight = () => {
 
     const fetchHighlight = async () => {
         try {
-            const res = await apiFetch(`/highlights/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/highlights/show/${id}`);
             const data = await res.json();
             if (data) setFormData({ ...data, is_active: data.is_active === '1' || data.is_active === true });
         } catch (error) { console.error(error); }
@@ -27,8 +25,8 @@ const AdminEditHighlight = () => {
         e.preventDefault();
         setSaving(true);
         const url = isEdit
-            ? `/highlights/update/${id}`
-            : `${BASE_URL}/api/highlights/create`;
+            ? `http://localhost:8080/api/highlights/update/${id}`
+            : 'http://localhost:8080/api/highlights/create';
 
         try {
             const formBody = new URLSearchParams();

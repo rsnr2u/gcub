@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditBoardManagement = () => {
     const { id } = useParams();
@@ -31,7 +29,7 @@ const AdminEditBoardManagement = () => {
 
     const fetchMember = async () => {
         try {
-            const response = await apiFetch(`/board-management/show/${id}`);
+            const response = await fetch(`http://localhost:8080/api/board-management/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData({
@@ -39,7 +37,7 @@ const AdminEditBoardManagement = () => {
                     image: null
                 });
                 if (data.image_path) {
-                    setPreviewImage(`${BASE_URL}/${data.image_path}`);
+                    setPreviewImage(`http://localhost:8080/${data.image_path}`);
                 }
             }
             setLoading(false);
@@ -73,8 +71,8 @@ const AdminEditBoardManagement = () => {
         });
 
         const url = isEdit
-            ? `/board-management/update/${id}`
-            : `${BASE_URL}/api/board-management/create`;
+            ? `http://localhost:8080/api/board-management/update/${id}`
+            : 'http://localhost:8080/api/board-management/create';
 
         try {
             const response = await fetch(url, {

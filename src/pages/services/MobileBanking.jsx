@@ -96,20 +96,20 @@ const MobileBanking = () => {
                                     <h2 className="text-3xl font-bold mb-4">Download Our App Now</h2>
                                     <p className="text-slate-400 mb-8">Available on both Android and iOS devices. Start your mobile banking journey today.</p>
                                     <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                                        <button className="flex items-center gap-3 px-6 py-3 bg-white text-black rounded-xl font-bold hover:bg-slate-200 transition">
+                                        <a target='_blank' href="https://play.google.com/store/apps/details?id=app.imps.guntur_new" className="flex items-center gap-3 px-6 py-3 bg-white text-black rounded-xl font-bold hover:bg-slate-200 transition">
                                             <i className="fab fa-google-play text-2xl"></i>
                                             <div className="text-left">
                                                 <div className="text-[10px] uppercase font-bold leading-none">Get it on</div>
                                                 <div className="text-lg leading-none">Google Play</div>
                                             </div>
-                                        </button>
-                                        <button className="flex items-center gap-3 px-6 py-3 bg-black border border-slate-700 text-white rounded-xl font-bold hover:bg-slate-800 transition">
+                                        </a>
+                                        <a target='_blank' href="https://apps.apple.com/in/app/guntur-urban-mobile-banking/id1608340285" className="flex items-center gap-3 px-6 py-3 bg-black border border-slate-700 text-white rounded-xl font-bold hover:bg-slate-800 transition">
                                             <i className="fab fa-apple text-2xl"></i>
                                             <div className="text-left">
                                                 <div className="text-[10px] uppercase font-bold leading-none">Download on the</div>
                                                 <div className="text-lg leading-none">App Store</div>
                                             </div>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="w-48 h-auto">
@@ -147,7 +147,7 @@ const MobileBanking = () => {
                             <p className="text-blue-200 text-sm mb-6">Need assistance in registering for mobile banking? Our helpdesk is ready to assist you.</p>
                             <a href="tel:18004258873" className="flex items-center justify-center gap-3 w-full bg-white text-blue-900 py-4 rounded-2xl font-bold hover:bg-blue-50 transition">
                                 <i className="fas fa-phone-alt"></i>
-                                Call Support
+                                1800-425-8873
                             </a>
                         </div>
                     </div>

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { apiFetch } from '../../utils/api';
-
 
 const AdminBranches = () => {
     const [branches, setBranches] = useState([]);
@@ -15,7 +13,7 @@ const AdminBranches = () => {
 
     const fetchBranches = async () => {
         try {
-            const response = await apiFetch('/branches');
+            const response = await fetch('http://localhost:8080/api/branches');
             const data = await response.json();
             console.log('Branches API Response:', data);
             if (Array.isArray(data)) {
@@ -35,7 +33,7 @@ const AdminBranches = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this branch repository node?')) return;
         try {
-            const response = await apiFetch(`/branches/delete/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/branches/delete/${id}`, {
                 method: 'POST'
             });
             const data = await response.json();

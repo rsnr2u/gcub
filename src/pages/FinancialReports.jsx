@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const FinancialReports = () => {
     const [reports, setReports] = useState([]);
@@ -14,8 +12,8 @@ const FinancialReports = () => {
         const fetchData = async () => {
             try {
                 const [reportsRes, indicatorsRes] = await Promise.all([
-                    apiFetch('/annual-reports'),
-                    apiFetch('/financial-indicators')
+                    fetch('http://localhost:8080/api/annual-reports'),
+                    fetch('http://localhost:8080/api/financial-indicators')
                 ]);
 
                 const reportsData = await reportsRes.json();
@@ -236,7 +234,7 @@ const ReportItem = ({ title, desc, file_path }) => (
             </div>
         </div>
         <a
-            href={file_path ? `${BASE_URL}/${file_path}` : "#"}
+            href={file_path ? `http://localhost:8080/${file_path}` : "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3.5 bg-white border border-gray-200 text-[#003399] font-bold text-sm rounded-lg hover:bg-[#003399] hover:text-white hover:border-[#003399] transition shadow-sm flex items-center gap-3 group min-w-[200px] justify-center"

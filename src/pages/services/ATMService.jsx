@@ -129,9 +129,9 @@ const ATMService = () => {
                             <h3 className="text-xl font-bold text-slate-800 mb-6">Emergency</h3>
                             <p className="text-sm text-slate-600 mb-4">Lost your debit card? Block it immediately to prevent unauthorized transactions.</p>
                             <div className="space-y-3">
-                                <a href="tel:18004258873" className="flex items-center gap-3 text-red-600 font-bold hover:underline">
+                                <a href="tel:18001234567" className="flex items-center gap-3 text-red-600 font-bold hover:underline">
                                     <i className="fas fa-phone-alt"></i>
-                                    1800 425 8873
+                                    1800-456-7890
                                 </a>
                                 <p className="text-xs text-slate-400 italic">Available 24/7 for card blocking.</p>
                             </div>

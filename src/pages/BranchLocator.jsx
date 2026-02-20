@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch } from '../utils/api';
-
 
 const BranchLocator = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +10,7 @@ const BranchLocator = () => {
     useEffect(() => {
         const fetchBranches = async () => {
             try {
-                const response = await apiFetch('/branches');
+                const response = await fetch('http://localhost:8080/api/branches');
                 const data = await response.json();
 
                 if (Array.isArray(data)) {
@@ -90,7 +88,7 @@ const BranchLocator = () => {
                             <div className="inline-block w-8 h-8 border-2 border-[#003399] border-t-transparent rounded-full animate-spin"></div>
                         </div>
                     ) : filteredBranches.length > 0 ? (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {filteredBranches.map((branch, idx) => (
                                 <div key={branch.id || idx} className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 group flex flex-col h-full overflow-hidden">
                                     <div className={`p-6 border-b border-gray-50 flex justify-between items-start ${branch.is_head_office == 1 ? 'bg-blue-50/30' : ''}`}>
@@ -112,7 +110,7 @@ const BranchLocator = () => {
                                             <div className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-[#003399] flex-shrink-0 group-hover:bg-[#003399] group-hover:text-white transition-colors">
                                                 <i className="fas fa-location-dot text-sm"></i>
                                             </div>
-                                            <p className="text-sm text-gray-600 leading-relaxed font-light">{branch.address}</p>
+                                            <p className="text-sm text-gray-600 leading-relaxed font-regular">{branch.address}</p>
                                         </div>
 
                                         <div className="grid grid-cols-1 gap-4 pt-2">

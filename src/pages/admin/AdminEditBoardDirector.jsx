@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditBoardDirector = () => {
     const { id } = useParams();
@@ -31,7 +29,7 @@ const AdminEditBoardDirector = () => {
 
     const fetchDirector = async () => {
         try {
-            const response = await apiFetch(`/board-directors/show/${id}`);
+            const response = await fetch(`http://localhost:8080/api/board-directors/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData({
@@ -39,7 +37,7 @@ const AdminEditBoardDirector = () => {
                     image: null
                 });
                 if (data.image_path) {
-                    setPreviewImage(`${BASE_URL}/${data.image_path}`);
+                    setPreviewImage(`http://localhost:8080/${data.image_path}`);
                 }
             }
             setLoading(false);
@@ -73,8 +71,8 @@ const AdminEditBoardDirector = () => {
         });
 
         const url = isEdit
-            ? `/board-directors/update/${id}`
-            : `${BASE_URL}/api/board-directors/create`;
+            ? `http://localhost:8080/api/board-directors/update/${id}`
+            : 'http://localhost:8080/api/board-directors/create';
 
         try {
             const response = await fetch(url, {

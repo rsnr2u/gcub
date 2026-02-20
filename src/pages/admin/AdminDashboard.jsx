@@ -14,7 +14,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await authFetch('admin/stats');
+                const response = await authFetch('http://localhost:8080/api/admin/stats');
                 const data = await response.json();
                 setStats(data);
             } catch (error) {
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="p-8">
                     <div className="w-full text-center">
-                        <img src="assets/images/gcublogo.png" alt="GCUB Logo" className="h-16 mx-auto mb-6 opacity-80" />
+                        <img src="/assets/images/gcublogo.png" alt="GCUB Logo" className="h-16 mx-auto mb-6 opacity-80" />
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">The Guntur Co-operative Urban Bank Ltd.</h2>
                         <p className="text-gray-600 leading-relaxed mb-6 text-sm">
                             This is the official React-based administration portal for GCUB. Manage your website content,

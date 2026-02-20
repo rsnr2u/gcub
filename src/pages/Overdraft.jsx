@@ -7,7 +7,7 @@ const Overdraft = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-3/4">
                         <div className="mb-6 rounded-lg overflow-hidden shadow-sm h-72 relative">
-                            <img src="assets/images/overdraft/banner.png" alt="Overdraft Banner" className="w-full h-full object-cover" />
+                            <img src="/assets/images/overdraft/banner.png" alt="Overdraft Banner" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div className="p-6 text-white text-left">
                                     <h2 className="text-3xl font-bold mb-2">Manage Cash Flows</h2>
@@ -42,6 +42,13 @@ const Overdraft = () => {
                                 <p className="mb-2">Visit your nearest branch for more details.</p>
                                 <a href="/branch-locator" className="text-[#003399] font-medium hover:underline">Branch Locator</a>
                             </div>
+                        </div>
+                        {/* CTA Card */}
+                        <div className="bg-[#003399] text-white p-8 rounded-xl shadow-xl relative overflow-hidden group mt-6">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <h3 className="text-2xl font-bold mb-4 relative z-10">Start Your Journey</h3>
+                            <p className="text-blue-100 mb-8 relative z-10 font-light">Open an account today and experience banking services tailored for your lifestyle.</p>
+                            <a href="/contact" className="w-full bg-white text-[#003399] flex items-center justify-center font-bold py-4 rounded-xl hover:bg-blue-50 transition shadow-lg relative z-10 uppercase tracking-widest text-sm">Apply Now</a>
                         </div>
                     </div>
                 </div>

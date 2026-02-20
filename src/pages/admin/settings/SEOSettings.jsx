@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../../utils/api';
-
 
 const SEOSettings = () => {
     const [settings, setSettings] = useState({
@@ -21,7 +19,7 @@ const SEOSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await apiFetch('/admin/settings');
+            const response = await fetch('http://localhost:8080/api/admin/settings');
             const data = await response.json();
             setSettings({
                 seo_site_title: data.seo_site_title || '',
@@ -53,7 +51,7 @@ const SEOSettings = () => {
         });
 
         try {
-            const response = await fetch(`${BASE_URL}/api/admin/settings/update`, {
+            const response = await fetch('http://localhost:8080/api/admin/settings/update', {
                 method: 'POST',
                 body: formData
             });
@@ -160,7 +158,7 @@ const SEOSettings = () => {
                                             value={settings.seo_og_image}
                                             onChange={handleChange}
                                             className="w-full px-5 py-2.5 bg-white border-1 border-gray-400 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-50 outline-none transition-all font-medium font-mono text-sm"
-                                            placeholder="assets/images/gcublogo.png"
+                                            placeholder="/assets/images/gcublogo.png"
                                         />
                                     </div>
 

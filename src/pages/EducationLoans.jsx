@@ -7,7 +7,7 @@ const EducationLoans = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-3/4">
                         <div className="mb-6 rounded-lg overflow-hidden shadow-sm h-72 relative">
-                            <img src="assets/images/education_loan/banner.png" alt="Education Loan Banner" className="w-full h-full object-cover" />
+                            <img src="/assets/images/education_loan/banner.png" alt="Education Loan Banner" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                                 <div className="p-6 text-white text-left">
                                     <h2 className="text-3xl font-bold mb-2">Fuel Your Ambitions</h2>

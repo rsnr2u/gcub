@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditBranch = () => {
     const { id } = useParams();
@@ -32,7 +30,7 @@ const AdminEditBranch = () => {
 
     const fetchBranch = async () => {
         try {
-            const response = await apiFetch(`/branches/show/${id}`);
+            const response = await fetch(`http://localhost:8080/api/branches/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData(data);
@@ -55,8 +53,8 @@ const AdminEditBranch = () => {
         setMessage({ type: '', text: '' });
 
         const url = isEdit
-            ? `/branches/update/${id}`
-            : `${BASE_URL}/api/branches/create`;
+            ? `http://localhost:8080/api/branches/update/${id}`
+            : 'http://localhost:8080/api/branches/create';
 
         try {
             const response = await fetch(url, {

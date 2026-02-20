@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const PopupModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,12 +12,12 @@ const PopupModal = () => {
                 const hasBeenShown = sessionStorage.getItem('gcub_popup_shown');
                 if (hasBeenShown) return;
 
-                const response = await apiFetch('/admin/settings');
+                const response = await fetch('http://localhost:8080/api/admin/settings');
                 const settings = await response.json();
 
                 if (settings.popup_enabled === 'on') {
                     const imageUrl = settings.popup_image?.startsWith('/')
-                        ? `${BASE_URL}${ settings.popup_image }`
+                        ? `http://localhost:8080${settings.popup_image}`
                         : settings.popup_image;
 
                     setConfig({

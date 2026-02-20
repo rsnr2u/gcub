@@ -3,7 +3,6 @@ import AdminAboutUs from './AdminAboutUs';
 import AdminChairman from './AdminChairman';
 import AdminBoardDirectors from './AdminBoardDirectors';
 import AdminBoardManagement from './AdminBoardManagement';
-import AdminDICGCCertificate from './AdminDICGCCertificate';
 
 const AdminBankInfo = () => {
     const [searchParams] = useSearchParams();
@@ -12,9 +11,7 @@ const AdminBankInfo = () => {
         'about-us': 'About Us',
         'chairman': 'Chairman’s Desk',
         'board-directors': 'Board of Directors',
-        'board-of-management': 'Board of Management',
-        'dicgc': 'DICGC Certificate',
-        'ombudsman': 'Ombudsman'
+        'board-of-management': 'Board of Management'
     };
 
     const tabSlug = searchParams.get('tab') || 'about-us';
@@ -43,8 +40,6 @@ const AdminBankInfo = () => {
                     <AdminBoardDirectors isEmbedded={false} />
                 ) : activeTab === 'Board of Management' ? (
                     <AdminBoardManagement isEmbedded={false} />
-                ) : activeTab === 'DICGC Certificate' ? (
-                    <AdminDICGCCertificate />
                 ) : (
                     /* Generic Content Editor for other tabs */
                     <div className="max-w-4xl mx-auto space-y-6">

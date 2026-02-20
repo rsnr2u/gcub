@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditFinancialIndicator = () => {
     const { id } = useParams();
@@ -25,7 +23,7 @@ const AdminEditFinancialIndicator = () => {
 
     const fetchIndicator = async () => {
         try {
-            const res = await apiFetch(`/financial-indicators/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/financial-indicators/show/${id}`);
             const data = await res.json();
             if (data) setFormData({ ...data, is_positive_growth: data.is_positive_growth === '1' || data.is_positive_growth === true });
         } catch (error) { console.error(error); }
@@ -35,8 +33,8 @@ const AdminEditFinancialIndicator = () => {
         e.preventDefault();
         setSaving(true);
         const url = isEdit
-            ? `/financial-indicators/update/${id}`
-            : `${BASE_URL}/api/financial-indicators/create`;
+            ? `http://localhost:8080/api/financial-indicators/update/${id}`
+            : 'http://localhost:8080/api/financial-indicators/create';
 
         try {
             // Using JSON for simplicity here as no files involved

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditProduct = () => {
     const { id } = useParams();
@@ -39,7 +37,7 @@ const AdminEditProduct = () => {
 
     const fetchProduct = async () => {
         try {
-            const response = await apiFetch(`/products/show/${id}`);
+            const response = await fetch(`http://localhost:8080/api/products/show/${id}`);
             const product = await response.json();
 
             if (product && !product.error) {
@@ -158,8 +156,8 @@ const AdminEditProduct = () => {
         setMessage({ type: '', text: '' });
 
         const url = isNew
-            ? `${BASE_URL}/api/products/create`
-            : `/products/update/${id}`;
+            ? 'http://localhost:8080/api/products/create'
+            : `http://localhost:8080/api/products/update/${id}`;
 
         const postData = new FormData();
         Object.keys(formData).forEach(key => {
@@ -287,14 +285,14 @@ const AdminEditProduct = () => {
                                                 {formData.icon_value && !iconFile && (
                                                     <div className="w-14 h-14 rounded-xl border border-gray-100 bg-gray-50 p-2 overflow-hidden flex-shrink-0 shadow-inner">
                                                         <img
-                                                            src={`assets/images/icons/${formData.icon_value}`}
+                                                            src={`/assets/images/icons/${formData.icon_value}`}
                                                             className="w-full h-full object-contain"
                                                             alt="Current"
                                                             onError={(e) => {
                                                                 if (e.target.src.includes('/icons/')) {
                                                                     e.target.src = e.target.src.replace('/icons/', '/cards/');
                                                                 } else {
-                                                                    e.target.src = 'assets/images/gcublogo.png';
+                                                                    e.target.src = '/assets/images/gcublogo.png';
                                                                 }
                                                             }}
                                                         />
@@ -572,9 +570,9 @@ const AdminEditProduct = () => {
                                     {(bannerFile || formData.image_path) ? (
                                         <div className="relative w-full">
                                             <img
-                                                src={bannerFile ? URL.createObjectURL(bannerFile) : `assets/images/banner/${formData.image_path}`}
+                                                src={bannerFile ? URL.createObjectURL(bannerFile) : `/assets/images/banner/${formData.image_path}`}
                                                 className="w-full h-auto rounded-xl shadow-sm"
-                                                onError={(e) => e.target.src = 'assets/images/placeholder_banner.jpg'}
+                                                onError={(e) => e.target.src = '/assets/images/placeholder_banner.jpg'}
                                             />
                                             {bannerFile && (
                                                 <button onClick={() => setBannerFile(null)} className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-lg">

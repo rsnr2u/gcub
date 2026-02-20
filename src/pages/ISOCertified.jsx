@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { organizationSchema, createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch } from '../utils/api';
-
 
 const ISOCertified = () => {
     const [content, setContent] = useState({ title: '', body: '' });
@@ -14,7 +12,7 @@ const ISOCertified = () => {
 
     const fetchContent = async () => {
         try {
-            const response = await apiFetch('/iso-certified');
+            const response = await fetch('http://localhost:8080/api/iso-certified');
             const data = await response.json();
             setContent(data);
         } catch (error) {
@@ -251,7 +249,7 @@ const ISOCertified = () => {
                                     className="inline-flex items-center gap-2 bg-white text-[#003399] border-2 border-[#003399] px-5 py-2.5 rounded-lg font-bold text-sm hover:bg-blue-50 transition"
                                 >
                                     <i className="fas fa-phone-alt"></i>
-                                    1800 425 8873
+                                    1800-425-8873
                                 </a>
                             </div>
                         </div>

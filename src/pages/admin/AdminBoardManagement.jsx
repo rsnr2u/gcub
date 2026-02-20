@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminBoardManagement = ({ isEmbedded = false }) => {
     const [members, setMembers] = useState([]);
@@ -14,7 +12,7 @@ const AdminBoardManagement = ({ isEmbedded = false }) => {
 
     const fetchMembers = async () => {
         try {
-            const response = await apiFetch('/board-management');
+            const response = await fetch('http://localhost:8080/api/board-management');
             const data = await response.json();
             if (Array.isArray(data)) {
                 setMembers(data);
@@ -32,7 +30,7 @@ const AdminBoardManagement = ({ isEmbedded = false }) => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this member?')) return;
         try {
-            const response = await apiFetch(`/board-management/delete/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/board-management/delete/${id}`, {
                 method: 'POST'
             });
             const data = await response.json();
@@ -104,7 +102,7 @@ const AdminBoardManagement = ({ isEmbedded = false }) => {
                                             <td className="px-8 py-4">
                                                 <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-100 bg-gray-50">
                                                     {member.image_path ? (
-                                                        <img src={`${BASE_URL}/${member.image_path}`} alt={member.name} className="w-full h-full object-cover" />
+                                                        <img src={`http://localhost:8080/${member.image_path}`} alt={member.name} className="w-full h-full object-cover" />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                                                             <i className="fas fa-user"></i>

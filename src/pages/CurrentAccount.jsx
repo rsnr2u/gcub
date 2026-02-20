@@ -10,7 +10,7 @@ const CurrentAccount = () => {
                     <div className="w-full lg:w-3/4">
                         {/* Banner Image */}
                         <div className="mb-6 rounded-lg overflow-hidden shadow-sm">
-                            <img src="assets/images/current_account/banner.png" alt="Current Account Banner" className="w-full h-auto object-cover" />
+                            <img src="/assets/images/current_account/banner.png" alt="Current Account Banner" className="w-full h-auto object-cover" />
                         </div>
 
                         {/* Intro Text */}
@@ -73,25 +73,35 @@ const CurrentAccount = () => {
                         <div className="rounded-lg overflow-hidden shadow-md group">
                             <div className="bg-yellow-500 text-white text-center py-2 font-bold text-sm">Recurring Deposit Scheme</div>
                             <div className="relative overflow-hidden">
-                                <img src="assets/images/current_account/rd_ad.png" alt="Recurring Deposit" className="w-full h-auto transform group-hover:scale-105 transition duration-500" />
+                                <img src="/assets/images/current_account/rd_ad.png" alt="Recurring Deposit" className="w-full h-auto transform group-hover:scale-105 transition duration-500" />
                                 <div className="bg-yellow-500 text-white text-center py-2 text-xs font-bold cursor-pointer hover:bg-yellow-600 transition">Know More</div>
                             </div>
                         </div>
 
-                        <div className="bg-white border rounded p-4 shadow-sm">
-                            <h3 className="bg-yellow-500 text-white text-center py-1 font-bold text-sm mb-4 -mx-4 -mt-4 rounded-t">Special Offers</h3>
-                            <div className="space-y-4 text-sm">
-                                <OfferItem title="Gold Loans" desc="Lower ROI of 12.50%" />
-                                <hr />
-                                <OfferItem title="Higher Interest Rates" desc="Higher interest rates on Fixed Deposit." />
-                                <hr />
-                                <OfferItem title="Platinum Cards" desc="Platinum cards at nominal charges." />
-                            </div>
+                    </div>
+
+                    {/* CTA Card */}
+                    <div className="bg-[#003399] text-white p-8 rounded-xl shadow-xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                        <h3 className="text-2xl font-bold mb-4 relative z-10">Start Your Journey</h3>
+                        <p className="text-blue-100 mb-8 relative z-10 font-light">Open an account today and experience banking services tailored for your lifestyle.</p>
+                        <a href="/contact" className="w-full bg-white text-[#003399] flex items-center justify-center font-bold py-4 rounded-xl hover:bg-blue-50 transition shadow-lg relative z-10 uppercase tracking-widest text-sm">Apply Now</a>
+                    </div>
+
+                    <div className="bg-white border rounded p-4 shadow-sm">
+                        <h3 className="bg-yellow-500 text-white text-center py-1 font-bold text-sm mb-4 -mx-4 -mt-4 rounded-t">Special Offers</h3>
+                        <div className="space-y-4 text-sm">
+                            <OfferItem title="Gold Loans" desc="Lower ROI of 12.50%" />
+                            <hr />
+                            <OfferItem title="Higher Interest Rates" desc="Higher interest rates on Fixed Deposit." />
+                            <hr />
+                            <OfferItem title="Platinum Cards" desc="Platinum cards at nominal charges." />
                         </div>
                     </div>
                 </div>
-            </main>
         </div>
+            </main >
+        </div >
     );
 };
 

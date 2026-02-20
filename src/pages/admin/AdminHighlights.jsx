@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch } from '../../utils/api';
-
 
 const AdminHighlights = () => {
     const [highlights, setHighlights] = useState([]);
@@ -14,7 +12,7 @@ const AdminHighlights = () => {
 
     const fetchHighlights = async () => {
         try {
-            const res = await apiFetch('/highlights');
+            const res = await fetch('http://localhost:8080/api/highlights');
             const data = await res.json();
             setHighlights(Array.isArray(data) ? data : []);
             setLoading(false);
@@ -27,7 +25,7 @@ const AdminHighlights = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this highlight?')) return;
         try {
-            const response = await apiFetch(`/highlights/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`http://localhost:8080/api/highlights/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Highlight deleted.' });
                 fetchHighlights();

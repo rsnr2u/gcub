@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminQuickAccess = () => {
     const [items, setItems] = useState([]);
@@ -15,7 +13,7 @@ const AdminQuickAccess = () => {
 
     const fetchItems = async () => {
         try {
-            const res = await apiFetch('/quick-access?admin=true');
+            const res = await fetch('http://localhost:8080/api/quick-access?admin=true');
             const data = await res.json();
             setItems(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -27,7 +25,7 @@ const AdminQuickAccess = () => {
 
     const handleToggleStatus = async (id, currentStatus) => {
         try {
-            const res = await apiFetch(`/quick-access/toggle-status/${id}`, {
+            const res = await fetch(`http://localhost:8080/api/quick-access/toggle-status/${id}`, {
                 method: 'POST'
             });
             const result = await res.json();
@@ -45,7 +43,7 @@ const AdminQuickAccess = () => {
         if (!window.confirm('Are you sure you want to delete this item?')) return;
 
         try {
-            const res = await apiFetch(`/quick-access/delete/${id}`, {
+            const res = await fetch(`http://localhost:8080/api/quick-access/delete/${id}`, {
                 method: 'POST'
             });
             const result = await res.json();
@@ -92,7 +90,7 @@ const AdminQuickAccess = () => {
 
         // Save new order to backend
         try {
-            const res = await fetch(`${BASE_URL}/api/quick-access/reorder`, {
+            const res = await fetch('http://localhost:8080/api/quick-access/reorder', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ items: updatedItems })

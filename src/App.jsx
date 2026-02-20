@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -44,6 +44,11 @@ import SitemapPage from './pages/SitemapPage';
 import DICGCCertificate from './pages/DICGCCertificate';
 import Ombudsman from './pages/Ombudsman';
 import ISOCertified from './pages/ISOCertified';
+import NewsDetail from './pages/NewsDetail';
+import Gallery from './pages/Gallery';
+import GalleryDetail from './pages/GalleryDetail';
+import AdminGallery from './pages/admin/AdminGallery';
+import AdminGalleryForm from './pages/admin/AdminGalleryForm';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -76,8 +81,6 @@ import AdminAwards from './pages/admin/AdminAwards';
 import AdminEditAward from './pages/admin/AdminEditAward';
 import AdminDeafAccounts from './pages/admin/AdminDeafAccounts';
 import AdminEditDeafAccount from './pages/admin/AdminEditDeafAccount';
-import AdminOmbudsman from './pages/admin/AdminOmbudsman';
-import AdminEditOmbudsman from './pages/admin/AdminEditOmbudsman';
 import AdminSliders from './pages/admin/AdminSliders';
 import AdminEditSlider from './pages/admin/AdminEditSlider';
 import AdminHomePageContent from './pages/admin/AdminHomePageContent';
@@ -91,6 +94,8 @@ import AdminQuickAccess from './pages/admin/AdminQuickAccess';
 import AdminEditQuickAccess from './pages/admin/AdminEditQuickAccess';
 import AdminContactSubmissions from './pages/admin/AdminContactSubmissions';
 import AdminViewContactSubmission from './pages/admin/AdminViewContactSubmission';
+import AdminNews from './pages/admin/AdminNews';
+import AdminEditNews from './pages/admin/AdminEditNews';
 import ProductDetail from './pages/ProductDetail';
 
 // Individual Static Banking Services
@@ -163,7 +168,10 @@ function App() {
           <Route path="/cyber-security" element={<CyberSecurity />} />
           <Route path="/deaf-accounts" element={<DeafAccounts />} />
           <Route path="/debit-cards" element={<DebitCards />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/product/:slug" element={<ProductDetail />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/gallery/:id" element={<GalleryDetail />} />
 
 
           {/* Disclosures */}
@@ -227,12 +235,13 @@ function App() {
           <Route path="disclosures/deaf-accounts" element={<AdminDeafAccounts />} />
           <Route path="disclosures/deaf-accounts/new" element={<AdminEditDeafAccount />} />
           <Route path="disclosures/deaf-accounts/edit/:id" element={<AdminEditDeafAccount />} />
-          <Route path="disclosures/ombudsman" element={<AdminOmbudsman />} />
-          <Route path="disclosures/ombudsman/new" element={<AdminEditOmbudsman />} />
-          <Route path="disclosures/ombudsman/edit/:id" element={<AdminEditOmbudsman />} />
           <Route path="content/sliders" element={<AdminSliders />} />
           <Route path="content/sliders/new" element={<AdminEditSlider />} />
           <Route path="content/sliders/edit/:id" element={<AdminEditSlider />} />
+          <Route path="content/news" element={<AdminNews />} />
+          <Route path="content/news/new" element={<AdminEditNews />} />
+          <Route path="content/news/create" element={<AdminEditNews />} />
+          <Route path="content/news/edit/:id" element={<AdminEditNews />} />
           <Route path="content/home-page" element={<AdminHomePageContent />} />
           <Route path="content/statistics" element={<StatisticsSettings />} />
           <Route path="content/missed-call-banking" element={<AdminMissedCallBanking />} />
@@ -241,6 +250,10 @@ function App() {
           <Route path="content/quick-access" element={<AdminQuickAccess />} />
           <Route path="content/quick-access/new" element={<AdminEditQuickAccess />} />
           <Route path="content/quick-access/edit/:id" element={<AdminEditQuickAccess />} />
+          <Route path="content/gallery" element={<AdminGallery />} />
+          <Route path="content/gallery/new" element={<AdminGalleryForm />} />
+          <Route path="content/gallery/create" element={<AdminGalleryForm />} />
+          <Route path="content/gallery/edit/:id" element={<AdminGalleryForm />} />
           <Route path="contact-submissions" element={<AdminContactSubmissions />} />
           <Route path="contact-submissions/view/:id" element={<AdminViewContactSubmission />} />
           <Route path="users" element={<AdminUsers />} />

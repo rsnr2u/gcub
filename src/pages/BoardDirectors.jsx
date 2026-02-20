@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const BoardDirectors = () => {
     const [directors, setDirectors] = useState([]);
@@ -10,8 +8,9 @@ const BoardDirectors = () => {
 
     useEffect(() => {
         const fetchDirectors = async () => {
+            const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
             try {
-                const response = await apiFetch('/board-directors');
+                const response = await fetch(`${apiBaseUrl}/api/board-directors`);
                 const data = await response.json();
 
                 // Sample data if API is empty
@@ -88,26 +87,28 @@ const BoardDirectors = () => {
                     </div>
                 ) : (
                     <div className="max-w-7xl mx-auto">
-                        {/* Key Leadership - Full Width Cards */}
-                        <div className="grid grid-cols-1 gap-8 mb-12">
+                        {/* Key Leadership - Centered */}
+                        <div className="flex flex-wrap justify-center gap-8 mb-12">
                             {chairman && (
-                                <CorporateCard
-                                    member={chairman}
-                                    fullWidth
-                                    isChairman
-                                />
+                                <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)] max-w-sm">
+                                    <CorporateCard
+                                        member={chairman}
+                                        isChairman
+                                    />
+                                </div>
                             )}
                             {viceChairman && (
-                                <CorporateCard
-                                    member={viceChairman}
-                                    fullWidth
-                                    isViceChairman
-                                />
+                                <div className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)] max-w-sm">
+                                    <CorporateCard
+                                        member={viceChairman}
+                                        isViceChairman
+                                    />
+                                </div>
                             )}
                         </div>
 
-                        {/* Other Directors - 2 Columns */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Other Directors - 3 Columns */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {otherDirectors.map((director, idx) => (
                                 <CorporateCard key={director.id || idx} member={director} />
                             ))}
@@ -121,15 +122,15 @@ const BoardDirectors = () => {
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
                         <div className="space-y-3">
-                            <h4 className="font-bold text-lg uppercase tracking-widest text-red-500">Governance</h4>
+                            <h4 className="font-bold text-lg uppercase tracking-widest text-[#E61111]">Governance</h4>
                             <p className="text-blue-100 text-sm font-light leading-relaxed">Ensuring transparent and ethical oversight of all bank operations.</p>
                         </div>
                         <div className="space-y-3 md:border-x border-white/10 px-8">
-                            <h4 className="font-bold text-lg uppercase tracking-widest text-red-500">Stability</h4>
+                            <h4 className="font-bold text-lg uppercase tracking-widest text-[#E61111]">Stability</h4>
                             <p className="text-blue-100 text-sm font-light leading-relaxed">Maintaining the financial strength that has defined GCUB for decades.</p>
                         </div>
                         <div className="space-y-3">
-                            <h4 className="font-bold text-lg uppercase tracking-widest text-red-500">Service</h4>
+                            <h4 className="font-bold text-lg uppercase tracking-widest text-[#E61111]">Service</h4>
                             <p className="text-blue-100 text-sm font-light leading-relaxed">Our board remains dedicated to the growth of our member community.</p>
                         </div>
                     </div>
@@ -139,41 +140,36 @@ const BoardDirectors = () => {
     );
 };
 
-const CorporateCard = ({ member, fullWidth, isChairman, isViceChairman }) => {
-    const headerBg = isChairman ? 'border-t-4 border-t-[#003399]' : isViceChairman ? 'border-t-4 border-t-[#E61111]' : '';
-    const nameColor = isChairman ? 'text-[#003399]' : isViceChairman ? 'text-[#E61111]' : 'text-[#003399]';
+const CorporateCard = ({ member, isChairman, isViceChairman }) => {
+    const borderColor = isChairman ? 'border-[#003399]' : isViceChairman ? 'border-[#E61111]' : 'border-gray-200';
+    const nameColor = isChairman ? 'text-[#003399]' : isViceChairman ? 'text-[#E61111]' : 'text-gray-800';
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
     return (
-        <div className={`bg-white border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row ${fullWidth ? 'w-full' : ''} ${headerBg}`}>
-            <div className={`aspect-square md:aspect-auto ${fullWidth ? 'md:w-1/4' : 'md:w-2/5'} flex-shrink-0 overflow-hidden bg-[#f8fafc] border-b md:border-b-0 md:border-r border-gray-100`}>
+        <div className={`bg-white border ${borderColor} rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group`}>
+            {/* Image Section - Fixed Aspect Ratio */}
+            <div className="aspect-[4/5] overflow-hidden bg-gray-50 relative">
                 <img
-                    src={member.image_path ? `${BASE_URL}/${member.image_path}` : "assets/images/management/default.png"}
+                    src={member.image_path ? `${apiBaseUrl}/${member.image_path}` : "/assets/images/management/default.png"}
                     alt={member.name}
-                    className="w-full h-full object-cover object-top"
-                    onError={(e) => e.target.src = "assets/images/management/default.png"}
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => e.target.src = "/assets/images/management/default.png"}
                 />
+
+                {/* Designation Overlay/Badge */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6">
+                    <span className="text-white font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-90 drop-shadow-md">
+                        {member.designation}
+                    </span>
+                </div>
             </div>
 
-            <div className="p-8 md:p-10 flex flex-col justify-center flex-grow">
-                <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[#E61111] font-bold text-[10px] uppercase tracking-[0.2em]">{member.designation}</span>
-                    <div className="h-px bg-gray-100 flex-grow"></div>
-                </div>
-
-                <h3 className={`${fullWidth ? 'text-2xl md:text-3xl' : 'text-xl'} font-bold ${nameColor} mb-4 tracking-tight uppercase`}>
+            {/* Content Section - Minimal */}
+            <div className="p-5 text-center">
+                <div className="h-0.5 w-8 bg-gray-100 mx-auto mb-4"></div>
+                <h3 className={`text-base md:text-lg font-bold ${nameColor} tracking-tight leading-snug`}>
                     {member.name}
                 </h3>
-
-                {member.bio && (
-                    <p className="text-gray-600 text-sm md:text-base leading-relaxed font-normal">
-                        {member.bio}
-                    </p>
-                )}
-
-                <div className="mt-8 flex items-center gap-4">
-                    <div className="h-[1px] w-8 bg-gray-200"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
-                </div>
             </div>
         </div>
     );

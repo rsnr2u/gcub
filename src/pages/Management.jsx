@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
-import { apiFetch, BASE_URL } from '../utils/api';
-
 
 const Management = () => {
     const [management, setManagement] = useState([]);
@@ -10,14 +8,15 @@ const Management = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
             try {
-                const response = await apiFetch('/board-management');
+                const response = await fetch(`${apiBaseUrl}/api/board-management`);
                 const data = await response.json();
 
                 const sampleManagement = [
-                    { name: "Sri CEO Name", designation: "Chief Executive Officer", bio: "Leading the bank's executive operations with a focus on sustainable growth, risk management, and digital infrastructure.", status: "active" },
-                    { name: "Sri Member Name", designation: "General Manager", bio: "Overseeing day-to-day administrative and banking operations to ensure seamless service delivery across all branches.", status: "active" },
-                    { name: "Sri Member Name", designation: "Dy. General Manager", bio: "Supporting the management team with expertise in credit management and institutional planning.", status: "active" }
+                    { name: "Sri CEO Name", designation: "Chief Executive Officer", bio: "Leading the bank's executive operations.", status: "active" },
+                    { name: "Sri Member Name", designation: "General Manager", bio: "Overseeing day-to-day administrative and banking operations.", status: "active" },
+                    { name: "Sri Member Name", designation: "Dy. General Manager", bio: "Supporting the management team with expertise in credit management.", status: "active" }
                 ];
 
                 setManagement(Array.isArray(data) && data.length > 0
@@ -35,14 +34,13 @@ const Management = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    // Isolate CEO
-    const ceo = management.find(m => m.designation.toLowerCase().includes('chief executive officer') || m.designation.toLowerCase().includes('ceo'));
-    const staff = management.filter(m => m !== ceo);
+    // Sorting is handled by the API (display_order), but we ensure active status
+    const members = management.filter(m => m.status !== 'inactive');
 
     return (
         <div className="management-page bg-[#fcfcfc] min-h-screen">
             <SEO
-                title="Management Team - GCUB"
+                title="Board of Management Team"
                 description="The Guntur Co-operative Urban Bank Ltd. Executive Management Team."
             />
             <SchemaOrg schema={createBreadcrumbSchema([
@@ -56,7 +54,7 @@ const Management = () => {
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto text-center">
                         <span className="text-[#E61111] font-bold text-xs uppercase tracking-[0.3em] mb-4 block">Executive Excellence</span>
-                        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">Management Team</h1>
+                        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">Board of Management</h1>
                         <div className="h-1.5 w-16 bg-white mx-auto mb-4"></div>
                         <p className="text-white text-lg md:text-xl leading-relaxed font-light">
                             Our executive leadership is committed to operational excellence,
@@ -73,17 +71,14 @@ const Management = () => {
                     </div>
                 ) : (
                     <div className="max-w-7xl mx-auto">
-                        {/* CEO Row */}
-                        {ceo && (
-                            <div className="mb-8">
-                                <CorporateCard member={ceo} fullWidth isManagement />
-                            </div>
-                        )}
-
-                        {/* Staff Grid */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {staff.map((member, idx) => (
-                                <CorporateCard key={member.id || idx} member={member} isManagement />
+                        {/* Management Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {members.map((member, idx) => (
+                                <CorporateCard
+                                    key={member.id || idx}
+                                    member={member}
+                                    isCEO={member.designation.toLowerCase().includes('ceo') || member.designation.toLowerCase().includes('chief executive officer')}
+                                />
                             ))}
                         </div>
                     </div>
@@ -95,15 +90,15 @@ const Management = () => {
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
                         <div className="space-y-3">
-                            <h4 className="font-bold text-lg uppercase tracking-widest text-red-500">Integrity</h4>
+                            <h4 className="font-bold text-lg uppercase tracking-widest text-[#E61111]">Integrity</h4>
                             <p className="text-blue-100 text-sm font-light leading-relaxed">Upholding the highest standards of transparency in co-operative banking.</p>
                         </div>
                         <div className="space-y-3 md:border-x border-white/10 px-8">
-                            <h4 className="font-bold text-lg uppercase tracking-widest text-red-500">Excellence</h4>
+                            <h4 className="font-bold text-lg uppercase tracking-widest text-[#E61111]">Excellence</h4>
                             <p className="text-blue-100 text-sm font-light leading-relaxed">Dedicated to delivering superior service and member satisfaction.</p>
                         </div>
                         <div className="space-y-3">
-                            <h4 className="font-bold text-lg uppercase tracking-widest text-red-500">Trust</h4>
+                            <h4 className="font-bold text-lg uppercase tracking-widest text-[#E61111]">Trust</h4>
                             <p className="text-blue-100 text-sm font-light leading-relaxed">Building lifelong relationships centered on mutual respect and growth.</p>
                         </div>
                     </div>
@@ -113,45 +108,36 @@ const Management = () => {
     );
 };
 
-const CorporateCard = ({ member, fullWidth, isChairman, isViceChairman, isManagement }) => {
-    // Styling based on role
-    const headerBg = isChairman ? 'border-t-4 border-t-[#003399]' : isViceChairman ? 'border-t-4 border-t-[#E61111]' : '';
-    const nameColor = isChairman ? 'text-[#003399]' : isViceChairman ? 'text-[#E61111]' : 'text-[#003399]';
+const CorporateCard = ({ member, isCEO }) => {
+    const borderColor = isCEO ? 'border-[#003399]' : 'border-gray-200';
+    const nameColor = isCEO ? 'text-[#003399]' : 'text-gray-800';
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
     return (
-        <div className={`bg-white border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row ${fullWidth ? 'w-full' : ''} ${headerBg}`}>
-            {/* Image Section */}
-            <div className={`aspect-square md:aspect-auto ${fullWidth ? 'md:w-1/4' : 'md:w-2/5'} flex-shrink-0 overflow-hidden bg-[#f8fafc] border-b md:border-b-0 md:border-r border-gray-100`}>
+        <div className={`bg-white border ${borderColor} rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group`}>
+            {/* Image Section - Fixed Aspect Ratio */}
+            <div className="aspect-[4/5] overflow-hidden bg-gray-50 relative">
                 <img
-                    src={member.image_path ? `${BASE_URL}/${member.image_path}` : "assets/images/management/default.png"}
+                    src={member.image_path ? `${apiBaseUrl}/${member.image_path}` : "/assets/images/management/default.png"}
                     alt={member.name}
-                    className="w-full h-full object-cover object-top"
-                    onError={(e) => e.target.src = "assets/images/management/default.png"}
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => e.target.src = "/assets/images/management/default.png"}
                 />
+
+                {/* Designation Overlay/Badge */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6">
+                    <span className="text-white font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-90 drop-shadow-md">
+                        {member.designation}
+                    </span>
+                </div>
             </div>
 
-            {/* Content Section */}
-            <div className="p-8 md:p-10 flex flex-col justify-center flex-grow">
-                <div className="flex items-center gap-3 mb-4">
-                    <span className="text-[#E61111] font-bold text-[10px] uppercase tracking-[0.2em]">{member.designation}</span>
-                    <div className="h-px bg-gray-100 flex-grow"></div>
-                </div>
-
-                <h3 className={`${fullWidth ? 'text-2xl md:text-3xl' : 'text-xl'} font-bold ${nameColor} mb-4 tracking-tight uppercase`}>
+            {/* Content Section - Minimal */}
+            <div className="p-5 text-center">
+                <div className="h-0.5 w-8 bg-gray-100 mx-auto mb-4"></div>
+                <h3 className={`text-base md:text-lg font-bold ${nameColor} tracking-tight leading-snug`}>
                     {member.name}
                 </h3>
-
-                {member.bio && (
-                    <p className="text-gray-600 text-sm md:text-base leading-relaxed font-normal">
-                        {member.bio}
-                    </p>
-                )}
-
-                {/* Subtle Decorative Element */}
-                <div className="mt-8 flex items-center gap-4">
-                    <div className="h-[1px] w-8 bg-gray-200"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
-                </div>
             </div>
         </div>
     );

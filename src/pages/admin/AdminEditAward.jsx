@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditAward = () => {
     const { id } = useParams();
@@ -17,7 +15,7 @@ const AdminEditAward = () => {
 
     const fetchAward = async () => {
         try {
-            const res = await apiFetch(`/awards/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/awards/show/${id}`);
             const data = await res.json();
             if (data) setFormData({ ...data, image: null });
         } catch (error) { console.error('Error fetching award:', error); }
@@ -37,8 +35,8 @@ const AdminEditAward = () => {
         }
 
         const url = isEdit
-            ? `/awards/update/${id}`
-            : `${BASE_URL}/api/awards/create`;
+            ? `http://localhost:8080/api/awards/update/${id}`
+            : 'http://localhost:8080/api/awards/create';
 
         try {
             const res = await fetch(url, { method: 'POST', body: data });

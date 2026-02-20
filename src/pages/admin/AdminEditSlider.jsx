@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditSlider = () => {
     const navigate = useNavigate();
@@ -28,7 +26,7 @@ const AdminEditSlider = () => {
 
     const fetchDetails = async () => {
         try {
-            const res = await apiFetch(`/sliders/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/sliders/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -41,7 +39,7 @@ const AdminEditSlider = () => {
                     is_active: data.is_active || 1
                 });
                 if (data.image_path) {
-                    setImagePreview(`${BASE_URL}/${data.image_path}`);
+                    setImagePreview(`http://localhost:8080/${data.image_path}`);
                 }
             }
         } catch (err) { console.error('Error fetching details:', err); }
@@ -61,8 +59,8 @@ const AdminEditSlider = () => {
         setMessage({ text: '', type: '' });
 
         const url = isEdit
-            ? `/sliders/update/${id}`
-            : `${BASE_URL}/api/sliders/create`;
+            ? `http://localhost:8080/api/sliders/update/${id}`
+            : 'http://localhost:8080/api/sliders/create';
 
         const formDataToSend = new FormData();
         Object.keys(formData).forEach(key => {

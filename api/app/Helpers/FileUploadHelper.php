@@ -18,8 +18,8 @@ class FileUploadHelper
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $newName = $file->getRandomName();
 
-            // Base path: gcub/public/assets/uploads/
-            $uploadPath = FCPATH . '../../gcub/public/assets/uploads/' . $subfolder;
+            // Base path: public/assets/uploads/
+            $uploadPath = FCPATH . 'assets/uploads/' . $subfolder;
 
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);

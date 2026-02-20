@@ -207,7 +207,7 @@ const TermsOfService = () => {
                                 <p><strong>The Guntur Co-Operative Urban Bank Limited</strong></p>
                                 <p>D.No: 3/2, Brodipet, Guntur – 522002, Andhra Pradesh</p>
                                 <p>Email: gcubhelpdesk@guntururbanbank.org</p>
-                                <p>Toll Free: 1800 425 8873</p>
+                                <p>Toll Free: 1800-425-8873</p>
                             </div>
                         </div>
                     </div>

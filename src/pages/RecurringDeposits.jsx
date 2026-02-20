@@ -7,7 +7,7 @@ const RecurringDeposits = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-3/4">
                         <div className="mb-6 rounded-lg overflow-hidden shadow-sm">
-                            <img src="assets/images/recurring_deposit/banner.png" alt="Recurring Deposit Banner" className="w-full h-auto object-cover" />
+                            <img src="/assets/images/recurring_deposit/banner.png" alt="Recurring Deposit Banner" className="w-full h-auto object-cover" />
                         </div>
 
                         <div className="mb-8 text-sm text-gray-600 leading-relaxed text-justify">
@@ -53,6 +53,13 @@ const RecurringDeposits = () => {
                         <div className="bg-gray-100 border border-gray-200 rounded overflow-hidden">
                             <div className="bg-[#0056b3] text-white px-4 py-2 text-sm font-bold">Maturity Calculator</div>
                             <a href="#" className="block p-4 text-sm text-gray-700 hover:text-[#003399] hover:bg-gray-50 transition">Check Maturity Value</a>
+                        </div>
+                        {/* CTA Card */}
+                        <div className="bg-[#003399] text-white p-8 rounded-xl shadow-xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <h3 className="text-2xl font-bold mb-4 relative z-10">Start Your Journey</h3>
+                            <p className="text-blue-100 mb-8 relative z-10 font-light">Open an account today and experience banking services tailored for your lifestyle.</p>
+                            <a href="/contact" className="w-full bg-white text-[#003399] flex items-center justify-center font-bold py-4 rounded-xl hover:bg-blue-50 transition shadow-lg relative z-10 uppercase tracking-widest text-sm">Apply Now</a>
                         </div>
                     </div>
                 </div>

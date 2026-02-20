@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminKycNorms = () => {
     const [content, setContent] = useState({
@@ -27,7 +25,7 @@ const AdminKycNorms = () => {
 
     const fetchContent = async () => {
         try {
-            const res = await apiFetch('/kyc-norms-content');
+            const res = await fetch('http://localhost:8080/api/kyc-norms-content');
             const data = await res.json();
             if (data) {
                 setContent({
@@ -47,7 +45,7 @@ const AdminKycNorms = () => {
 
     const fetchDocuments = async () => {
         try {
-            const res = await apiFetch('/kyc-documents');
+            const res = await fetch('http://localhost:8080/api/kyc-documents');
             const data = await res.json();
             if (Array.isArray(data)) {
                 setIdentityDocs(data.filter(d => d.category === 'identity'));
@@ -65,7 +63,7 @@ const AdminKycNorms = () => {
         setMessage({ text: '', type: '' });
 
         try {
-            const res = await fetch(`${BASE_URL}/api/kyc-norms-content/update`, {
+            const res = await fetch('http://localhost:8080/api/kyc-norms-content/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(content)
@@ -86,7 +84,7 @@ const AdminKycNorms = () => {
 
     const handleAddDocument = async (category) => {
         try {
-            const res = await fetch(`${BASE_URL}/api/kyc-documents/create`, {
+            const res = await fetch('http://localhost:8080/api/kyc-documents/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newDoc, category })
@@ -105,7 +103,7 @@ const AdminKycNorms = () => {
 
     const handleUpdateDocument = async (id) => {
         try {
-            const res = await apiFetch(`/kyc-documents/update/${id}`, {
+            const res = await fetch(`http://localhost:8080/api/kyc-documents/update/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingDoc)
@@ -124,7 +122,7 @@ const AdminKycNorms = () => {
     const handleDeleteDocument = async (id) => {
         if (!window.confirm('Are you sure you want to delete this document?')) return;
         try {
-            const res = await apiFetch(`/kyc-documents/delete/${id}`, { method: 'POST' });
+            const res = await fetch(`http://localhost:8080/api/kyc-documents/delete/${id}`, { method: 'POST' });
             const result = await res.json();
             if (result.status === 'success') {
                 setMessage({ text: 'Document deleted successfully!', type: 'success' });

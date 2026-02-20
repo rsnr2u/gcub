@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminInterestRates = () => {
     const [tables, setTables] = useState([]);
@@ -15,7 +13,7 @@ const AdminInterestRates = () => {
 
     const fetchTables = async () => {
         try {
-            const response = await apiFetch('/interest-rates');
+            const response = await fetch('http://localhost:8080/api/interest-rates');
             const data = await response.json();
             if (Array.isArray(data)) {
                 setTables(data);
@@ -101,8 +99,8 @@ const AdminInterestRates = () => {
         formData.append('rows', JSON.stringify(table.rows));
 
         const url = table.id
-            ? `/interest-rates/update/${table.id}`
-            : `${BASE_URL}/api/interest-rates/create`;
+            ? `http://localhost:8080/api/interest-rates/update/${table.id}`
+            : 'http://localhost:8080/api/interest-rates/create';
 
         try {
             const response = await fetch(url, {
@@ -134,7 +132,7 @@ const AdminInterestRates = () => {
         }
 
         try {
-            const response = await apiFetch(`/interest-rates/delete/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/interest-rates/delete/${id}`, {
                 method: 'POST'
             });
             const data = await response.json();

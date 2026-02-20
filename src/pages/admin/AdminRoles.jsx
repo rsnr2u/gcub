@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminRoles = () => {
     const [roles, setRoles] = useState([]);
@@ -20,7 +18,7 @@ const AdminRoles = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await apiFetch('/roles');
+            const res = await fetch('http://localhost:8080/api/roles');
             const data = await res.json();
             setRoles(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -32,7 +30,7 @@ const AdminRoles = () => {
 
     const fetchPermissions = async () => {
         try {
-            const res = await apiFetch('/permissions/grouped');
+            const res = await fetch('http://localhost:8080/api/permissions/grouped');
             const data = await res.json();
             setPermissions(data || {});
         } catch (err) {
@@ -42,7 +40,7 @@ const AdminRoles = () => {
 
     const fetchRolePermissions = async (roleId) => {
         try {
-            const res = await apiFetch(`/permissions/by-role/${roleId}`);
+            const res = await fetch(`http://localhost:8080/api/permissions/by-role/${roleId}`);
             const data = await res.json();
             setRolePermissions(Array.isArray(data) ? data.map(p => p.id) : []);
         } catch (err) {
@@ -69,7 +67,7 @@ const AdminRoles = () => {
         if (!selectedRole) return;
 
         try {
-            const res = await apiFetch(`/roles/assign-permissions/${selectedRole.id}`, {
+            const res = await fetch(`http://localhost:8080/api/roles/assign-permissions/${selectedRole.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ permission_ids: rolePermissions })
@@ -101,8 +99,8 @@ const AdminRoles = () => {
     const handleSaveRole = async () => {
         try {
             const url = editingRole
-                ? `/roles/update/${editingRole}`
-                : `${BASE_URL}/api/roles/create`;
+                ? `http://localhost:8080/api/roles/update/${editingRole}`
+                : 'http://localhost:8080/api/roles/create';
 
             const res = await fetch(url, {
                 method: 'POST',
@@ -130,7 +128,7 @@ const AdminRoles = () => {
         if (!window.confirm('Are you sure you want to delete this role?')) return;
 
         try {
-            const res = await apiFetch(`/roles/delete/${roleId}`, { method: 'POST' });
+            const res = await fetch(`http://localhost:8080/api/roles/delete/${roleId}`, { method: 'POST' });
             const result = await res.json();
 
             if (result.status === 'success') {

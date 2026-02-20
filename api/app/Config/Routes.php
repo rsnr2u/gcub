@@ -11,6 +11,18 @@ $routes->options('(:any)', function () { }); // Handle OPTIONS request for CORS
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
     $routes->get('news', 'News::index');
     $routes->get('news/latest', 'News::latest');
+    $routes->get('news/show/(:num)', 'News::show/$1');
+    $routes->post('news/create', 'News::create');
+    $routes->post('news/update/(:num)', 'News::update/$1');
+    $routes->post('news/delete/(:num)', 'News::delete/$1');
+
+    // Gallery Routes
+    $routes->get('gallery', 'Gallery::index');
+    $routes->get('gallery/show/(:num)', 'Gallery::show/$1');
+    $routes->post('gallery/create', 'Gallery::create');
+    $routes->post('gallery/update/(:num)', 'Gallery::update/$1');
+    $routes->post('gallery/delete/(:num)', 'Gallery::delete/$1');
+    $routes->post('gallery/delete-image/(:num)', 'Gallery::deleteImage/$1');
 
     // Products & Services Routes
     $routes->get('products', 'Products::index');

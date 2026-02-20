@@ -1,8 +1,42 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import SchemaOrg, { organizationSchema, createBreadcrumbSchema } from '../components/SchemaOrg';
 
 const About = () => {
+    const [data, setData] = useState({
+        metadata: {},
+        timeline: [],
+        core_values: [],
+        network: []
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchAboutData = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/bank-about');
+                const result = await response.json();
+                setData(result);
+            } catch (error) {
+                console.error('Error fetching about data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchAboutData();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-gray-500 animate-pulse font-medium">Loading About Us content...</div>
+            </div>
+        );
+    }
+
+    const { metadata, timeline, core_values, network } = data;
+
     return (
         <div className="about-page">
             {/* SEO Meta Tags */}
@@ -21,31 +55,31 @@ const About = () => {
             ])} />
 
             {/* Hero Section with Corporate Overlay */}
-            <section className="relative bg-blue-50 py-16">
+            <section className="relative bg-[#001a37] py-16">
                 <div className="container mx-auto px-4 relative text-center md:text-left">
-                    <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">Our Legacy</h1>
-                    <p className="text-md md:text-xl text-gray-600 font-light max-w-3xl">Empowering generations with trust, stability, and customer-centric banking since 1947.</p>
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white tracking-tight">Our Legacy</h1>
+                    <p className="text-md md:text-xl text-white font-light max-w-3xl">Empowering generations with trust, stability, and customer-centric banking since 1947.</p>
                 </div>
             </section>
 
             {/* Stats Bar / Key Highlights */}
-            <section className="bg-red-50 text-gray py-8 shadow-lg relative z-20 -mt-8 mx-4 md:mx-auto md:max-w-6xl rounded-lg">
+            <section className="bg-blue-50 text-gray py-8 relative mx-4 md:mx-auto">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-red-400/50">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-blue-400/50">
                         <div>
-                            <span className="block text-3xl md:text-4xl font-bold">75+</span>
+                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_years || '75+'}</span>
                             <span className="text-sm uppercase tracking-wider opacity-90">Years of Service</span>
                         </div>
                         <div>
-                            <span className="block text-3xl md:text-4xl font-bold">22</span>
+                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_branches || '22'}</span>
                             <span className="text-sm uppercase tracking-wider opacity-90">Branches</span>
                         </div>
                         <div>
-                            <span className="block text-3xl md:text-4xl font-bold">₹1012Cr+</span>
+                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_volume || '₹1012Cr+'}</span>
                             <span className="text-sm uppercase tracking-wider opacity-90">Business Volume</span>
                         </div>
                         <div>
-                            <span className="block text-3xl md:text-4xl font-bold">50k+</span>
+                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_customers || '50k+'}</span>
                             <span className="text-sm uppercase tracking-wider opacity-90">Customers</span>
                         </div>
                     </div>
@@ -61,30 +95,34 @@ const About = () => {
                         <div className="lg:w-2/3">
                             <div className="prose prose-lg text-gray-600 max-w-none">
                                 <h2 className="text-3xl font-bold text-[#003399] mb-6 border-b-2 border-yellow-400 inline-block pb-2">
-                                    Welcome to The Guntur Co-operative Urban Bank Limited</h2>
-                                <p className="leading-relaxed mb-6">
-                                    The Guntur Co-operative Urban Bank Limited stands as a pillar of financial stability in Andhra
-                                    Pradesh. Established in <strong>1947</strong>, amidst the dawn of India's independence, we have
-                                    upheld a tradition of trust and integrity for over seven decades.
-                                </p>
-                                <p className="leading-relaxed mb-8">
-                                    Our journey from a "Produce Consumers Co-operative Society" to a premier Urban Co-operative Bank
-                                    is a testament to our adaptability. Today, operating under the <em>Andhra Pradesh Mutually Aided
-                                        Co-operative Societies Act, 1995</em>, we blend cooperative values with modern banking
-                                    efficiency.
-                                </p>
-
-                                <h3 className="text-2xl font-bold text-[#003399] mt-10 mb-4">Vision & Mission</h3>
-                                <div className="bg-orange-50 p-8 rounded-xl shadow-sm border-l-4 border-[#003399] mb-8">
-                                    <h4 className="font-bold text-gray-800 mb-2">Our Vision</h4>
-                                    <p className="italic text-gray-600">"To be a trusted and progressive co-operative bank, delivering secure, inclusive, and sustainable banking solutions."</p>
+                                    {metadata.welcome_title || 'Welcome to The Guntur Co-operative Urban Bank Limited'}</h2>
+                                <div className="leading-relaxed mb-8 text-justify whitespace-pre-line">
+                                    {metadata.welcome_text || (
+                                        <>
+                                            <p className="mb-4">
+                                                The Guntur Co-operative Urban Bank Limited stands as a pillar of financial stability in Andhra
+                                                Pradesh. Established in <strong>1947</strong>, amidst the dawn of India's independence, we have
+                                                upheld a tradition of trust and integrity for over seven decades.
+                                            </p>
+                                            <p>
+                                                Our journey from a "Produce Consumers Co-operative Society" to a premier Urban Co-operative Bank
+                                                is a testament to our adaptability. Today, operating under the <em>Andhra Pradesh Mutually Aided
+                                                    Co-operative Societies Act, 1995</em>, we blend cooperative values with modern banking
+                                                efficiency.
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
 
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <ValueCard icon="fas fa-shield-alt" title="Integrity" desc="Safe, reliable, and affordable services with absolute transparency." />
-                                    <ValueCard icon="fas fa-users" title="Inclusion" desc="Supporting the banking needs of all sections of society." />
-                                    <ValueCard icon="fas fa-laptop-code" title="Innovation" desc="Adopting modern technology while maintaining personalized service." />
-                                    <ValueCard icon="fas fa-chart-line" title="Growth" desc="Contributing clearly to regional economic growth and development." />
+                                <div className="grid md:grid-cols-2 gap-8 mb-12">
+                                    <div className="bg-orange-50 p-8 rounded-xl shadow-sm border-l-4 border-[#003399]">
+                                        <h4 className="font-bold text-gray-800 mb-2 uppercase text-xs tracking-widest">Our Vision</h4>
+                                        <p className="italic text-gray-600 leading-relaxed font-serif">"{metadata.vision_text || 'To be a trusted and progressive co-operative bank, delivering secure, inclusive, and sustainable banking solutions.'}"</p>
+                                    </div>
+                                    <div className="bg-blue-50 p-8 rounded-xl shadow-sm border-l-4 border-red-600">
+                                        <h4 className="font-bold text-gray-800 mb-2 uppercase text-xs tracking-widest">Our Mission</h4>
+                                        <p className="italic text-gray-600 leading-relaxed font-serif">"{metadata.mission_text || 'Supporting the banking needs of all sections of society by adopting modern technology while maintaining personalized service.'}"</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -92,10 +130,24 @@ const About = () => {
                             <div className="mt-20">
                                 <h3 className="text-2xl font-bold text-[#003399] mb-8">Our Journey</h3>
                                 <div className="border-l-2 border-gray-200 ml-4 space-y-12">
-                                    <TimelineItem year="1947" title="Inception" desc="Established as 'Produce Consumers Co-operative Society'." color="bg-[#E61111]" />
-                                    <TimelineItem year="1949" title="Urban Bank Conversion" desc="Registered under Madras Co-operative Societies Act, 1932. First branch opened at Brodipet." color="bg-blue-900" />
-                                    <TimelineItem year="1998" title="Modern Governance" desc="Adopted the AP Mutually Aided Co-operative Societies Act, 1995." color="bg-blue-900" />
-                                    <TimelineItem year="2018-Present" title="Expansion & Growth" desc="Expanded to 13 branches across Guntur, Krishna, and Prakasam districts. Surpassed ₹606 Crores business volume." color="bg-[#E61111]" />
+                                    {timeline.length > 0 ? (
+                                        timeline.map((item, index) => (
+                                            <TimelineItem
+                                                key={item.id}
+                                                year={item.year}
+                                                title={item.title}
+                                                desc={item.description}
+                                                color={index % 2 === 0 ? 'bg-[#E61111]' : 'bg-blue-900'}
+                                            />
+                                        ))
+                                    ) : (
+                                        <>
+                                            <TimelineItem year="1947" title="Inception" desc="Established as 'Produce Consumers Co-operative Society'." color="bg-[#E61111]" />
+                                            <TimelineItem year="1949" title="Urban Bank Conversion" desc="Registered under Madras Co-operative Societies Act, 1932. First branch opened at Brodipet." color="bg-blue-900" />
+                                            <TimelineItem year="1998" title="Modern Governance" desc="Adopted the AP Mutually Aided Co-operative Societies Act, 1995." color="bg-blue-900" />
+                                            <TimelineItem year="2018-Present" title="Expansion & Growth" desc="Expanded to 13 branches across Guntur, Krishna, and Prakasam districts. Surpassed ₹606 Crores business volume." color="bg-[#E61111]" />
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -105,7 +157,7 @@ const About = () => {
                             {/* Image Card */}
                             <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
                                 <div className="relative">
-                                    <img src="assets/images/gcub-building.png" alt="Head Office" className="w-full h-64 object-cover" />
+                                    <img src="/assets/images/gcub-building.png" alt="Head Office" className="w-full h-64 object-cover" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                     <div className="absolute bottom-4 left-4 text-white">
                                         <h4 className="font-bold text-lg">Head Office</h4>
@@ -115,7 +167,7 @@ const About = () => {
                                 <div className="p-6">
                                     <p className="text-gray-600 text-sm mb-4 flex items-start gap-3">
                                         <i className="fas fa-map-marker-alt text-[#E61111] mt-1"></i>
-                                        <span>Door No. 3/2, Brodipet,<br />Guntur – 522002</span>
+                                        <span>2/3, Brodipet, Guntur, Andhra Pradesh – 522002</span>
                                     </p>
                                     <Link to="/contact" className="block w-full bg-[#003399] text-white text-center py-3 rounded hover:bg-blue-800 transition font-medium shadow-md hover:shadow-lg">Contact Us</Link>
                                 </div>
@@ -128,7 +180,7 @@ const About = () => {
                                 </div>
                                 <h3 className="text-xl font-bold mb-6 border-b border-white/20 pb-4">Core Values</h3>
                                 <ul className="space-y-4 relative z-10">
-                                    {['Trust & Integrity', 'Customer-Centric', 'Co-operative Spirit', 'Financial Responsibility', 'Community Commitment'].map((val) => (
+                                    {(core_values.length > 0 ? core_values.map(v => v.title) : ['Trust & Integrity', 'Customer-Centric', 'Co-operative Spirit', 'Financial Responsibility', 'Community Commitment']).map((val) => (
                                         <li key={val} className="flex items-center gap-3">
                                             <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
                                             <span className="font-medium">{val}</span>
@@ -143,18 +195,29 @@ const About = () => {
                                     <i className="fas fa-project-diagram"></i> Our Network
                                 </h3>
                                 <div className="space-y-4 divide-y divide-gray-100">
-                                    <div className="pt-2">
-                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Guntur City</span>
-                                        <p className="font-bold text-gray-800 text-lg">5 Branches</p>
-                                    </div>
-                                    <div className="pt-4">
-                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Guntur District</span>
-                                        <p className="font-bold text-gray-800 text-lg">6 Branches</p>
-                                    </div>
-                                    <div className="pt-4">
-                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Key Towns</span>
-                                        <p className="font-bold text-gray-800 text-lg">Ongole & Gollapudi</p>
-                                    </div>
+                                    {network.length > 0 ? (
+                                        network.map((item) => (
+                                            <div key={item.id} className="pt-2 first:pt-0">
+                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{item.region_name}</span>
+                                                <p className="font-bold text-gray-800 text-lg">{item.branch_count}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <div className="pt-2">
+                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Guntur City</span>
+                                                <p className="font-bold text-gray-800 text-lg">5 Branches</p>
+                                            </div>
+                                            <div className="pt-4">
+                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Guntur District</span>
+                                                <p className="font-bold text-gray-800 text-lg">6 Branches</p>
+                                            </div>
+                                            <div className="pt-4">
+                                                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Key Towns</span>
+                                                <p className="font-bold text-gray-800 text-lg">Ongole & Gollapudi</p>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../../utils/api';
-
 
 const AdminLogin = () => {
     const [username, setUsername] = useState('');
@@ -14,7 +12,7 @@ const AdminLogin = () => {
         setError('');
 
         try {
-            const response = await fetch(`${BASE_URL}/api/login`, {
+            const response = await fetch('http://localhost:8080/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,10 +46,10 @@ const AdminLogin = () => {
                 {/* Header */}
                 <div className="bg-[#003399] py-8 text-center relative overflow-hidden">
                     {/* Pattern Overlay */}
-                    <div className="absolute inset-0 opacity-10 bg-[url('assets/images/pattern.png')] pointer-events-none"></div>
+                    <div className="absolute inset-0 opacity-10 bg-[url('/assets/images/pattern.png')] pointer-events-none"></div>
 
                     <div className="relative z-10">
-                        <img src="assets/images/gcublogo.png" alt="GCUB Logo"
+                        <img src="/assets/images/gcublogo.png" alt="GCUB Logo"
                             className="h-16 mx-auto mb-4 bg-white rounded-lg p-2 shadow-sm" />
                         <h2 className="text-white text-2xl font-bold tracking-wide">Admin Portal</h2>
                         <p className="text-blue-200 text-sm mt-1">Guntur Co-operative Urban Bank Ltd.</p>

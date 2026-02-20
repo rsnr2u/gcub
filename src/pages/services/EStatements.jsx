@@ -130,7 +130,7 @@ const EStatements = () => {
                         <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
                             <h3 className="text-xl font-bold text-slate-800 mb-6">Need help?</h3>
                             <p className="text-sm text-slate-600 mb-6">Can't open your e-statement or didn't receive one? Contact our support.</p>
-                            <a href="tel:18004258873" className="block w-full text-center bg-blue-900 py-4 rounded-2xl text-white font-bold hover:bg-black transition">
+                            <a href="tel:18001234567" className="block w-full text-center bg-blue-900 py-4 rounded-2xl text-white font-bold hover:bg-black transition">
                                 Contact Support
                             </a>
                         </div>

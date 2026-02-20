@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch } from '../utils/api';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import SEO from '../components/SEO';
@@ -13,29 +12,16 @@ import 'swiper/css/pagination';
 
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const slides = [
+    const [slides, setSlides] = useState([
         {
-            image: 'assets/images/slides/slide_digital_banking_v2.png',
+            image: '/assets/images/slides/slide_digital_banking_v2.png',
             tag: 'Digital Banking',
             title: 'Banking at your Fingertips.',
             desc: 'Experience seamless transactions with our secure and user-friendly Net Banking platform.',
             link: '/net-banking'
-        },
-        {
-            image: 'assets/images/slides/slide_mobile_app_v2.png',
-            tag: 'Mobile App',
-            title: 'Your Bank, Now in Your Pocket.',
-            desc: 'Download our mobile app for instant transfers, bill payments, and more.',
-            link: '/downloads'
-        },
-        {
-            image: 'assets/images/slides/slide_gold_loan_v2.png',
-            tag: 'Gold Loans',
-            title: 'Unlock the Value of Your Gold.',
-            desc: 'Quick processing, attractive interest rates, and maximum value per gram.',
-            link: '/gold-loans'
         }
-    ];
+    ]);
+    const [loadingSliders, setLoadingSliders] = useState(true);
 
     const [quickAccess, setQuickAccess] = useState([]);
     const [dynamicProducts, setDynamicProducts] = useState([]);
@@ -65,11 +51,38 @@ const Home = () => {
         cta_button_link: '/about'
     });
     const [legacyStats, setLegacyStats] = useState([]);
+    const [latestNews, setLatestNews] = useState([]);
 
     useEffect(() => {
+        const fetchSliders = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/sliders');
+                const data = await response.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    const activeSliders = data
+                        .filter(item => item.is_active == 1)
+                        .map(item => ({
+                            image: `http://localhost:8080/${item.image_path}`,
+                            tag: item.category,
+                            title: item.title,
+                            desc: item.description,
+                            link: item.button_link || '/',
+                            buttonText: item.button_name || 'Get Started'
+                        }));
+                    if (activeSliders.length > 0) {
+                        setSlides(activeSliders);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching sliders:', error);
+            } finally {
+                setLoadingSliders(false);
+            }
+        };
+
         const fetchQuickAccess = async () => {
             try {
-                const response = await apiFetch('/quick-access');
+                const response = await fetch('http://localhost:8080/api/quick-access');
                 const data = await response.json();
                 const staticRoutes = {
                     'mobile-banking': '/mobile-banking',
@@ -103,31 +116,25 @@ const Home = () => {
                 console.error('Error fetching quick access items:', error);
             }
         };
-        fetchQuickAccess();
-    }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
+        const fetchProducts = async () => {
             try {
-                const response = await apiFetch('/products');
+                const response = await fetch('http://localhost:8080/api/products');
                 const products = await response.json();
 
                 if (Array.isArray(products)) {
                     setDynamicProducts(products.filter(p => p && p.status === 'active'));
                 }
             } catch (error) {
-                console.error('Error fetching home data:', error);
+                console.error('Error fetching products:', error);
             } finally {
                 setLoadingProducts(false);
             }
         };
-        fetchData();
-    }, []);
 
-    useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await apiFetch('/admin/settings');
+                const response = await fetch('http://localhost:8080/api/admin/settings');
                 const data = await response.json();
                 if (data && data.stats_title) {
                     setStats(prev => ({ ...prev, ...data }));
@@ -139,7 +146,7 @@ const Home = () => {
 
         const fetchHomeContent = async () => {
             try {
-                const response = await apiFetch('/homepage-content');
+                const response = await fetch('http://localhost:8080/api/homepage-content');
                 const data = await response.json();
                 if (data && data.section_title) {
                     setHomeContent(data);
@@ -151,7 +158,7 @@ const Home = () => {
 
         const fetchLegacyStats = async () => {
             try {
-                const response = await apiFetch('/homepage-stats');
+                const response = await fetch('http://localhost:8080/api/homepage-stats');
                 const data = await response.json();
                 if (Array.isArray(data)) {
                     setLegacyStats(data);
@@ -161,20 +168,32 @@ const Home = () => {
             }
         };
 
+        const fetchLatestNews = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/news/latest');
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    setLatestNews(data);
+                }
+            } catch (error) {
+                console.error('Error fetching latest news:', error);
+            }
+        };
+
+        fetchSliders();
+        fetchQuickAccess();
+        fetchProducts();
         fetchStats();
         fetchHomeContent();
         fetchLegacyStats();
+        fetchLatestNews();
     }, []);
 
     const getProductImage = (p) => {
         if (p.icon_type === 'img') {
-            // New uploads go to /icons/, legacy in /cards/
-            // We can use onError in the img tag for fallback, 
-            // but for this mapped object we'll provide the path.
-            // Let's assume new ones are in icons
-            return `assets/images/icons/${p.icon_value}`;
+            return `/assets/images/icons/${p.icon_value}`;
         }
-        return 'assets/images/gcublogo.png';
+        return '/assets/images/gcublogo.png';
     };
 
     const depositSchemes = dynamicProducts
@@ -207,11 +226,14 @@ const Home = () => {
     };
 
     useEffect(() => {
-        startHeroTimer();
+        if (slides.length > 0) {
+            startHeroTimer();
+        }
         return () => {
             if (heroTimerRef.current) clearInterval(heroTimerRef.current);
         };
-    }, []);
+    }, [slides.length]);
+
 
     const navigateHero = (direction) => {
         if (direction === 'next') {
@@ -256,7 +278,7 @@ const Home = () => {
                                         <span className="inline-block py-1 px-3 rounded-full bg-[#E61111] text-xs font-bold uppercase tracking-wider mb-4">{slide.tag}</span>
                                         <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: slide.title }}></h2>
                                         <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg">{slide.desc}</p>
-                                        <Link to={slide.link} className="inline-block bg-white text-[#003399] px-8 py-3 rounded-md font-bold hover:bg-gray-100 transition shadow-lg transform hover:-translate-y-1">Get Started</Link>
+                                        <Link to={slide.link} className="inline-block bg-white text-[#003399] px-8 py-3 rounded-md font-bold hover:bg-gray-100 transition shadow-lg transform hover:-translate-y-1">{slide.buttonText || 'Get Started'}</Link>
                                     </div>
                                 </div>
                             </div>
@@ -310,13 +332,22 @@ const Home = () => {
                     </div>
                     <div className="flex-1 py-2 overflow-hidden">
                         <div className="animate-marquee whitespace-nowrap text-sm font-medium tracking-wide">
-                            <Link to="/gold-loans" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ Gold Loans at attractive interest rates!</Link>
-                            <span className="text-blue-500">|</span>
-                            <Link to="/fixed-deposits" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ Senior Citizen FD Interest Rate increased to 7.5%</Link>
-                            <span className="text-blue-500">|</span>
-                            <Link to="/mobile-banking" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ Mobile Banking App launched - Download Now!</Link>
-                            <span className="text-blue-500">|</span>
-                            <Link to="/atm-safety" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ ATM Safety Guidelines released.</Link>
+                            {latestNews.length > 0 ? latestNews.map((item, idx) => (
+                                <span key={idx} className="inline-flex items-center">
+                                    <Link to={`/news/${item.id}`} className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ {item.title}</Link>
+                                    {idx < latestNews.length - 1 && <span className="text-blue-500">|</span>}
+                                </span>
+                            )) : (
+                                <>
+                                    <Link to="/gold-loans" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ Gold Loans at attractive interest rates!</Link>
+                                    <span className="text-blue-500">|</span>
+                                    <Link to="/fixed-deposits" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ Senior Citizen FD Interest Rate increased to 7.5%</Link>
+                                    <span className="text-blue-500">|</span>
+                                    <Link to="/mobile-banking" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ Mobile Banking App launched - Download Now!</Link>
+                                    <span className="text-blue-500">|</span>
+                                    <Link to="/atm-safety" className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ ATM Safety Guidelines released.</Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -420,7 +451,7 @@ const Home = () => {
                                                             if (e.target.src.includes('/icons/')) {
                                                                 e.target.src = e.target.src.replace('/icons/', '/cards/');
                                                             } else {
-                                                                e.target.src = 'assets/images/gcublogo.png';
+                                                                e.target.src = '/assets/images/gcublogo.png';
                                                             }
                                                         }}
                                                     />
@@ -475,7 +506,7 @@ const Home = () => {
                                                             if (e.target.src.includes('/icons/')) {
                                                                 e.target.src = e.target.src.replace('/icons/', '/cards/');
                                                             } else {
-                                                                e.target.src = 'assets/images/gcublogo.png';
+                                                                e.target.src = '/assets/images/gcublogo.png';
                                                             }
                                                         }}
                                                     />
@@ -498,10 +529,10 @@ const Home = () => {
                             <QuickLinksSidebar />
                             <div className="space-y-4">
                                 <Link to="/contact" className="block overflow-hidden rounded-xl shadow-md group">
-                                    <img src="assets/images/lodge-complaint.jpg" alt="Lodge Complaint" className="w-full h-auto transform group-hover:scale-105 transition duration-500" />
+                                    <img src="/assets/images/lodge-complaint.jpg" alt="Lodge Complaint" className="w-full h-auto transform group-hover:scale-105 transition duration-500" />
                                 </Link>
                                 <a href="https://www.dicgc.org.in/" target="_blank" className="block overflow-hidden rounded-xl shadow-md group bg-white p-2 text-center">
-                                    <img src="assets/images/dicgc.png" alt="DICGC" className="w-full h-auto object-contain mx-auto" />
+                                    <img src="/assets/images/dicgc.png" alt="DICGC" className="w-full h-auto object-contain mx-auto" />
                                 </a>
                             </div>
                         </div>

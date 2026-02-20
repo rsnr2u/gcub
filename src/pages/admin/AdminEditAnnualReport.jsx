@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditAnnualReport = () => {
     const { id } = useParams();
@@ -17,7 +15,7 @@ const AdminEditAnnualReport = () => {
 
     const fetchReport = async () => {
         try {
-            const res = await apiFetch(`/annual-reports/show/${id}`);
+            const res = await fetch(`http://localhost:8080/api/annual-reports/show/${id}`);
             const data = await res.json();
             if (data) setFormData({ ...data, file: null }); // Don't set file input
         } catch (error) { console.error('Error fetching report:', error); }
@@ -38,8 +36,8 @@ const AdminEditAnnualReport = () => {
         }
 
         const url = isEdit
-            ? `/annual-reports/update/${id}`
-            : `${BASE_URL}/api/annual-reports/create`;
+            ? `http://localhost:8080/api/annual-reports/update/${id}`
+            : 'http://localhost:8080/api/annual-reports/create';
 
         try {
             const res = await fetch(url, { method: 'POST', body: data });

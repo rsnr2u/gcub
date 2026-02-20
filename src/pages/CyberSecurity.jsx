@@ -46,7 +46,7 @@ const CyberSecurity = () => {
                             <p className="text-gray-600 mb-6 max-w-lg mx-auto">If you suspect any unauthorized transaction in your account, report it to the bank immediately to block your account/card.</p>
                             <div className="flex flex-col md:flex-row justify-center gap-4">
                                 <a href="tel:18004258873" className="inline-flex items-center justify-center bg-[#E61111] text-white px-6 py-3 rounded font-bold hover:bg-red-700 transition">
-                                    <i className="fas fa-phone-alt mr-2"></i> Call 1800 425 8873
+                                    <i className="fas fa-phone-alt mr-2"></i> Call 1800-425-8873
                                 </a>
                                 <a href="mailto:cybercell@gcub.com" className="inline-flex items-center justify-center bg-white text-[#E61111] border border-[#E61111] px-6 py-3 rounded font-bold hover:bg-red-50 transition">
                                     <i className="far fa-envelope mr-2"></i> Email Cyber Cell

@@ -4,13 +4,13 @@ const SEO = ({
     title = 'The Guntur Co-Operative Urban Bank Limited',
     description = 'GCUB - A premier co-operative bank in Andhra Pradesh since 1947. Offering savings accounts, fixed deposits, gold loans, housing loans, and comprehensive banking services.',
     keywords = 'GCUB, Guntur Co-operative Bank, Urban Bank, Savings Account, Fixed Deposits, Gold Loans, Housing Loans, Andhra Pradesh Bank, Co-operative Bank',
-    image = 'assets/images/gcublogo.png',
+    image = '/assets/images/gcublogo.png',
     url = '',
     type = 'website',
     author = 'The Guntur Co-Operative Urban Bank Limited',
     robots = 'index, follow'
 }) => {
-    const siteUrl = 'https://guntururban.bank.in';
+    const siteUrl = 'https://gcub.in';
     const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
     const fullImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 

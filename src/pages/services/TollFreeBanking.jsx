@@ -101,29 +101,39 @@ const TollFreeBanking = () => {
                     {/* Sidebar Section */}
                     <div className="lg:col-span-4 space-y-8">
                         <div className="bg-blue-50 p-8 rounded-3xl border border-blue-100">
-                            <h3 className="text-xl font-bold text-blue-900 mb-6">IVR Guide</h3>
-                            <p className="text-sm text-slate-600 mb-6">Choose from the following options for quick service:</p>
-                            <div className="space-y-3">
-                                <div className="flex justify-between p-3 bg-white rounded-xl border border-blue-100">
-                                    <span className="text-sm font-bold text-slate-700">Press 1</span>
-                                    <span className="text-sm text-slate-500">For Languages</span>
-                                </div>
-                                <div className="flex justify-between p-3 bg-white rounded-xl border border-blue-100">
-                                    <span className="text-sm font-bold text-slate-700">Press 2</span>
-                                    <span className="text-sm text-slate-500">ATM Card Blocking</span>
-                                </div>
-                                <div className="flex justify-between p-3 bg-white rounded-xl border border-blue-100">
-                                    <span className="text-sm font-bold text-slate-700">Press 3</span>
-                                    <span className="text-sm text-slate-500">Account Services</span>
+                            <h3 className="text-xl font-bold text-blue-900 mb-6 font-primary">Balance Enquiry</h3>
+                            <p className="text-sm text-slate-600 mb-6">Give a missed call through your registered mobile number for quick service:</p>
+                            <div className="space-y-4">
+                                <div className="p-5 bg-white rounded-2xl border border-blue-100 shadow-sm transition-all hover:shadow-md group">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Balance Enquiry</span>
+                                        <i className="fas fa-wallet text-blue-600 opacity-50"></i>
+                                    </div>
+                                    <a href="tel:02249558043" className="text-xl font-black text-blue-900 group-hover:text-[#E61111] transition">02249558043</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-slate-900 p-8 rounded-3xl text-white">
-                            <h3 className="text-xl font-bold mb-4">International Calls</h3>
-                            <p className="text-slate-400 text-sm mb-4">Calling from abroad? Use our international helpline:</p>
-                            <a href="tel:+912212345678" className="text-xl font-black text-blue-400 hover:text-white transition">+91 22 1234 5678</a>
-                            <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-widest font-bold">Standard rates apply</p>
+                        <div className="bg-red-50 p-8 rounded-3xl border border-red-100">
+                            <h3 className="text-xl font-bold text-red-900 mb-4">ATM Card Blocking</h3>
+                            <p className="text-slate-600 text-sm mb-6">Lost or stolen card? Call immediately to block your card and protect your funds:</p>
+                            <a href="tel:18004258873" className="w-full inline-flex items-center justify-center gap-3 bg-red-600 text-white py-4 rounded-xl font-bold hover:bg-red-700 transition shadow-lg shadow-red-200">
+                                <i className="fas fa-shield-alt"></i>
+                                <span>08045936080</span>
+                            </a>
+                        </div>
+
+                        <div className="bg-[#002b5c] p-8 rounded-3xl text-white">
+                            <h3 className="text-xl font-bold mb-4">Quick Downloads</h3>
+                            <p className="text-blue-100/70 text-sm mb-6">Download the Toll Free Banking request form to avail these services.</p>
+                            <a
+                                href="/downloads"
+                                className="w-full inline-flex items-center justify-center gap-3 bg-white text-[#002b5c] py-4 rounded-xl font-bold hover:bg-blue-50 transition"
+                            >
+                                <i className="fas fa-file-download"></i>
+                                <span>Download Request Form</span>
+                            </a>
+                            <p className="text-[10px] text-blue-300/50 mt-4 uppercase tracking-widest font-bold text-center">PDF Format | 1.2 MB</p>
                         </div>
                     </div>
 

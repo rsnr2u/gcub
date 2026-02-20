@@ -101,9 +101,9 @@ const NACHService = () => {
                                 To enable NACH Debit, you need to sign a one-time mandate (E-Mandate) form authorizing the collection entity to debit your account.
                             </p>
                             <div className="bg-white p-4 rounded-xl border border-blue-200">
-                                <h4 className="text-xs font-black text-blue-900 uppercase mb-2">Check Mandate Status</h4>
-                                <p className="text-xs text-slate-500 mb-3">Track your mandate registration status through our portal.</p>
-                                <button className="text-[10px] font-black uppercase text-blue-600 hover:text-blue-900 transition">Track Status →</button>
+                                <h4 className="text-xs font-black text-blue-900 uppercase mb-2">Download the Form</h4>
+                                <p className="text-xs text-slate-500 mb-3">Download the E-Mandate form to enable NACH Debit.</p>
+                                <a className="text-[10px] font-black uppercase text-blue-600 hover:text-blue-900 transition" href="/downloads">Download the Form</a>
                             </div>
                         </div>
 

@@ -14,7 +14,7 @@ const AdminProducts = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await authFetch('products');
+            const response = await authFetch('http://localhost:8080/api/products');
             const data = await response.json();
             if (Array.isArray(data)) {
                 setProducts(data);
@@ -33,7 +33,7 @@ const AdminProducts = () => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
 
         try {
-            const response = await authFetch(`/products/delete/${id}`, { method: 'POST' });
+            const response = await authFetch(`http://localhost:8080/api/products/delete/${id}`, { method: 'POST' });
             const data = await response.json();
             if (data.status === 'success') {
                 setMessage({ type: 'success', text: 'Product deleted successfully!' });
@@ -94,14 +94,14 @@ const AdminProducts = () => {
                                 <div className="p-5 flex items-center gap-4">
                                     {product.icon_type === 'img' ? (
                                         <img
-                                            src={`assets/images/icons/${product.icon_value}`}
+                                            src={`/assets/images/icons/${product.icon_value}`}
                                             alt={product.name}
                                             className="w-16 h-16 rounded-lg object-cover bg-gray-50 p-1 border border-gray-100"
                                             onError={(e) => {
                                                 if (e.target.src.includes('/icons/')) {
                                                     e.target.src = e.target.src.replace('/icons/', '/cards/');
                                                 } else {
-                                                    e.target.src = 'assets/images/gcublogo.png';
+                                                    e.target.src = '/assets/images/gcublogo.png';
                                                 }
                                             }}
                                         />

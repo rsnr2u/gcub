@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../../utils/api';
-
 
 const PopupSettings = () => {
     const [settings, setSettings] = useState({
@@ -25,7 +23,7 @@ const PopupSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await apiFetch('/admin/settings');
+            const response = await fetch('http://localhost:8080/api/admin/settings');
             const data = await response.json();
             setSettings({
                 popup_enabled: data.popup_enabled || 'off',
@@ -37,7 +35,7 @@ const PopupSettings = () => {
                 popup_cta_link: data.popup_cta_link || ''
             });
             if (data.popup_image) {
-                setImagePreview(data.popup_image.startsWith('/') ? `${BASE_URL}${ data.popup_image }` : data.popup_image);
+                setImagePreview(data.popup_image.startsWith('/') ? `http://localhost:8080${data.popup_image}` : data.popup_image);
             }
             setLoading(false);
         } catch (error) {
@@ -80,7 +78,7 @@ const PopupSettings = () => {
         }
 
         try {
-            const response = await fetch(`${BASE_URL}/api/admin/settings/update`, {
+            const response = await fetch('http://localhost:8080/api/admin/settings/update', {
                 method: 'POST',
                 body: formData
             });
@@ -89,7 +87,7 @@ const PopupSettings = () => {
                 setMessage({ type: 'success', text: 'Popup announcement settings updated successfully!' });
                 if (data.data && data.data.popup_image) {
                     setSettings(prev => ({ ...prev, popup_image: data.data.popup_image }));
-                    setImagePreview(`${BASE_URL}${ data.data.popup_image }`);
+                    setImagePreview(`http://localhost:8080${data.data.popup_image}`);
                     setImageFile(null);
                 }
             } else {

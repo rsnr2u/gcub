@@ -1,12 +1,5 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
-export const BASE_URL = API_BASE_URL.replace(/\/api$/, '') || 'http://localhost:8080';
-
-
 export const authFetch = async (url, options = {}) => {
     const token = localStorage.getItem('authToken');
-
-    // Prepend base URL if the url is relative
-    const finalUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
 
     const headers = {
         ...options.headers,
@@ -17,9 +10,7 @@ export const authFetch = async (url, options = {}) => {
         headers['Content-Type'] = 'application/json';
     }
 
-    const response = await fetch(finalUrl, { ...options, headers });
-
-
+    const response = await fetch(url, { ...options, headers });
 
     if (response.status === 401) {
         // Auto logout on unauthorized
@@ -34,9 +25,4 @@ export const authFetch = async (url, options = {}) => {
     }
 
     return response;
-};
-
-export const apiFetch = async (url, options = {}) => {
-    const finalUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
-    return fetch(finalUrl, options);
 };

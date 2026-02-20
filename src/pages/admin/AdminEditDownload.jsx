@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { BASE_URL, apiFetch } from '../../utils/api';
-
 
 const AdminEditDownload = () => {
     const { id } = useParams();
@@ -30,7 +28,7 @@ const AdminEditDownload = () => {
 
     const fetchDownloadData = async () => {
         try {
-            const response = await apiFetch(`/downloads/show/${id}`);
+            const response = await fetch(`http://localhost:8080/api/downloads/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData({
@@ -76,8 +74,8 @@ const AdminEditDownload = () => {
         }
 
         const url = id
-            ? `/downloads/update/${id}`
-            : `${BASE_URL}/api/downloads/create`;
+            ? `http://localhost:8080/api/downloads/update/${id}`
+            : 'http://localhost:8080/api/downloads/create';
 
         try {
             const response = await fetch(url, {

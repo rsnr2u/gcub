@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../../utils/api';
-
 
 const SocialSettings = () => {
     const [settings, setSettings] = useState({
@@ -19,7 +17,7 @@ const SocialSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await apiFetch('/admin/settings');
+            const response = await fetch('http://localhost:8080/api/admin/settings');
             const data = await response.json();
             setSettings({
                 seo_facebook_url: data.seo_facebook_url || '',
@@ -49,7 +47,7 @@ const SocialSettings = () => {
         });
 
         try {
-            const response = await fetch(`${BASE_URL}/api/admin/settings/update`, {
+            const response = await fetch('http://localhost:8080/api/admin/settings/update', {
                 method: 'POST',
                 body: formData
             });

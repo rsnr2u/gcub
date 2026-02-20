@@ -79,6 +79,13 @@ const IMPS = () => {
                             <p className="text-blue-100 text-sm mb-4">Contact our registered mobile support for any failed transactions.</p>
                             <a href="/contact" className="inline-block bg-white text-[#003399] px-4 py-2 rounded font-bold text-sm hover:bg-gray-100 transition">Contact Support</a>
                         </div>
+
+                        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 text-center">
+                            <i className="fas fa-file-download text-4xl text-gray-400 mb-3"></i>
+                            <h4 className="font-bold text-gray-800 mb-2">Download Forms</h4>
+                            <p className="text-xs text-gray-500 mb-4">Download the IMPS form to enable IMPS Debit.</p>
+                            <a href="/downloads" className="text-[#003399] text-sm font-bold hover:underline">Go to Downloads</a>
+                        </div>
                     </div>
 
                 </div>

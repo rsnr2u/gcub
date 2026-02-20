@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import SEO from '../components/SEO';
 import SchemaOrg, { localBusinessSchema, createBreadcrumbSchema } from '../components/SchemaOrg';
-import { BASE_URL } from '../utils/api';
-
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -22,7 +20,7 @@ const Contact = () => {
         setMessage({ text: '', type: '' });
 
         try {
-            const res = await fetch(`${BASE_URL}/api/contact-submissions/create`, {
+            const res = await fetch('http://localhost:8080/api/contact-submissions/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -55,7 +53,7 @@ const Contact = () => {
             {/* SEO Meta Tags */}
             <SEO
                 title="Contact Us - GCUB | Get in Touch with Guntur Co-Operative Urban Bank"
-                description="Contact The Guntur Co-Operative Urban Bank. Head Office: Brodipet, Guntur. Toll Free: 1800 425 8873. Email: gcubhelpdesk@guntururbanbank.org. Visit our 22 branches across Andhra Pradesh."
+                description="Contact The Guntur Co-Operative Urban Bank. Head Office: Brodipet, Guntur. Toll Free: 1800-425-8873. Email: gcubhelpdesk@guntururbanbank.org. Visit our 22 branches across Andhra Pradesh."
                 keywords="GCUB Contact, Guntur Bank Contact Number, Bank Address Guntur, Customer Service, Branch Locator"
                 url="/contact"
             />
@@ -183,7 +181,7 @@ const Contact = () => {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full bg-[#0088ff] hover:bg-[#0077e6] text-white font-bold py-3.5 rounded transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full bg-[#004085] hover:bg-[#001a37] text-white font-bold py-3.5 rounded transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <i className={`fas ${loading ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-sm`}></i>
                                         {loading ? 'Sending...' : 'Send Message'}
@@ -195,7 +193,7 @@ const Contact = () => {
                         {/* Right Column: Sidebar */}
                         <div className="lg:w-5/12 space-y-6">
                             {/* Head Office Card */}
-                            <div className="bg-[#0088ff] text-white rounded-xl p-8 shadow-lg relative overflow-hidden">
+                            <div className="bg-[#004085] text-white rounded-xl p-8 shadow-lg relative overflow-hidden">
                                 <div className="relative z-10">
                                     <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
                                         <span className="bg-white/20 p-2 rounded-lg"><i className="far fa-building"></i></span>
@@ -203,8 +201,8 @@ const Contact = () => {
                                     </h3>
                                     <div className="space-y-6">
                                         <ContactInfoItem icon="fas fa-map-marker-alt" label="" text={<>D.No: 3/2, Brodipet,<br />GUNTUR-522002, Andhra Pradesh</>} />
-                                        <ContactInfoItem icon="fas fa-phone-alt" label="Toll Free" text="1800 425 8873" isBold />
-                                        <ContactInfoItem icon="far fa-envelope" label="Email" text="gcubhelpdesk@guntururbanbank.org" />
+                                        <ContactInfoItem icon="fas fa-phone-alt" label="Toll Free" text="1800-425-8873" isBold />
+                                        <ContactInfoItem icon="far fa-envelope" label="Email" text="helpdesk@guntururban.bank.in" />
                                         <ContactInfoItem icon="far fa-clock" label="Working Hours" text="10:00 AM to 6:00 PM" />
                                     </div>
                                 </div>
@@ -213,12 +211,12 @@ const Contact = () => {
                             {/* Branch Timings */}
                             <div className="grid md:grid-cols-2 gap-4">
                                 <TimingCard title="Local Branches" icon="far fa-building" bgColor="bg-blue-50" iconColor="text-blue-500" timings={[
-                                    { label: 'Mon - Sat', text: '10:00 AM to 6:00 PM', labelColor: 'text-purple-600' },
+                                    { label: 'Mon - Sat', text: '10:00 AM to 6:00 PM', labelColor: 'text-blue-600' },
                                     { label: 'Lunch Break', text: '2:00 PM to 3:00 PM', labelColor: 'text-orange-500', icon: 'fas fa-mug-hot' },
                                     { label: 'Closed', text: '2nd & 4th Saturday / Sundays', labelColor: 'text-red-500', subText: true }
                                 ]} />
                                 <TimingCard title="Out Station" icon="far fa-building" bgColor="bg-purple-50" iconColor="text-purple-500" timings={[
-                                    { label: 'Mon - Sat', text: '10:00 AM to 5:00 PM', labelColor: 'text-purple-600' },
+                                    { label: 'Mon - Sat', text: '10:00 AM to 5:00 PM', labelColor: 'text-blue-600' },
                                     { label: 'Lunch Break', text: '2:00 PM to 2:30 PM', labelColor: 'text-orange-500', icon: 'fas fa-mug-hot' },
                                     { label: 'Closed', text: '2nd & 4th Saturday / Sundays', labelColor: 'text-red-500', subText: true }
                                 ]} />
@@ -227,8 +225,8 @@ const Contact = () => {
                             {/* Quick Actions */}
                             <div className="grid grid-cols-3 gap-4">
                                 <QuickAction icon="fas fa-phone-alt" label="Call Us" sub="24/7" color="blue" href="tel:18004258873" />
-                                <QuickAction icon="far fa-envelope" label="Email" sub="Quick Reply" color="green" href="mailto:help@gcub.com" />
-                                <QuickAction icon="fas fa-map-marker-alt" label="Visit" sub="13 Branches" color="purple" href="/branch-locator" />
+                                <QuickAction icon="far fa-envelope" label="Email" sub="Quick Reply" color="green" href="mailto:support@guntururban.bank.in" />
+                                <QuickAction icon="fas fa-map-marker-alt" label="Visit" sub="Branches" color="purple" href="/branch-locator" />
                             </div>
                         </div>
                     </div>

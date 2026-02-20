@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch, BASE_URL } from '../../utils/api';
-
 
 const AdminBoardDirectors = ({ isEmbedded = false }) => {
     const [directors, setDirectors] = useState([]);
@@ -14,7 +12,7 @@ const AdminBoardDirectors = ({ isEmbedded = false }) => {
 
     const fetchDirectors = async () => {
         try {
-            const response = await apiFetch('/board-directors');
+            const response = await fetch('http://localhost:8080/api/board-directors');
             const data = await response.json();
             if (Array.isArray(data)) {
                 setDirectors(data);
@@ -32,7 +30,7 @@ const AdminBoardDirectors = ({ isEmbedded = false }) => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this director?')) return;
         try {
-            const response = await apiFetch(`/board-directors/delete/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/board-directors/delete/${id}`, {
                 method: 'POST'
             });
             const data = await response.json();
@@ -103,7 +101,7 @@ const AdminBoardDirectors = ({ isEmbedded = false }) => {
                                             <td className="px-8 py-4">
                                                 <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-100 bg-gray-50">
                                                     {director.image_path ? (
-                                                        <img src={`${BASE_URL}/${director.image_path}`} alt={director.name} className="w-full h-full object-cover" />
+                                                        <img src={`http://localhost:8080/${director.image_path}`} alt={director.name} className="w-full h-full object-cover" />
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                                                             <i className="fas fa-user"></i>

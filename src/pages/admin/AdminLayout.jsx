@@ -42,7 +42,7 @@ const AdminLayout = () => {
     useEffect(() => {
         const fetchNewSubmissionsCount = async () => {
             try {
-                const res = await authFetch('contact-submissions?status=new');
+                const res = await authFetch('http://localhost:8080/api/contact-submissions?status=new');
                 const data = await res.json();
                 setNewSubmissionsCount(data.counts?.new || 0);
             } catch (err) {
@@ -57,7 +57,7 @@ const AdminLayout = () => {
 
     const handleLogout = async () => {
         try {
-            await authFetch('logout', { method: 'POST' });
+            await authFetch('http://localhost:8080/api/logout', { method: 'POST' });
         } catch (err) {
             console.error('Logout error:', err);
         }
@@ -89,11 +89,13 @@ const AdminLayout = () => {
             children: [
                 { name: 'Home Page', path: '/admin/content/home-page', icon: 'fas fa-home' },
                 { name: 'Sliders', path: '/admin/content/sliders', icon: 'fas fa-images' },
+                { name: 'Latest News', path: '/admin/content/news', icon: 'fas fa-newspaper' },
                 { name: 'Holidays', path: '/admin/content/holidays', icon: 'fas fa-calendar-alt' },
                 { name: 'KYC Norms', path: '/admin/content/kyc-norms', icon: 'fas fa-id-card' },
                 { name: 'Missed Call Banking', path: '/admin/content/missed-call-banking', icon: 'fas fa-phone' },
                 { name: 'Quick Access', path: '/admin/content/quick-access', icon: 'fas fa-th' },
                 { name: 'Home Statistics', path: '/admin/content/statistics', icon: 'fas fa-chart-line' },
+                { name: 'Photo Gallery', path: '/admin/content/gallery', icon: 'fas fa-images' },
             ]
         },
         {
@@ -113,9 +115,7 @@ const AdminLayout = () => {
             name: 'Disclosures',
             icon: 'fas fa-file-contract',
             children: [
-                { name: 'DICGC Certificate', path: '/admin/bank-info?tab=dicgc', icon: 'fas fa-certificate' },
                 { name: 'DEAF Accounts', path: '/admin/disclosures/deaf-accounts', icon: 'fas fa-users-slash' },
-                { name: 'Ombudsman', path: '/admin/disclosures/ombudsman', icon: 'fas fa-gavel' },
             ]
         },
         { name: 'Contact Submissions', path: '/admin/contact-submissions', icon: 'fas fa-envelope' },
