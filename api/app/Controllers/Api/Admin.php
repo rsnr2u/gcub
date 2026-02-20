@@ -70,33 +70,37 @@ class Admin extends BaseController
     // Update Site Settings
     public function updateSettings()
     {
-        $data = $this->request->getPost();
+        try {
+            $data = $this->request->getPost();
 
-        // Handle File Uploads
-        if ($files = $this->request->getFiles()) {
-            foreach ($files as $key => $file) {
-                if ($file->isValid() && !$file->hasMoved()) {
-                    $newName = $file->getRandomName();
-                    // Ensure the directory exists
-                    $uploadPath = FCPATH . 'assets/uploads';
-                    if (!is_dir($uploadPath)) {
-                        mkdir($uploadPath, 0777, true);
+            // Handle File Uploads
+            if ($files = $this->request->getFiles()) {
+                foreach ($files as $key => $file) {
+                    if ($file->isValid() && !$file->hasMoved()) {
+                        $newName = $file->getRandomName();
+                        // Ensure the directory exists
+                        $uploadPath = FCPATH . 'assets/uploads';
+                        if (!is_dir($uploadPath)) {
+                            mkdir($uploadPath, 0777, true);
+                        }
+                        $file->move($uploadPath, $newName);
+                        // Store the relative path in the database
+                        $data[$key] = '/assets/uploads/' . $newName;
                     }
-                    $file->move($uploadPath, $newName);
-                    // Store the relative path in the database
-                    $data[$key] = '/assets/uploads/' . $newName;
                 }
             }
-        }
 
-        if ($this->settingsModel->updateSettings($data)) {
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Settings updated successfully',
-                'data' => $data // Option for frontend to update state with new paths
-            ]);
+            if ($this->settingsModel->updateSettings($data)) {
+                return $this->respond([
+                    'status' => 'success',
+                    'message' => 'Settings updated successfully',
+                    'data' => $data
+                ]);
+            }
+            return $this->fail('Failed to update settings');
+        } catch (\Exception $e) {
+            return $this->fail('An error occurred: ' . $e->getMessage());
         }
-        return $this->fail('Failed to update settings');
     }
 
     // Get Dashboard Stats

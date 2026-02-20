@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { authFetch } from '../../../utils/api';
 
 const BrandingSettings = () => {
     const [settings, setSettings] = useState({
@@ -22,7 +23,7 @@ const BrandingSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/admin/settings');
+            const response = await authFetch('http://localhost:8080/api/admin/settings');
             const data = await response.json();
             setSettings({
                 site_logo: data.site_logo || '',
@@ -50,7 +51,7 @@ const BrandingSettings = () => {
         formData.append(key, file);
 
         try {
-            const response = await fetch('http://localhost:8080/api/admin/settings/update', {
+            const response = await authFetch('http://localhost:8080/api/admin/settings/update', {
                 method: 'POST',
                 body: formData
             });

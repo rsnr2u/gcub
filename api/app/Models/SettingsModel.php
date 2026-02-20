@@ -30,8 +30,24 @@ class SettingsModel extends Model
 
     public function updateSettings($data)
     {
+        $db = \Config\Database::connect();
+
         foreach ($data as $key => $value) {
-            $this->where('setting_key', $key)->set(['setting_value' => $value])->update();
+            $builder = $db->table($this->table);
+            $exists = $builder->where('setting_key', $key)->get()->getRow();
+
+            if ($exists) {
+                $db->table($this->table)->where('setting_key', $key)->update([
+                    'setting_value' => $value,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            } else {
+                $db->table($this->table)->insert([
+                    'setting_key' => $key,
+                    'setting_value' => $value,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
         return true;
     }

@@ -48,17 +48,17 @@ const EducationLoans = () => {
                         <div className="bg-[#0056b3] text-white overflow-hidden rounded shadow-sm">
                             <a href="/interest-rates" className="block px-4 py-3 border-b border-blue-400/30 hover:bg-[#003399] transition text-sm font-medium">Interest Rates</a>
                         </div>
-                        <div className="bg-gray-100 border border-gray-200 rounded overflow-hidden">
-                            <div className="bg-[#0056b3] text-white px-4 py-2 text-sm font-bold">Contact Us</div>
-                            <div className="p-4 text-sm text-gray-700">
-                                <p className="mb-2">Visit your nearest branch for more details.</p>
-                                <a href="/branch-locator" className="text-[#003399] font-medium hover:underline">Branch Locator</a>
-                            </div>
+                        {/* CTA Card */}
+                        <div className="bg-[#003399] text-white p-8 rounded-xl shadow-xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-700"></div>
+                            <h3 className="text-2xl font-bold mb-4 relative z-10">Start Your Journey</h3>
+                            <p className="text-blue-100 mb-8 relative z-10 font-light">Open an account today and experience banking services tailored for your lifestyle.</p>
+                            <a href="/contact" className="w-full bg-white text-[#003399] flex items-center justify-center font-bold py-4 rounded-xl hover:bg-blue-50 transition shadow-lg relative z-10 uppercase tracking-widest text-sm">Apply Now</a>
                         </div>
                     </div>
                 </div>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 };
 

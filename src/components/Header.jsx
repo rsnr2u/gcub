@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const Header = () => {
+const Header = memo(() => {
     const [activeMenu, setActiveMenu] = useState(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [mobileExpanded, setMobileExpanded] = useState(null);
@@ -180,6 +180,7 @@ const Header = () => {
                                 src={settings.site_logo ? (settings.site_logo.startsWith('/') ? `http://localhost:8080${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png"}
                                 alt="GCUB Logo"
                                 className="h-8 md:h-12 object-contain"
+                                loading="lazy"
                             />
                         </Link>
                     </div>
@@ -401,6 +402,7 @@ const Header = () => {
             </nav>
         </>
     );
-};
+});
+
 
 export default Header;

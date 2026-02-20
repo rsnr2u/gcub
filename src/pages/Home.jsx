@@ -447,6 +447,7 @@ const Home = () => {
                                                         src={item.image}
                                                         alt={item.name}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                                        loading="lazy"
                                                         onError={(e) => {
                                                             if (e.target.src.includes('/icons/')) {
                                                                 e.target.src = e.target.src.replace('/icons/', '/cards/');
@@ -502,6 +503,7 @@ const Home = () => {
                                                         src={item.image}
                                                         alt={item.name}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                                        loading="lazy"
                                                         onError={(e) => {
                                                             if (e.target.src.includes('/icons/')) {
                                                                 e.target.src = e.target.src.replace('/icons/', '/cards/');
@@ -529,10 +531,10 @@ const Home = () => {
                             <QuickLinksSidebar />
                             <div className="space-y-4">
                                 <Link to="/contact" className="block overflow-hidden rounded-xl shadow-md group">
-                                    <img src="/assets/images/lodge-complaint.jpg" alt="Lodge Complaint" className="w-full h-auto transform group-hover:scale-105 transition duration-500" />
+                                    <img src="/assets/images/lodge-complaint.jpg" alt="Lodge Complaint" className="w-full h-auto transform group-hover:scale-105 transition duration-500" loading="lazy" />
                                 </Link>
                                 <a href="https://www.dicgc.org.in/" target="_blank" className="block overflow-hidden rounded-xl shadow-md group bg-white p-2 text-center">
-                                    <img src="/assets/images/dicgc.png" alt="DICGC" className="w-full h-auto object-contain mx-auto" />
+                                    <img src="/assets/images/dicgc.png" alt="DICGC" className="w-full h-auto object-contain mx-auto" loading="lazy" />
                                 </a>
                             </div>
                         </div>
