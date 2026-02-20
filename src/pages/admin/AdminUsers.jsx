@@ -15,7 +15,7 @@ const AdminUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const res = await authFetch('http://localhost:8080/api/users');
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/users`);
             const data = await res.json();
             setUsers(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -27,7 +27,7 @@ const AdminUsers = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await authFetch('http://localhost:8080/api/roles');
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/roles`);
             const data = await res.json();
             setRoles(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -37,7 +37,7 @@ const AdminUsers = () => {
 
     const handleToggleStatus = async (id, currentStatus) => {
         try {
-            const res = await authFetch(`http://localhost:8080/api/users/toggle-status/${id}`, { method: 'POST' });
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/users/toggle-status/${id}`, { method: 'POST' });
             const result = await res.json();
             if (result.status === 'success') {
                 setMessage({ text: `User ${currentStatus ? 'deactivated' : 'activated'} successfully!`, type: 'success' });
@@ -53,7 +53,7 @@ const AdminUsers = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this user?')) return;
         try {
-            const res = await authFetch(`http://localhost:8080/api/users/delete/${id}`, { method: 'POST' });
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/users/delete/${id}`, { method: 'POST' });
             const result = await res.json();
             if (result.status === 'success') {
                 setMessage({ text: 'User deleted successfully!', type: 'success' });

@@ -18,7 +18,7 @@ const AdminRoles = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/roles');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roles`);
             const data = await res.json();
             setRoles(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -30,7 +30,7 @@ const AdminRoles = () => {
 
     const fetchPermissions = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/permissions/grouped');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/permissions/grouped`);
             const data = await res.json();
             setPermissions(data || {});
         } catch (err) {
@@ -40,7 +40,7 @@ const AdminRoles = () => {
 
     const fetchRolePermissions = async (roleId) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/permissions/by-role/${roleId}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/permissions/by-role/${roleId}`);
             const data = await res.json();
             setRolePermissions(Array.isArray(data) ? data.map(p => p.id) : []);
         } catch (err) {
@@ -67,7 +67,7 @@ const AdminRoles = () => {
         if (!selectedRole) return;
 
         try {
-            const res = await fetch(`http://localhost:8080/api/roles/assign-permissions/${selectedRole.id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roles/assign-permissions/${selectedRole.id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ permission_ids: rolePermissions })
@@ -99,8 +99,8 @@ const AdminRoles = () => {
     const handleSaveRole = async () => {
         try {
             const url = editingRole
-                ? `http://localhost:8080/api/roles/update/${editingRole}`
-                : 'http://localhost:8080/api/roles/create';
+                ? `${import.meta.env.VITE_API_BASE_URL}/roles/update/${editingRole}`
+                : `${import.meta.env.VITE_API_BASE_URL}/roles/create`;
 
             const res = await fetch(url, {
                 method: 'POST',
@@ -128,7 +128,7 @@ const AdminRoles = () => {
         if (!window.confirm('Are you sure you want to delete this role?')) return;
 
         try {
-            const res = await fetch(`http://localhost:8080/api/roles/delete/${roleId}`, { method: 'POST' });
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roles/delete/${roleId}`, { method: 'POST' });
             const result = await res.json();
 
             if (result.status === 'success') {

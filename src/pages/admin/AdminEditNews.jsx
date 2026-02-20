@@ -25,7 +25,7 @@ const AdminEditNews = () => {
 
     const fetchDetails = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/news/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/news/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -34,7 +34,7 @@ const AdminEditNews = () => {
                     is_latest: parseInt(data.is_latest) || 0
                 });
                 if (data.image) {
-                    setImagePreview(`http://localhost:8080/${data.image}`);
+                    setImagePreview(`${import.meta.env.VITE_BASE_URL}/${data.image}`);
                 }
             }
         } catch (err) {
@@ -56,8 +56,8 @@ const AdminEditNews = () => {
         setMessage({ text: '', type: '' });
 
         const url = isEdit
-            ? `http://localhost:8080/api/news/update/${id}`
-            : 'http://localhost:8080/api/news/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/news/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/news/create`;
 
         const formDataToSend = new FormData();
         formDataToSend.append('title', formData.title);

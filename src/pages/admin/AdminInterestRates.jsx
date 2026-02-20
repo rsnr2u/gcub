@@ -13,7 +13,7 @@ const AdminInterestRates = () => {
 
     const fetchTables = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/interest-rates');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/interest-rates`);
             const data = await response.json();
             if (Array.isArray(data)) {
                 setTables(data);
@@ -99,8 +99,8 @@ const AdminInterestRates = () => {
         formData.append('rows', JSON.stringify(table.rows));
 
         const url = table.id
-            ? `http://localhost:8080/api/interest-rates/update/${table.id}`
-            : 'http://localhost:8080/api/interest-rates/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/interest-rates/update/${table.id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/interest-rates/create`;
 
         try {
             const response = await fetch(url, {
@@ -132,7 +132,7 @@ const AdminInterestRates = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/interest-rates/delete/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/interest-rates/delete/${id}`, {
                 method: 'POST'
             });
             const data = await response.json();

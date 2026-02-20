@@ -12,7 +12,7 @@ const ISOCertified = () => {
 
     const fetchContent = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/iso-certified');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/iso-certified`);
             const data = await response.json();
             setContent(data);
         } catch (error) {

@@ -26,7 +26,7 @@ const AdminEditDeafAccount = () => {
 
     const fetchBranches = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/branches');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/branches`);
             const data = await res.json();
             setBranches(Array.isArray(data) ? data : []);
         } catch (err) { console.error('Error fetching branches:', err); }
@@ -34,7 +34,7 @@ const AdminEditDeafAccount = () => {
 
     const fetchAccountDetails = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/deaf-accounts/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/deaf-accounts/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -56,8 +56,8 @@ const AdminEditDeafAccount = () => {
         setMessage({ text: '', type: '' });
 
         const url = isEdit
-            ? `http://localhost:8080/api/deaf-accounts/update/${id}`
-            : 'http://localhost:8080/api/deaf-accounts/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/deaf-accounts/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/deaf-accounts/create`;
 
         try {
             const res = await fetch(url, {

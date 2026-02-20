@@ -9,7 +9,7 @@ const Gallery = () => {
     useEffect(() => {
         const fetchGallery = async () => {
             try {
-                const res = await fetch('http://localhost:8080/api/gallery');
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gallery`);
                 const data = await res.json();
                 setGalleryItems(data);
             } catch (err) {
@@ -68,7 +68,7 @@ const Gallery = () => {
                                 >
                                     <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-lg group-hover:shadow-2xl transition-all duration-500 transform group-hover:-translate-y-2">
                                         <img
-                                            src={`http://localhost:8080/${item.image}`}
+                                            src={`${import.meta.env.VITE_BASE_URL}/${item.image}`}
                                             alt={item.title}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />

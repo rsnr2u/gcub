@@ -8,7 +8,7 @@ const BoardDirectors = () => {
 
     useEffect(() => {
         const fetchDirectors = async () => {
-            const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+            const apiBaseUrl = import.meta.env.VITE_API_URL || `${import.meta.env.VITE_BASE_URL}`;
             try {
                 const response = await fetch(`${apiBaseUrl}/api/board-directors`);
                 const data = await response.json();
@@ -143,7 +143,7 @@ const BoardDirectors = () => {
 const CorporateCard = ({ member, isChairman, isViceChairman }) => {
     const borderColor = isChairman ? 'border-[#003399]' : isViceChairman ? 'border-[#E61111]' : 'border-gray-200';
     const nameColor = isChairman ? 'text-[#003399]' : isViceChairman ? 'text-[#E61111]' : 'text-gray-800';
-    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+    const apiBaseUrl = import.meta.env.VITE_API_URL || `${import.meta.env.VITE_BASE_URL}`;
 
     return (
         <div className={`bg-white border ${borderColor} rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group`}>

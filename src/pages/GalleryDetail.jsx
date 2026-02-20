@@ -11,7 +11,7 @@ const GalleryDetail = () => {
     useEffect(() => {
         const fetchGalleryDetail = async () => {
             try {
-                const res = await fetch(`http://localhost:8080/api/gallery/show/${id}`);
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gallery/show/${id}`);
                 const data = await res.json();
                 setGalleryPost(data);
             } catch (err) {
@@ -118,7 +118,7 @@ const GalleryDetail = () => {
                                     onClick={() => openLightbox(index)}
                                 >
                                     <img
-                                        src={`http://localhost:8080/${img.image}`}
+                                        src={`${import.meta.env.VITE_BASE_URL}/${img.image}`}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         alt={`Gallery ${index}`}
                                     />
@@ -171,7 +171,7 @@ const GalleryDetail = () => {
                         onClick={e => e.stopPropagation()}
                     >
                         <img
-                            src={`http://localhost:8080/${galleryPost.images[selectedImageIndex]?.image}`}
+                            src={`${import.meta.env.VITE_BASE_URL}/${galleryPost.images[selectedImageIndex]?.image}`}
                             alt="Lightbox"
                             className="max-w-full max-h-[85vh] md:max-h-[90vh] object-contain rounded-xl shadow-2xl"
                         />

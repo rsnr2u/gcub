@@ -29,7 +29,7 @@ const AdminEditBoardDirector = () => {
 
     const fetchDirector = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/board-directors/show/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/board-directors/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData({
@@ -37,7 +37,7 @@ const AdminEditBoardDirector = () => {
                     image: null
                 });
                 if (data.image_path) {
-                    setPreviewImage(`http://localhost:8080/${data.image_path}`);
+                    setPreviewImage(`${import.meta.env.VITE_BASE_URL}/${data.image_path}`);
                 }
             }
             setLoading(false);
@@ -71,8 +71,8 @@ const AdminEditBoardDirector = () => {
         });
 
         const url = isEdit
-            ? `http://localhost:8080/api/board-directors/update/${id}`
-            : 'http://localhost:8080/api/board-directors/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/board-directors/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/board-directors/create`;
 
         try {
             const response = await fetch(url, {

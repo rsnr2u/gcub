@@ -15,7 +15,7 @@ const About = () => {
     useEffect(() => {
         const fetchAboutData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/bank-about');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/bank-about`);
                 const result = await response.json();
                 setData(result);
             } catch (error) {

@@ -21,7 +21,7 @@ const AdminMissedCallBanking = () => {
 
     const fetchContent = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/missed-call-banking-content');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/missed-call-banking-content`);
             const data = await res.json();
             if (data) {
                 setContent({
@@ -39,7 +39,7 @@ const AdminMissedCallBanking = () => {
 
     const fetchServices = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/missed-call-banking-services');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/missed-call-banking-services`);
             const data = await res.json();
             setServices(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -53,7 +53,7 @@ const AdminMissedCallBanking = () => {
         setMessage({ text: '', type: '' });
 
         try {
-            const res = await fetch('http://localhost:8080/api/missed-call-banking-content/update', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/missed-call-banking-content/update`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(content)
@@ -74,7 +74,7 @@ const AdminMissedCallBanking = () => {
 
     const handleAddService = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/missed-call-banking-services/create', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/missed-call-banking-services/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newService)
@@ -93,7 +93,7 @@ const AdminMissedCallBanking = () => {
 
     const handleUpdateService = async (id) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/missed-call-banking-services/update/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/missed-call-banking-services/update/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingService)
@@ -112,7 +112,7 @@ const AdminMissedCallBanking = () => {
     const handleDeleteService = async (id) => {
         if (!window.confirm('Are you sure you want to delete this service?')) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/missed-call-banking-services/delete/${id}`, { method: 'POST' });
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/missed-call-banking-services/delete/${id}`, { method: 'POST' });
             const result = await res.json();
             if (result.status === 'success') {
                 setMessage({ text: 'Service deleted successfully!', type: 'success' });

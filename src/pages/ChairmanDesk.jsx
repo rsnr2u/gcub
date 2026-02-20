@@ -3,7 +3,7 @@ import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
 
 const ChairmanDesk = () => {
-    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+    const apiBaseUrl = import.meta.env.VITE_API_URL || `${import.meta.env.VITE_BASE_URL}`;
     const [chairman, setChairman] = useState(null);
     const [loading, setLoading] = useState(true);
 

@@ -29,7 +29,7 @@ const AdminEditBoardManagement = () => {
 
     const fetchMember = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/board-management/show/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/board-management/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData({
@@ -37,7 +37,7 @@ const AdminEditBoardManagement = () => {
                     image: null
                 });
                 if (data.image_path) {
-                    setPreviewImage(`http://localhost:8080/${data.image_path}`);
+                    setPreviewImage(`${import.meta.env.VITE_BASE_URL}/${data.image_path}`);
                 }
             }
             setLoading(false);
@@ -71,8 +71,8 @@ const AdminEditBoardManagement = () => {
         });
 
         const url = isEdit
-            ? `http://localhost:8080/api/board-management/update/${id}`
-            : 'http://localhost:8080/api/board-management/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/board-management/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/board-management/create`;
 
         try {
             const response = await fetch(url, {

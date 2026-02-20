@@ -17,7 +17,7 @@ const Downloads = () => {
 
     const fetchDownloads = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/downloads');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/downloads`);
             const data = await response.json();
             if (Array.isArray(data)) {
                 setDownloads(data);
@@ -86,7 +86,7 @@ const DownloadCategory = ({ title, icon, borderColor, items }) => (
                         <h4 className="font-bold text-gray-800 mb-1">{item.title}</h4>
                         <p className="text-xs text-gray-500 mb-3 flex-1">{item.description}</p>
                         <a
-                            href={item.file_path ? `${(import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '')}/${item.file_path.replace(/^\//, '')}` : '#'}
+                            href={item.file_path ? `${(import.meta.env.VITE_API_URL || `${import.meta.env.VITE_BASE_URL}`).replace(/\/$/, '')}/${item.file_path.replace(/^\//, '')}` : '#'}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center text-sm font-medium text-[#003399] hover:underline"

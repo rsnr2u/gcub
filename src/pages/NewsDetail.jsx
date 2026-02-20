@@ -11,7 +11,7 @@ const NewsDetail = () => {
     useEffect(() => {
         const fetchNewsDetail = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/news/show/${id}`);
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/news/show/${id}`);
                 if (!response.ok) {
                     throw new Error('News not found');
                 }
@@ -78,7 +78,7 @@ const NewsDetail = () => {
                     {news.image && (
                         <div className="mb-12 rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10 border border-gray-100">
                             <img
-                                src={`http://localhost:8080/${news.image}`}
+                                src={`${import.meta.env.VITE_BASE_URL}/${news.image}`}
                                 alt={news.title}
                                 className="w-full h-auto object-cover max-h-[500px]"
                             />

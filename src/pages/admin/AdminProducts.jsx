@@ -14,7 +14,7 @@ const AdminProducts = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await authFetch('http://localhost:8080/api/products');
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/products`);
             const data = await response.json();
             if (Array.isArray(data)) {
                 setProducts(data);
@@ -33,7 +33,7 @@ const AdminProducts = () => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
 
         try {
-            const response = await authFetch(`http://localhost:8080/api/products/delete/${id}`, { method: 'POST' });
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/products/delete/${id}`, { method: 'POST' });
             const data = await response.json();
             if (data.status === 'success') {
                 setMessage({ type: 'success', text: 'Product deleted successfully!' });

@@ -17,7 +17,7 @@ const AdminHolidays = () => {
 
     const fetchContent = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/holidays-content');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/holidays-content`);
             const data = await res.json();
             if (data) {
                 setNoteText(data.note_text || '');
@@ -31,7 +31,7 @@ const AdminHolidays = () => {
 
     const fetchHolidays = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/holidays');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/holidays`);
             const data = await res.json();
             setHolidays(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -45,7 +45,7 @@ const AdminHolidays = () => {
         setMessage({ text: '', type: '' });
 
         try {
-            const res = await fetch('http://localhost:8080/api/holidays-content/update', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/holidays-content/update`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ note_text: noteText })
@@ -79,7 +79,7 @@ const AdminHolidays = () => {
     const handleAddHoliday = async () => {
         const dayName = getDayFromDate(newHoliday.holiday_date);
         try {
-            const res = await fetch('http://localhost:8080/api/holidays/create', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/holidays/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newHoliday, day_name: dayName })
@@ -99,7 +99,7 @@ const AdminHolidays = () => {
     const handleUpdateHoliday = async (id) => {
         const dayName = getDayFromDate(editingHoliday.holiday_date);
         try {
-            const res = await fetch(`http://localhost:8080/api/holidays/update/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/holidays/update/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...editingHoliday, day_name: dayName })
@@ -118,7 +118,7 @@ const AdminHolidays = () => {
     const handleDeleteHoliday = async (id) => {
         if (!window.confirm('Are you sure you want to delete this holiday?')) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/holidays/delete/${id}`, { method: 'POST' });
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/holidays/delete/${id}`, { method: 'POST' });
             const result = await res.json();
             if (result.status === 'success') {
                 setMessage({ text: 'Holiday deleted successfully!', type: 'success' });

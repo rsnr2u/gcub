@@ -36,8 +36,8 @@ const AdminContactSubmissions = () => {
         setLoading(true);
         try {
             const url = filter === 'all'
-                ? 'http://localhost:8080/api/contact-submissions'
-                : `http://localhost:8080/api/contact-submissions?status=${filter}`;
+                ? `${import.meta.env.VITE_API_BASE_URL}/contact-submissions`
+                : `${import.meta.env.VITE_API_BASE_URL}/contact-submissions?status=${filter}`;
 
             console.log('Fetching from URL:', url);
             const res = await authFetch(url);
@@ -60,7 +60,7 @@ const AdminContactSubmissions = () => {
         if (!window.confirm('Are you sure you want to delete this submission?')) return;
 
         try {
-            const res = await authFetch(`http://localhost:8080/api/contact-submissions/delete/${id}`, {
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/contact-submissions/delete/${id}`, {
                 method: 'POST'
             });
             const result = await res.json();

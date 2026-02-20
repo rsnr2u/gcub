@@ -56,13 +56,13 @@ const Home = () => {
     useEffect(() => {
         const fetchSliders = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/sliders');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/sliders`);
                 const data = await response.json();
                 if (Array.isArray(data) && data.length > 0) {
                     const activeSliders = data
                         .filter(item => item.is_active == 1)
                         .map(item => ({
-                            image: `http://localhost:8080/${item.image_path}`,
+                            image: `${import.meta.env.VITE_BASE_URL}/${item.image_path}`,
                             tag: item.category,
                             title: item.title,
                             desc: item.description,
@@ -82,7 +82,7 @@ const Home = () => {
 
         const fetchQuickAccess = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/quick-access');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/quick-access`);
                 const data = await response.json();
                 const staticRoutes = {
                     'mobile-banking': '/mobile-banking',
@@ -119,7 +119,7 @@ const Home = () => {
 
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/products');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products`);
                 const products = await response.json();
 
                 if (Array.isArray(products)) {
@@ -134,7 +134,7 @@ const Home = () => {
 
         const fetchStats = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/admin/settings');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
                 const data = await response.json();
                 if (data && data.stats_title) {
                     setStats(prev => ({ ...prev, ...data }));
@@ -146,7 +146,7 @@ const Home = () => {
 
         const fetchHomeContent = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/homepage-content');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-content`);
                 const data = await response.json();
                 if (data && data.section_title) {
                     setHomeContent(data);
@@ -158,7 +158,7 @@ const Home = () => {
 
         const fetchLegacyStats = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/homepage-stats');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-stats`);
                 const data = await response.json();
                 if (Array.isArray(data)) {
                     setLegacyStats(data);
@@ -170,7 +170,7 @@ const Home = () => {
 
         const fetchLatestNews = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/news/latest');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/news/latest`);
                 const data = await response.json();
                 if (Array.isArray(data)) {
                     setLatestNews(data);

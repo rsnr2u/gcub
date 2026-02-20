@@ -12,8 +12,8 @@ const FinancialReports = () => {
         const fetchData = async () => {
             try {
                 const [reportsRes, indicatorsRes] = await Promise.all([
-                    fetch('http://localhost:8080/api/annual-reports'),
-                    fetch('http://localhost:8080/api/financial-indicators')
+                    fetch(`${import.meta.env.VITE_API_BASE_URL}/annual-reports`),
+                    fetch(`${import.meta.env.VITE_API_BASE_URL}/financial-indicators`)
                 ]);
 
                 const reportsData = await reportsRes.json();
@@ -234,7 +234,7 @@ const ReportItem = ({ title, desc, file_path }) => (
             </div>
         </div>
         <a
-            href={file_path ? `http://localhost:8080/${file_path}` : "#"}
+            href={file_path ? `${import.meta.env.VITE_BASE_URL}/${file_path}` : "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3.5 bg-white border border-gray-200 text-[#003399] font-bold text-sm rounded-lg hover:bg-[#003399] hover:text-white hover:border-[#003399] transition shadow-sm flex items-center gap-3 group min-w-[200px] justify-center"

@@ -15,7 +15,7 @@ const AdminEditAnnualReport = () => {
 
     const fetchReport = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/annual-reports/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/annual-reports/show/${id}`);
             const data = await res.json();
             if (data) setFormData({ ...data, file: null }); // Don't set file input
         } catch (error) { console.error('Error fetching report:', error); }
@@ -36,8 +36,8 @@ const AdminEditAnnualReport = () => {
         }
 
         const url = isEdit
-            ? `http://localhost:8080/api/annual-reports/update/${id}`
-            : 'http://localhost:8080/api/annual-reports/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/annual-reports/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/annual-reports/create`;
 
         try {
             const res = await fetch(url, { method: 'POST', body: data });

@@ -12,7 +12,7 @@ const AdminHighlights = () => {
 
     const fetchHighlights = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/highlights');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/highlights`);
             const data = await res.json();
             setHighlights(Array.isArray(data) ? data : []);
             setLoading(false);
@@ -25,7 +25,7 @@ const AdminHighlights = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this highlight?')) return;
         try {
-            const response = await fetch(`http://localhost:8080/api/highlights/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/highlights/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Highlight deleted.' });
                 fetchHighlights();

@@ -13,7 +13,7 @@ const AdminSliders = () => {
 
     const fetchData = async () => {
         try {
-            const res = await authFetch('http://localhost:8080/api/sliders');
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/sliders`);
             const result = await res.json();
             setData(Array.isArray(result) ? result : []);
         } catch (error) {
@@ -26,7 +26,7 @@ const AdminSliders = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this slider?')) return;
         try {
-            const response = await authFetch(`http://localhost:8080/api/sliders/delete/${id}`, { method: 'POST' });
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/sliders/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Slider deleted successfully.' });
                 fetchData();
@@ -39,7 +39,7 @@ const AdminSliders = () => {
             const formData = new FormData();
             formData.append('is_active', currentStatus ? 0 : 1);
 
-            const response = await authFetch(`http://localhost:8080/api/sliders/update/${id}`, {
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/sliders/update/${id}`, {
                 method: 'POST',
                 body: formData
             });
@@ -92,7 +92,7 @@ const AdminSliders = () => {
                                         <tr key={item.id} className="hover:bg-gray-50 transition text-sm text-gray-700">
                                             <td className="px-6 py-4">
                                                 {item.image_path ? (
-                                                    <img src={`http://localhost:8080/${item.image_path}`} alt={item.title} className="w-20 h-12 object-cover rounded" />
+                                                    <img src={`${import.meta.env.VITE_BASE_URL}/${item.image_path}`} alt={item.title} className="w-20 h-12 object-cover rounded" />
                                                 ) : (
                                                     <div className="w-20 h-12 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-400">No Image</div>
                                                 )}

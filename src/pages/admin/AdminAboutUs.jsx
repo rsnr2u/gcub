@@ -27,7 +27,7 @@ const AdminAboutUs = () => {
 
     const fetchData = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/bank-about');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/bank-about`);
             const result = await res.json();
             setData(result);
             setLoading(false);
@@ -47,7 +47,7 @@ const AdminAboutUs = () => {
     const saveMetadata = async () => {
         setSaving(true);
         try {
-            const res = await fetch('http://localhost:8080/api/bank-about/metadata/update', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/bank-about/metadata/update`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data.metadata)
@@ -92,8 +92,8 @@ const AdminAboutUs = () => {
     const saveTimelineEntry = async (e) => {
         e.preventDefault();
         const url = timelineForm.id
-            ? `http://localhost:8080/api/bank-about/timeline/update/${timelineForm.id}`
-            : 'http://localhost:8080/api/bank-about/timeline/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/bank-about/timeline/update/${timelineForm.id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/bank-about/timeline/create`;
 
         try {
             const bodyData = {
@@ -132,7 +132,7 @@ const AdminAboutUs = () => {
     const deleteTimelineEntry = async (id) => {
         if (!window.confirm('Delete this timeline entry?')) return;
         try {
-            await fetch(`http://localhost:8080/api/bank-about/timeline/delete/${id}`, { method: 'POST' });
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/bank-about/timeline/delete/${id}`, { method: 'POST' });
             fetchData();
         } catch (error) {
             console.error(error);
@@ -152,8 +152,8 @@ const AdminAboutUs = () => {
     const saveValueEntry = async (e) => {
         e.preventDefault();
         const url = valueForm.id
-            ? `http://localhost:8080/api/bank-about/values/update/${valueForm.id}`
-            : 'http://localhost:8080/api/bank-about/values/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/bank-about/values/update/${valueForm.id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/bank-about/values/create`;
 
         try {
             const res = await fetch(url, {
@@ -173,7 +173,7 @@ const AdminAboutUs = () => {
     const deleteValueEntry = async (id) => {
         if (!window.confirm('Delete this core value?')) return;
         try {
-            await fetch(`http://localhost:8080/api/bank-about/values/delete/${id}`, { method: 'POST' });
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/bank-about/values/delete/${id}`, { method: 'POST' });
             fetchData();
         } catch (error) {
             console.error(error);
@@ -193,8 +193,8 @@ const AdminAboutUs = () => {
     const saveNetworkEntry = async (e) => {
         e.preventDefault();
         const url = networkForm.id
-            ? `http://localhost:8080/api/bank-about/network/update/${networkForm.id}`
-            : 'http://localhost:8080/api/bank-about/network/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/bank-about/network/update/${networkForm.id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/bank-about/network/create`;
 
         try {
             const res = await fetch(url, {
@@ -214,7 +214,7 @@ const AdminAboutUs = () => {
     const deleteNetworkEntry = async (id) => {
         if (!window.confirm('Delete this network item?')) return;
         try {
-            await fetch(`http://localhost:8080/api/bank-about/network/delete/${id}`, { method: 'POST' });
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/bank-about/network/delete/${id}`, { method: 'POST' });
             fetchData();
         } catch (error) {
             console.error(error);

@@ -22,7 +22,7 @@ const AdminGalleryForm = () => {
         if (isEditMode) {
             const fetchItem = async () => {
                 try {
-                    const res = await authFetch(`http://localhost:8080/api/gallery/show/${id}`);
+                    const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/gallery/show/${id}`);
                     const data = await res.json();
                     setFormData({
                         title: data.title,
@@ -84,7 +84,7 @@ const AdminGalleryForm = () => {
 
         if (result.isConfirmed) {
             try {
-                const res = await authFetch(`http://localhost:8080/api/gallery/delete-image/${imageId}`, {
+                const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/gallery/delete-image/${imageId}`, {
                     method: 'POST'
                 });
                 if (res.ok) {
@@ -123,8 +123,8 @@ const AdminGalleryForm = () => {
 
         try {
             const url = isEditMode
-                ? `http://localhost:8080/api/gallery/update/${id}`
-                : 'http://localhost:8080/api/gallery/create';
+                ? `${import.meta.env.VITE_API_BASE_URL}/gallery/update/${id}`
+                : `${import.meta.env.VITE_API_BASE_URL}/gallery/create`;
 
             const res = await authFetch(url, {
                 method: 'POST',
@@ -231,7 +231,7 @@ const AdminGalleryForm = () => {
                                 {existingImages.map((img) => (
                                     <div key={img.id} className="relative aspect-square rounded-2xl overflow-hidden group border border-gray-100 shadow-sm">
                                         <img
-                                            src={`http://localhost:8080/${img.image}`}
+                                            src={`${import.meta.env.VITE_BASE_URL}/${img.image}`}
                                             alt="Existing"
                                             className="w-full h-full object-cover"
                                         />

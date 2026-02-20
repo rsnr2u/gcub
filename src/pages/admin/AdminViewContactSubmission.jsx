@@ -18,7 +18,7 @@ const AdminViewContactSubmission = () => {
     const fetchSubmission = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:8080/api/contact-submissions/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contact-submissions/show/${id}`);
             const data = await res.json();
             setSubmission(data);
             setAdminNotes(data.admin_notes || '');
@@ -32,7 +32,7 @@ const AdminViewContactSubmission = () => {
 
     const handleStatusUpdate = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/contact-submissions/update-status/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contact-submissions/update-status/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: selectedStatus })
@@ -50,7 +50,7 @@ const AdminViewContactSubmission = () => {
 
     const handleNotesUpdate = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/contact-submissions/update-notes/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/contact-submissions/update-notes/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ admin_notes: adminNotes })

@@ -37,7 +37,7 @@ const AdminEditProduct = () => {
 
     const fetchProduct = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/products/show/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products/show/${id}`);
             const product = await response.json();
 
             if (product && !product.error) {
@@ -156,8 +156,8 @@ const AdminEditProduct = () => {
         setMessage({ type: '', text: '' });
 
         const url = isNew
-            ? 'http://localhost:8080/api/products/create'
-            : `http://localhost:8080/api/products/update/${id}`;
+            ? `${import.meta.env.VITE_API_BASE_URL}/products/create`
+            : `${import.meta.env.VITE_API_BASE_URL}/products/update/${id}`;
 
         const postData = new FormData();
         Object.keys(formData).forEach(key => {

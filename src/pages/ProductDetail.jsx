@@ -14,7 +14,7 @@ const ProductDetail = () => {
             setLoading(true);
             try {
                 // Fetch specific product by slug
-                const prodResponse = await fetch(`http://localhost:8080/api/products/show/${slug}`);
+                const prodResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products/show/${slug}`);
                 if (!prodResponse.ok) {
                     setProduct(null);
                     return;
@@ -23,7 +23,7 @@ const ProductDetail = () => {
                 setProduct(currentProduct);
 
                 // Fetch all products for sidebar
-                const allResponse = await fetch('http://localhost:8080/api/products');
+                const allResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products`);
                 if (allResponse.ok) {
                     const allData = await allResponse.json();
                     if (Array.isArray(allData)) {

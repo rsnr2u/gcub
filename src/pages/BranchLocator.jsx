@@ -10,7 +10,7 @@ const BranchLocator = () => {
     useEffect(() => {
         const fetchBranches = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/branches');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/branches`);
                 const data = await response.json();
 
                 if (Array.isArray(data)) {

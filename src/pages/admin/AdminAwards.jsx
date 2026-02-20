@@ -12,7 +12,7 @@ const AdminAwards = () => {
 
     const fetchAwards = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/awards');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/awards`);
             const data = await res.json();
             console.log('Awards Data:', data); // Debugging
             setAwards(Array.isArray(data) ? data : []);
@@ -26,7 +26,7 @@ const AdminAwards = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this award?')) return;
         try {
-            const response = await fetch(`http://localhost:8080/api/awards/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/awards/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Award deleted.' });
                 fetchAwards();

@@ -22,7 +22,7 @@ const GlobalSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await authFetch('http://localhost:8080/api/admin/settings');
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
             const data = await response.json();
             // Filter only relevant settings for this page
             setSettings({
@@ -57,7 +57,7 @@ const GlobalSettings = () => {
         });
 
         try {
-            const response = await authFetch('http://localhost:8080/api/admin/settings/update', {
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings/update`, {
                 method: 'POST',
                 body: formData
             });

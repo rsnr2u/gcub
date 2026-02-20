@@ -13,7 +13,7 @@ const AdminNews = () => {
 
     const fetchNews = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/news');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/news`);
             const data = await res.json();
             setNews(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -27,7 +27,7 @@ const AdminNews = () => {
         if (!window.confirm('Are you sure you want to delete this news item?')) return;
 
         try {
-            const res = await authFetch(`http://localhost:8080/api/news/delete/${id}`, {
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/news/delete/${id}`, {
                 method: 'POST'
             });
             const result = await res.json();
@@ -81,7 +81,7 @@ const AdminNews = () => {
                                 <td className="px-6 py-4">
                                     <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 overflow-hidden text-center flex items-center justify-center">
                                         {item.image ? (
-                                            <img src={`http://localhost:8080/${item.image}`} className="w-full h-full object-cover" alt="" />
+                                            <img src={`${import.meta.env.VITE_BASE_URL}/${item.image}`} className="w-full h-full object-cover" alt="" />
                                         ) : (
                                             <i className="fas fa-image text-gray-200"></i>
                                         )}

@@ -24,7 +24,7 @@ const PopupSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await authFetch('http://localhost:8080/api/admin/settings');
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
             const data = await response.json();
             setSettings({
                 popup_enabled: data.popup_enabled || 'off',
@@ -36,7 +36,7 @@ const PopupSettings = () => {
                 popup_cta_link: data.popup_cta_link || ''
             });
             if (data.popup_image) {
-                setImagePreview(data.popup_image.startsWith('/') ? `http://localhost:8080${data.popup_image}` : data.popup_image);
+                setImagePreview(data.popup_image.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${data.popup_image}` : data.popup_image);
             }
             setLoading(false);
         } catch (error) {
@@ -79,7 +79,7 @@ const PopupSettings = () => {
         }
 
         try {
-            const response = await authFetch('http://localhost:8080/api/admin/settings/update', {
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings/update`, {
                 method: 'POST',
                 body: formData
             });
@@ -88,7 +88,7 @@ const PopupSettings = () => {
                 setMessage({ type: 'success', text: 'Popup announcement settings updated successfully!' });
                 if (data.data && data.data.popup_image) {
                     setSettings(prev => ({ ...prev, popup_image: data.data.popup_image }));
-                    setImagePreview(`http://localhost:8080${data.data.popup_image}`);
+                    setImagePreview(`${import.meta.env.VITE_BASE_URL}${data.data.popup_image}`);
                     setImageFile(null);
                 }
             } else {

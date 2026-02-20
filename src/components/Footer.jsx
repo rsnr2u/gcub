@@ -17,7 +17,7 @@ const Footer = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/admin/settings');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
             const data = await response.json();
             if (data) {
                 setSettings(prevSettings => ({
@@ -44,7 +44,7 @@ const Footer = () => {
                     <div className="space-y-4">
                         <div className='bg-white p-2 rounded-md'>
                             <img
-                                src={settings.site_dark_logo ? (settings.site_dark_logo.startsWith('/') ? `http://localhost:8080${settings.site_dark_logo}` : settings.site_dark_logo) : (settings.site_logo ? (settings.site_logo.startsWith('/') ? `http://localhost:8080${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png")}
+                                src={settings.site_dark_logo ? (settings.site_dark_logo.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${settings.site_dark_logo}` : settings.site_dark_logo) : (settings.site_logo ? (settings.site_logo.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png")}
                                 alt="GCUB Logo"
                                 className="h-10 object-contain"
                             />

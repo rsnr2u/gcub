@@ -26,7 +26,7 @@ const AdminEditSlider = () => {
 
     const fetchDetails = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/sliders/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/sliders/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -39,7 +39,7 @@ const AdminEditSlider = () => {
                     is_active: data.is_active || 1
                 });
                 if (data.image_path) {
-                    setImagePreview(`http://localhost:8080/${data.image_path}`);
+                    setImagePreview(`${import.meta.env.VITE_BASE_URL}/${data.image_path}`);
                 }
             }
         } catch (err) { console.error('Error fetching details:', err); }
@@ -59,8 +59,8 @@ const AdminEditSlider = () => {
         setMessage({ text: '', type: '' });
 
         const url = isEdit
-            ? `http://localhost:8080/api/sliders/update/${id}`
-            : 'http://localhost:8080/api/sliders/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/sliders/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/sliders/create`;
 
         const formDataToSend = new FormData();
         Object.keys(formData).forEach(key => {

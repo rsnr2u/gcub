@@ -27,7 +27,7 @@ const AdminEditUser = () => {
 
     const fetchRoles = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/roles');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/roles`);
             const data = await res.json();
             setRoles(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -38,7 +38,7 @@ const AdminEditUser = () => {
     const fetchUser = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`http://localhost:8080/api/users/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/show/${id}`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -63,8 +63,8 @@ const AdminEditUser = () => {
 
         try {
             const url = isEdit
-                ? `http://localhost:8080/api/users/update/${id}`
-                : 'http://localhost:8080/api/users/create';
+                ? `${import.meta.env.VITE_API_BASE_URL}/users/update/${id}`
+                : `${import.meta.env.VITE_API_BASE_URL}/users/create`;
 
             const res = await fetch(url, {
                 method: 'POST',

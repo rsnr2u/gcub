@@ -12,7 +12,7 @@ const Ombudsman = () => {
 
     const fetchOmbudsman = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/ombudsman');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/ombudsman`);
             const data = await response.json();
             setOmbudsmanList(Array.isArray(data) ? data : []);
         } catch (error) {

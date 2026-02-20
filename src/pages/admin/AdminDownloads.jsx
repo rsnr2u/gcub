@@ -27,7 +27,7 @@ const AdminDownloads = () => {
 
     const fetchDownloads = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/downloads');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/downloads`);
             const data = await response.json();
             if (Array.isArray(data)) {
                 setDownloads(data);
@@ -43,7 +43,7 @@ const AdminDownloads = () => {
         if (!window.confirm('Are you sure you want to delete this resource?')) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/api/downloads/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/downloads/delete/${id}`, { method: 'POST' });
             const data = await response.json();
             if (data.status === 'success') {
                 setMessage({ type: 'success', text: 'Resource deleted successfully!' });
@@ -112,7 +112,7 @@ const AdminDownloads = () => {
                                                 </p>
                                                 <div className="mt-4 flex items-center gap-3">
                                                     <a
-                                                        href={item.file_path ? `${(import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '')}/${item.file_path.replace(/^\//, '')}` : '#'}
+                                                        href={item.file_path ? `${(import.meta.env.VITE_API_URL || `${import.meta.env.VITE_BASE_URL}`).replace(/\/$/, '')}/${item.file_path.replace(/^\//, '')}` : '#'}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="text-[10px] font-bold text-[#003399] border border-blue-100 px-3 py-1 rounded-md hover:bg-[#003399] hover:text-white transition"

@@ -23,7 +23,7 @@ const BrandingSettings = () => {
 
     const fetchSettings = async () => {
         try {
-            const response = await authFetch('http://localhost:8080/api/admin/settings');
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
             const data = await response.json();
             setSettings({
                 site_logo: data.site_logo || '',
@@ -31,9 +31,9 @@ const BrandingSettings = () => {
                 site_dark_logo: data.site_dark_logo || ''
             });
             setPreviews({
-                site_logo: data.site_logo?.startsWith('/') ? `http://localhost:8080${data.site_logo}` : data.site_logo,
-                site_favicon: data.site_favicon?.startsWith('/') ? `http://localhost:8080${data.site_favicon}` : data.site_favicon,
-                site_dark_logo: data.site_dark_logo?.startsWith('/') ? `http://localhost:8080${data.site_dark_logo}` : data.site_dark_logo
+                site_logo: data.site_logo?.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${data.site_logo}` : data.site_logo,
+                site_favicon: data.site_favicon?.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${data.site_favicon}` : data.site_favicon,
+                site_dark_logo: data.site_dark_logo?.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${data.site_dark_logo}` : data.site_dark_logo
             });
             setLoading(false);
         } catch (error) {
@@ -51,7 +51,7 @@ const BrandingSettings = () => {
         formData.append(key, file);
 
         try {
-            const response = await authFetch('http://localhost:8080/api/admin/settings/update', {
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings/update`, {
                 method: 'POST',
                 body: formData
             });
@@ -59,7 +59,7 @@ const BrandingSettings = () => {
             if (data.status === 'success') {
                 const newPath = data.data[key];
                 setSettings(prev => ({ ...prev, [key]: newPath }));
-                setPreviews(prev => ({ ...prev, [key]: `http://localhost:8080${newPath}` }));
+                setPreviews(prev => ({ ...prev, [key]: `${import.meta.env.VITE_BASE_URL}${newPath}` }));
                 setMessage({ type: 'success', text: `${key.replace('site_', '').replace('_', ' ')} updated successfully!` });
             }
         } catch (error) {

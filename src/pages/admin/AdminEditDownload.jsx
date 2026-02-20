@@ -28,7 +28,7 @@ const AdminEditDownload = () => {
 
     const fetchDownloadData = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/downloads/show/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/downloads/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData({
@@ -74,8 +74,8 @@ const AdminEditDownload = () => {
         }
 
         const url = id
-            ? `http://localhost:8080/api/downloads/update/${id}`
-            : 'http://localhost:8080/api/downloads/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/downloads/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/downloads/create`;
 
         try {
             const response = await fetch(url, {

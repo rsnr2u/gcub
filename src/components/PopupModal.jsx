@@ -12,12 +12,12 @@ const PopupModal = () => {
                 const hasBeenShown = sessionStorage.getItem('gcub_popup_shown');
                 if (hasBeenShown) return;
 
-                const response = await fetch('http://localhost:8080/api/admin/settings');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
                 const settings = await response.json();
 
                 if (settings.popup_enabled === 'on') {
                     const imageUrl = settings.popup_image?.startsWith('/')
-                        ? `http://localhost:8080${settings.popup_image}`
+                        ? `${import.meta.env.VITE_BASE_URL}${settings.popup_image}`
                         : settings.popup_image;
 
                     setConfig({

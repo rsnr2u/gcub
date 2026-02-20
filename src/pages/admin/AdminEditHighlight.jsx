@@ -15,7 +15,7 @@ const AdminEditHighlight = () => {
 
     const fetchHighlight = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/highlights/show/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/highlights/show/${id}`);
             const data = await res.json();
             if (data) setFormData({ ...data, is_active: data.is_active === '1' || data.is_active === true });
         } catch (error) { console.error(error); }
@@ -25,8 +25,8 @@ const AdminEditHighlight = () => {
         e.preventDefault();
         setSaving(true);
         const url = isEdit
-            ? `http://localhost:8080/api/highlights/update/${id}`
-            : 'http://localhost:8080/api/highlights/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/highlights/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/highlights/create`;
 
         try {
             const formBody = new URLSearchParams();

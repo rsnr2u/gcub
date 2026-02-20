@@ -12,7 +12,7 @@ const DICGCCertificate = () => {
 
     const fetchContent = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/dicgc-certificate');
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dicgc-certificate`);
             const data = await response.json();
             setContent(data);
         } catch (error) {

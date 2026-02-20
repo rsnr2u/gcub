@@ -30,7 +30,7 @@ const AdminEditBranch = () => {
 
     const fetchBranch = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/branches/show/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/branches/show/${id}`);
             const data = await response.json();
             if (data) {
                 setFormData(data);
@@ -53,8 +53,8 @@ const AdminEditBranch = () => {
         setMessage({ type: '', text: '' });
 
         const url = isEdit
-            ? `http://localhost:8080/api/branches/update/${id}`
-            : 'http://localhost:8080/api/branches/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/branches/update/${id}`
+            : `${import.meta.env.VITE_API_BASE_URL}/branches/create`;
 
         try {
             const response = await fetch(url, {

@@ -42,7 +42,7 @@ const AdminLayout = () => {
     useEffect(() => {
         const fetchNewSubmissionsCount = async () => {
             try {
-                const res = await authFetch('http://localhost:8080/api/contact-submissions?status=new');
+                const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/contact-submissions?status=new`);
                 const data = await res.json();
                 setNewSubmissionsCount(data.counts?.new || 0);
             } catch (err) {
@@ -57,7 +57,7 @@ const AdminLayout = () => {
 
     const handleLogout = async () => {
         try {
-            await authFetch('http://localhost:8080/api/logout', { method: 'POST' });
+            await authFetch(`${import.meta.env.VITE_API_BASE_URL}/logout`, { method: 'POST' });
         } catch (err) {
             console.error('Logout error:', err);
         }

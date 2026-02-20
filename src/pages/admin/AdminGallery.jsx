@@ -11,7 +11,7 @@ const AdminGallery = () => {
     const fetchGallery = async () => {
         try {
             setLoading(true);
-            const res = await authFetch('http://localhost:8080/api/gallery');
+            const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/gallery`);
             const data = await res.json();
             setGalleryItems(data);
         } catch (err) {
@@ -39,7 +39,7 @@ const AdminGallery = () => {
 
         if (result.isConfirmed) {
             try {
-                const res = await authFetch(`http://localhost:8080/api/gallery/delete/${id}`, {
+                const res = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/gallery/delete/${id}`, {
                     method: 'POST'
                 });
                 if (res.ok) {
@@ -120,7 +120,7 @@ const AdminGallery = () => {
                                                     {item.image ? (
                                                         <>
                                                             <img
-                                                                src={`http://localhost:8080/${item.image}`}
+                                                                src={`${import.meta.env.VITE_BASE_URL}/${item.image}`}
                                                                 alt={item.title}
                                                                 className="w-full h-full object-cover"
                                                                 onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=No+Image'; }}

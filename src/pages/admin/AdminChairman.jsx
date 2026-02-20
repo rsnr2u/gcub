@@ -24,7 +24,7 @@ const AdminChairman = ({ isEmbedded = false }) => {
 
     const fetchProfile = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/chairman');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/chairman`);
             const data = await res.json();
 
             // Logic: If data exists, take the first one (most recent usually due to sorting, or just the single one expected)
@@ -45,7 +45,7 @@ const AdminChairman = ({ isEmbedded = false }) => {
                     display_order: profile.display_order,
                     image: null
                 });
-                setPreviewImage(profile.image_path ? `http://localhost:8080/${profile.image_path}` : null);
+                setPreviewImage(profile.image_path ? `${import.meta.env.VITE_BASE_URL}/${profile.image_path}` : null);
             }
             setLoading(false);
         } catch (error) {
@@ -75,8 +75,8 @@ const AdminChairman = ({ isEmbedded = false }) => {
         });
 
         const url = editingId
-            ? `http://localhost:8080/api/chairman/update/${editingId}`
-            : 'http://localhost:8080/api/chairman/create';
+            ? `${import.meta.env.VITE_API_BASE_URL}/chairman/update/${editingId}`
+            : `${import.meta.env.VITE_API_BASE_URL}/chairman/create`;
 
         try {
             const res = await fetch(url, {

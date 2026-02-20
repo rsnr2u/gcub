@@ -39,7 +39,7 @@ const Header = memo(() => {
     useEffect(() => {
         const fetchMenuData = async () => {
             try {
-                const productsRes = await fetch('http://localhost:8080/api/products');
+                const productsRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products`);
                 const products = await productsRes.json();
 
                 let depositsData = [];
@@ -120,7 +120,7 @@ const Header = memo(() => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/admin/settings');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/admin/settings`);
                 const data = await response.json();
                 if (data) {
                     setSettings(prevSettings => ({
@@ -177,7 +177,7 @@ const Header = memo(() => {
                     <div className="flex items-center gap-3 md:gap-4">
                         <Link to="/">
                             <img
-                                src={settings.site_logo ? (settings.site_logo.startsWith('/') ? `http://localhost:8080${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png"}
+                                src={settings.site_logo ? (settings.site_logo.startsWith('/') ? `${import.meta.env.VITE_BASE_URL}${settings.site_logo}` : settings.site_logo) : "/assets/images/gcublogo.png"}
                                 alt="GCUB Logo"
                                 className="h-8 md:h-12 object-contain"
                                 loading="lazy"

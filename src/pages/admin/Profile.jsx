@@ -25,7 +25,7 @@ const Profile = () => {
 
     const fetchProfile = async () => {
         try {
-            const response = await authFetch(`http://localhost:8080/api/admin/profile/${adminId}`);
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/profile/${adminId}`);
             const data = await response.json();
             setProfile(data);
             setLoading(false);
@@ -54,7 +54,7 @@ const Profile = () => {
         formData.append('phone', profile.phone);
 
         try {
-            const response = await authFetch(`http://localhost:8080/api/admin/profile/update/${adminId}`, {
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/profile/update/${adminId}`, {
                 method: 'POST',
                 body: formData
             });
@@ -87,7 +87,7 @@ const Profile = () => {
         formData.append('new_password', passwords.new_password);
 
         try {
-            const response = await authFetch(`http://localhost:8080/api/admin/profile/update/${adminId}`, {
+            const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/admin/profile/update/${adminId}`, {
                 method: 'POST',
                 body: formData
             });

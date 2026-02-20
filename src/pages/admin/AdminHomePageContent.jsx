@@ -23,7 +23,7 @@ const AdminHomePageContent = () => {
 
     const fetchContent = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/homepage-content');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-content`);
             const data = await res.json();
             if (data) {
                 setFormData({
@@ -43,7 +43,7 @@ const AdminHomePageContent = () => {
 
     const fetchStats = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/homepage-stats');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-stats`);
             const data = await res.json();
             setStats(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -62,7 +62,7 @@ const AdminHomePageContent = () => {
         });
 
         try {
-            const res = await fetch('http://localhost:8080/api/homepage-content/update', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-content/update`, {
                 method: 'POST',
                 body: formDataToSubmit
             });
@@ -83,7 +83,7 @@ const AdminHomePageContent = () => {
 
     const handleAddStat = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/homepage-stats/create', {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-stats/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newStat)
@@ -102,7 +102,7 @@ const AdminHomePageContent = () => {
 
     const handleUpdateStat = async (id) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/homepage-stats/update/${id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-stats/update/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingStat)
@@ -121,7 +121,7 @@ const AdminHomePageContent = () => {
     const handleDeleteStat = async (id) => {
         if (!window.confirm('Are you sure you want to delete this statistic?')) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/homepage-stats/delete/${id}`, { method: 'POST' });
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-stats/delete/${id}`, { method: 'POST' });
             const result = await res.json();
             if (result.status === 'success') {
                 setMessage({ text: 'Statistic deleted successfully!', type: 'success' });

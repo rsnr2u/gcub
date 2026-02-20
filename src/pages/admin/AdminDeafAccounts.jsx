@@ -12,7 +12,7 @@ const AdminDeafAccounts = () => {
 
     const fetchAccounts = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/deaf-accounts');
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/deaf-accounts`);
             const data = await res.json();
             setAccounts(Array.isArray(data) ? data : []);
             setLoading(false);
@@ -25,7 +25,7 @@ const AdminDeafAccounts = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Delete this account list?')) return;
         try {
-            const response = await fetch(`http://localhost:8080/api/deaf-accounts/delete/${id}`, { method: 'POST' });
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/deaf-accounts/delete/${id}`, { method: 'POST' });
             if ((await response.json()).status === 'success') {
                 setMessage({ type: 'success', text: 'Deleted successfully.' });
                 fetchAccounts();

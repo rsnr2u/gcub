@@ -30,7 +30,7 @@ class CreateSettingsTable extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('site_settings');
+        $this->forge->createTable('site_settings', true);
     }
 
     public function down()
