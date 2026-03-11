@@ -135,9 +135,14 @@ const CorporateCard = ({ member, isCEO }) => {
             {/* Content Section - Minimal */}
             <div className="p-5 text-center">
                 <div className="h-0.5 w-8 bg-gray-100 mx-auto mb-4"></div>
-                <h3 className={`text-base md:text-lg font-bold ${nameColor} tracking-tight leading-snug`}>
+                <h3 className={`text-base md:text-lg font-bold ${nameColor} tracking-tight leading-snug mb-1`}>
                     {member.name}
                 </h3>
+                {member.tagline && (
+                    <p className="text-[11px] md:text-xs text-gray-500 font-medium italic leading-tight">
+                        "{member.tagline}"
+                    </p>
+                )}
             </div>
         </div>
     );
