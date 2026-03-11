@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import DOMPurify from 'dompurify';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -9,6 +10,64 @@ import SchemaOrg, { organizationSchema, websiteSchema, createBreadcrumbSchema } 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
+const ProductSlider = ({ items, preTitle, title, swiperRef, setSwiperRef, delay = 5000 }) => (
+    <div>
+        <div className="flex justify-between items-end mb-6">
+            <div>
+                <span className="text-[#E61111] font-bold text-xs tracking-[0.2em] uppercase mb-1 block">{preTitle}</span>
+                <h2 className="text-2xl font-bold text-[#003399]">{title}</h2>
+            </div>
+            <div className="flex gap-2">
+                <button onClick={() => swiperRef?.slidePrev()} className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#003399] hover:bg-gray-50 transition shadow-sm cursor-pointer">
+                    <i className="fas fa-chevron-left text-xs"></i>
+                </button>
+                <button onClick={() => swiperRef?.slideNext()} className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#003399] hover:bg-gray-50 transition shadow-sm cursor-pointer">
+                    <i className="fas fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+        <Swiper
+            onSwiper={setSwiperRef}
+            modules={[Navigation, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={1}
+            autoplay={{ delay }}
+            breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+            }}
+            className="pb-4"
+        >
+            {items.map((item, idx) => (
+                <SwiperSlide key={idx}>
+                    <Link to={item.path} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 block h-full">
+                        <div className="h-40 overflow-hidden relative">
+                            <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                loading="lazy"
+                                onError={(e) => {
+                                    if (e.target.src.includes('/icons/')) {
+                                        e.target.src = e.target.src.replace('/icons/', '/cards/');
+                                    } else {
+                                        e.target.src = '/assets/images/gcublogo.png';
+                                    }
+                                }}
+                            />
+                            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition"></div>
+                        </div>
+                        <div className="p-6">
+                            <h3 className="font-bold text-[#003399] text-base mb-2 group-hover:text-[#E61111] transition-colors">{item.name}</h3>
+                            <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{item.desc}</p>
+                        </div>
+                    </Link>
+                </SwiperSlide>
+            ))}
+        </Swiper>
+    </div>
+);
 
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -189,41 +248,45 @@ const Home = () => {
         fetchLatestNews();
     }, []);
 
-    const getProductImage = (p) => {
+    const getProductImage = useCallback((p) => {
         if (p.icon_type === 'img') {
             return `/assets/images/icons/${p.icon_value}`;
         }
         return '/assets/images/gcublogo.png';
-    };
+    }, []);
 
-    const depositSchemes = dynamicProducts
-        .filter(p => p.category === 'Deposits')
-        .map(p => ({
-            name: p.name,
-            image: getProductImage(p),
-            desc: p.description,
-            path: `/product/${p.slug}`
-        }));
+    const depositSchemes = useMemo(() => {
+        return dynamicProducts
+            .filter(p => p.category === 'Deposits')
+            .map(p => ({
+                name: p.name,
+                image: getProductImage(p),
+                desc: p.description,
+                path: `/product/${p.slug}`
+            }));
+    }, [dynamicProducts, getProductImage]);
 
-    const loanSolutions = dynamicProducts
-        .filter(p => p.category === 'Loans')
-        .map(p => ({
-            name: p.name,
-            image: getProductImage(p),
-            desc: p.description,
-            path: `/product/${p.slug}`
-        }));
+    const loanSolutions = useMemo(() => {
+        return dynamicProducts
+            .filter(p => p.category === 'Loans')
+            .map(p => ({
+                name: p.name,
+                image: getProductImage(p),
+                desc: p.description,
+                path: `/product/${p.slug}`
+            }));
+    }, [dynamicProducts, getProductImage]);
 
     const [depSwiper, setDepSwiper] = useState(null);
     const [loanSwiper, setLoanSwiper] = useState(null);
     const heroTimerRef = useRef(null);
 
-    const startHeroTimer = () => {
+    const startHeroTimer = useCallback(() => {
         if (heroTimerRef.current) clearInterval(heroTimerRef.current);
         heroTimerRef.current = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
         }, 5000);
-    };
+    }, [slides.length]);
 
     useEffect(() => {
         if (slides.length > 0) {
@@ -235,14 +298,14 @@ const Home = () => {
     }, [slides.length]);
 
 
-    const navigateHero = (direction) => {
+    const navigateHero = useCallback((direction) => {
         if (direction === 'next') {
-            setCurrentSlide((currentSlide + 1) % slides.length);
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
         } else {
-            setCurrentSlide((currentSlide - 1 + slides.length) % slides.length);
+            setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
         }
         startHeroTimer(); // Reset timer on manual interaction
-    };
+    }, [slides.length, startHeroTimer]);
 
     return (
         <div className="home-page">
@@ -276,7 +339,7 @@ const Home = () => {
                                 <div className="container mx-auto px-4 md:px-6">
                                     <div className={`max-w-2xl text-white transition-all duration-1000 transform ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                                         <span className="inline-block py-1 px-3 rounded-full bg-[#E61111] text-xs font-bold uppercase tracking-wider mb-4">{slide.tag}</span>
-                                        <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: slide.title }}></h2>
+                                        <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(slide.title) }}></h2>
                                         <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg">{slide.desc}</p>
                                         <Link to={slide.link} className="inline-block bg-white text-[#003399] px-8 py-3 rounded-md font-bold hover:bg-gray-100 transition shadow-lg transform hover:-translate-y-1">{slide.buttonText || 'Get Started'}</Link>
                                     </div>
@@ -390,7 +453,7 @@ const Home = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 w-full md:w-auto shrink-0">
                                     {legacyStats.length > 0 ? (
-                                        legacyStats.slice(0, 4).map((stat, idx) => (
+                                        legacyStats.map((stat, idx) => (
                                             <div key={idx} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center w-full md:w-32">
                                                 <h4 className="text-xl font-bold text-[#003399] whitespace-nowrap">{stat.value}</h4>
                                                 <p className="text-[10px] text-gray-500 uppercase font-semibold tracking-tighter">{stat.label}</p>
@@ -411,118 +474,27 @@ const Home = () => {
                                 </div>
                             </div>
 
+
+
                             {/* Premium Deposits */}
-                            <div>
-                                <div className="flex justify-between items-end mb-6">
-                                    <div>
-                                        <span className="text-[#E61111] font-bold text-xs tracking-[0.2em] uppercase mb-1 block">Your Growth</span>
-                                        <h2 className="text-2xl font-bold text-[#003399]">Premium Deposit Schemes</h2>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => depSwiper?.slidePrev()} className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#003399] hover:bg-gray-50 transition shadow-sm cursor-pointer">
-                                            <i className="fas fa-chevron-left text-xs"></i>
-                                        </button>
-                                        <button onClick={() => depSwiper?.slideNext()} className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#003399] hover:bg-gray-50 transition shadow-sm cursor-pointer">
-                                            <i className="fas fa-chevron-right text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <Swiper
-                                    onSwiper={setDepSwiper}
-                                    modules={[Navigation, Autoplay]}
-                                    spaceBetween={20}
-                                    slidesPerView={1}
-                                    autoplay={{ delay: 5000 }}
-                                    breakpoints={{
-                                        640: { slidesPerView: 2 },
-                                        1024: { slidesPerView: 3 },
-                                    }}
-                                    className="pb-4"
-                                >
-                                    {depositSchemes.map((item, idx) => (
-                                        <SwiperSlide key={idx}>
-                                            <Link to={item.path} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 block h-full">
-                                                <div className="h-40 overflow-hidden relative">
-                                                    <img
-                                                        src={item.image}
-                                                        alt={item.name}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                                                        loading="lazy"
-                                                        onError={(e) => {
-                                                            if (e.target.src.includes('/icons/')) {
-                                                                e.target.src = e.target.src.replace('/icons/', '/cards/');
-                                                            } else {
-                                                                e.target.src = '/assets/images/gcublogo.png';
-                                                            }
-                                                        }}
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition"></div>
-                                                </div>
-                                                <div className="p-6">
-                                                    <h3 className="font-bold text-[#003399] text-base mb-2 group-hover:text-[#E61111] transition-colors">{item.name}</h3>
-                                                    <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{item.desc}</p>
-                                                </div>
-                                            </Link>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </div>
+                            <ProductSlider
+                                items={depositSchemes}
+                                preTitle="Your Growth"
+                                title="Premium Deposit Schemes"
+                                swiperRef={depSwiper}
+                                setSwiperRef={setDepSwiper}
+                                delay={5000}
+                            />
 
                             {/* Loan Solutions */}
-                            <div>
-                                <div className="flex justify-between items-end mb-6">
-                                    <div>
-                                        <span className="text-[#E61111] font-bold text-xs tracking-[0.2em] uppercase mb-1 block">Trusted Lending</span>
-                                        <h2 className="text-2xl font-bold text-[#003399]">Detailed Lending Solutions</h2>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => loanSwiper?.slidePrev()} className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#003399] hover:bg-gray-50 transition shadow-sm cursor-pointer">
-                                            <i className="fas fa-chevron-left text-xs"></i>
-                                        </button>
-                                        <button onClick={() => loanSwiper?.slideNext()} className="w-8 h-8 rounded-full border border-gray-200 bg-white flex items-center justify-center text-[#003399] hover:bg-gray-50 transition shadow-sm cursor-pointer">
-                                            <i className="fas fa-chevron-right text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <Swiper
-                                    onSwiper={setLoanSwiper}
-                                    modules={[Navigation, Autoplay]}
-                                    spaceBetween={20}
-                                    slidesPerView={1}
-                                    autoplay={{ delay: 6000 }}
-                                    breakpoints={{
-                                        640: { slidesPerView: 2 },
-                                        1024: { slidesPerView: 3 },
-                                    }}
-                                >
-                                    {loanSolutions.map((item, idx) => (
-                                        <SwiperSlide key={idx}>
-                                            <Link to={item.path} className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 block h-full">
-                                                <div className="h-40 overflow-hidden relative">
-                                                    <img
-                                                        src={item.image}
-                                                        alt={item.name}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                                                        loading="lazy"
-                                                        onError={(e) => {
-                                                            if (e.target.src.includes('/icons/')) {
-                                                                e.target.src = e.target.src.replace('/icons/', '/cards/');
-                                                            } else {
-                                                                e.target.src = '/assets/images/gcublogo.png';
-                                                            }
-                                                        }}
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition"></div>
-                                                </div>
-                                                <div className="p-6">
-                                                    <h3 className="font-bold text-[#003399] text-base mb-2 group-hover:text-[#E61111] transition-colors">{item.name}</h3>
-                                                    <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{item.desc}</p>
-                                                </div>
-                                            </Link>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </div>
+                            <ProductSlider
+                                items={loanSolutions}
+                                preTitle="Trusted Lending"
+                                title="Detailed Lending Solutions"
+                                swiperRef={loanSwiper}
+                                setSwiperRef={setLoanSwiper}
+                                delay={6000}
+                            />
                         </div>
 
                         {/* Sidebar */}
@@ -573,17 +545,19 @@ const ProductFinder = ({ products }) => {
     const [category, setCategory] = useState('');
     const [product, setProduct] = useState('');
 
-    const categoriesMap = (products || []).reduce((acc, p) => {
-        const cat = p.category || 'Other';
-        if (!acc[cat]) acc[cat] = [];
-        acc[cat].push({
-            name: p.name,
-            url: `/product/${p.slug}`
-        });
-        return acc;
-    }, {});
+    const categoriesMap = useMemo(() => {
+        return (products || []).reduce((acc, p) => {
+            const cat = p.category || 'Other';
+            if (!acc[cat]) acc[cat] = [];
+            acc[cat].push({
+                name: p.name,
+                url: `/product/${p.slug}`
+            });
+            return acc;
+        }, {});
+    }, [products]);
 
-    const sortedCategories = Object.keys(categoriesMap).sort();
+    const sortedCategories = useMemo(() => Object.keys(categoriesMap).sort(), [categoriesMap]);
 
     return (
         <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 relative overflow-hidden">
@@ -623,17 +597,19 @@ const ProductFinder = ({ products }) => {
     );
 };
 
+const QUICK_LINKS = [
+    { name: 'EMI Calculator', icon: 'far fa-calculator', path: '/emi-calculator' },
+    { name: 'Interest Rates', icon: 'far fa-percentage', path: '/interest-rates' },
+    { name: 'Missed Call Banking', icon: 'far fa-headset', path: '/missed-call-banking' },
+    { name: 'Holiday List', icon: 'far fa-calendar-alt', path: '/holiday-list' },
+    { name: 'KYC Norms', icon: 'far fa-file-alt', path: '/kyc-norms' },
+];
+
 const QuickLinksSidebar = () => (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <h3 className="font-bold text-lg text-[#003399] mb-4 border-b border-gray-100 pb-2">Quick Links</h3>
         <ul className="space-y-2">
-            {[
-                { name: 'EMI Calculator', icon: 'far fa-calculator', path: '/emi-calculator' },
-                { name: 'Interest Rates', icon: 'far fa-percentage', path: '/interest-rates' },
-                { name: 'Missed Call Banking', icon: 'far fa-headset', path: '/missed-call-banking' },
-                { name: 'Holiday List', icon: 'far fa-calendar-alt', path: '/holiday-list' },
-                { name: 'KYC Norms', icon: 'far fa-file-alt', path: '/kyc-norms' },
-            ].map((link, idx) => (
+            {QUICK_LINKS.map((link, idx) => (
                 <li key={idx}>
                     <Link to={link.path} className="flex items-center justify-between p-2 rounded hover:bg-gray-50 group transition">
                         <span className="text-sm font-medium text-gray-600 group-hover:text-[#003399]">

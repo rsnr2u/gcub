@@ -11,6 +11,7 @@ const About = () => {
         network: []
     });
     const [loading, setLoading] = useState(true);
+    const [legacyStats, setLegacyStats] = useState([]);
 
     useEffect(() => {
         const fetchAboutData = async () => {
@@ -20,11 +21,27 @@ const About = () => {
                 setData(result);
             } catch (error) {
                 console.error('Error fetching about data:', error);
-            } finally {
-                setLoading(false);
             }
         };
-        fetchAboutData();
+
+        const fetchLegacyStats = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/homepage-stats`);
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    setLegacyStats(data);
+                }
+            } catch (error) {
+                console.error('Error fetching legacy stats:', error);
+            }
+        };
+
+        const loadAllData = async () => {
+            await Promise.all([fetchAboutData(), fetchLegacyStats()]);
+            setLoading(false);
+        };
+
+        loadAllData();
     }, []);
 
     if (loading) {
@@ -62,26 +79,36 @@ const About = () => {
                 </div>
             </section>
 
-            {/* Stats Bar / Key Highlights */}
-            <section className="bg-blue-50 text-gray py-8 relative mx-4 md:mx-auto">
+            <section className="bg-blue-50 text-gray py-6 relative mx-4 md:mx-auto">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-blue-400/50">
-                        <div>
-                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_years || '75+'}</span>
-                            <span className="text-sm uppercase tracking-wider opacity-90">Years of Service</span>
-                        </div>
-                        <div>
-                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_branches || '22'}</span>
-                            <span className="text-sm uppercase tracking-wider opacity-90">Branches</span>
-                        </div>
-                        <div>
-                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_volume || '₹1012Cr+'}</span>
-                            <span className="text-sm uppercase tracking-wider opacity-90">Business Volume</span>
-                        </div>
-                        <div>
-                            <span className="block text-3xl md:text-4xl font-bold">{metadata.legacy_customers || '50k+'}</span>
-                            <span className="text-sm uppercase tracking-wider opacity-90">Customers</span>
-                        </div>
+                    <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-4 md:gap-8 text-center">
+                        {legacyStats.length > 0 ? (
+                            legacyStats.map((stat, idx) => (
+                                <div key={idx} className={`flex-1 min-w-[120px] ${idx === 0 ? "" : "border-l border-blue-400/50"}`}>
+                                    <span className="block text-xl md:text-2xl font-bold">{stat.value}</span>
+                                    <span className="text-[10px] md:text-xs uppercase tracking-wider opacity-90 font-semibold">{stat.label}</span>
+                                </div>
+                            ))
+                        ) : (
+                            <>
+                                <div className="flex-1 min-w-[120px]">
+                                    <span className="block text-xl md:text-2xl font-bold">{metadata.legacy_years || '75+'}</span>
+                                    <span className="text-[10px] md:text-xs uppercase tracking-wider opacity-90 font-semibold">Years of Service</span>
+                                </div>
+                                <div className="flex-1 min-w-[120px] border-l border-blue-400/50">
+                                    <span className="block text-xl md:text-2xl font-bold">{metadata.legacy_branches || '22'}</span>
+                                    <span className="text-[10px] md:text-xs uppercase tracking-wider opacity-90 font-semibold">Branches</span>
+                                </div>
+                                <div className="flex-1 min-w-[120px] border-l border-blue-400/50">
+                                    <span className="block text-xl md:text-2xl font-bold">{metadata.legacy_volume || '₹1012Cr+'}</span>
+                                    <span className="text-[10px] md:text-xs uppercase tracking-wider opacity-90 font-semibold">Business Volume</span>
+                                </div>
+                                <div className="flex-1 min-w-[120px] border-l border-blue-400/50">
+                                    <span className="block text-xl md:text-2xl font-bold">{metadata.legacy_customers || '50k+'}</span>
+                                    <span className="text-[10px] md:text-xs uppercase tracking-wider opacity-90 font-semibold">Customers</span>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>

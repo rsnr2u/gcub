@@ -36,7 +36,7 @@ const AdminEditSlider = () => {
                     button_name: data.button_name || '',
                     button_link: data.button_link || '',
                     display_order: data.display_order || 0,
-                    is_active: data.is_active || 1
+                    is_active: data.is_active !== undefined ? parseInt(data.is_active) : 1
                 });
                 if (data.image_path) {
                     setImagePreview(`${import.meta.env.VITE_BASE_URL}/${data.image_path}`);
@@ -180,6 +180,7 @@ const AdminEditSlider = () => {
 
                     <div>
                         <label className={labelStyle}>Slider Image</label>
+                        <p className="text-[10px] text-gray-400 mb-2 italic">Recommended resolution: 1920x600 px (Width x Height) for best display on all devices.</p>
                         <input
                             type="file"
                             accept="image/*"
