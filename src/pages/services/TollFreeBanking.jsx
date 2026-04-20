@@ -1,12 +1,39 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO';
+import { apiFetch } from '../../utils/api';
 
 const TollFreeBanking = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/toll-free-banking`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching toll free banking content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
         <div className="bg-white min-h-screen font-inter">
             <SEO
-                title="Toll Free Banking - 24/7 Helpline | GCUB"
-                description="Our dedicated toll-free helpline ensures you have access to banking support whenever you need it. Call us for any assistance."
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
             />
 
             {/* Hero Section */}
@@ -19,11 +46,11 @@ const TollFreeBanking = () => {
                         <i className="fas fa-chevron-right text-[10px]"></i>
                         <span className="text-white">Our Services</span>
                         <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">Toll Free Banking</span>
+                        <span className="text-white">{data.hero_title}</span>
                     </nav>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">Toll Free Banking</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
                     <p className="text-xl text-blue-100 max-w-2xl font-light">
-                        Your direct connection to our customer care team, absolutely free.
+                        {data.hero_description}
                     </p>
                 </div>
             </div>
@@ -35,9 +62,9 @@ const TollFreeBanking = () => {
                     {/* Content Section */}
                     <div className="lg:col-span-8">
                         <div className="mb-12">
-                            <h2 className="text-2xl font-bold text-blue-900 mb-6">Assistance Around the Clock</h2>
+                            <h2 className="text-2xl font-bold text-blue-900 mb-6">{data.intro_title}</h2>
                             <p className="text-lg text-slate-700 leading-relaxed mb-6">
-                                We value your time and convenience. Our Toll Free Banking service allows you to get help with your banking queries, report lost cards, and get information on our latest products without any call charges.
+                                {data.intro_description}
                             </p>
                         </div>
 
@@ -46,7 +73,7 @@ const TollFreeBanking = () => {
                                 <i className="fas fa-phone-alt text-3xl"></i>
                             </div>
                             <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-2">Our Dedicated Helpline</h3>
-                            <a href="tel:18004258873" className="text-4xl md:text-5xl font-black text-blue-900 block mb-4 hover:text-black transition">1800 425 8873</a>
+                            <a href={`tel:${data.helpline_number}`} className="text-4xl md:text-5xl font-black text-blue-900 block mb-4 hover:text-black transition">{data.helpline_number}</a>
                             <p className="text-slate-500 font-medium">Available 24x7 | 365 Days a Year</p>
                         </div>
 
@@ -56,44 +83,32 @@ const TollFreeBanking = () => {
                                     <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
                                     Services Offered
                                 </h3>
-                                <ul className="space-y-4">
-                                    <li className="flex items-center gap-3 text-slate-600">
-                                        <i className="fas fa-angle-right text-blue-500"></i>
-                                        Account Balance Inquiry
-                                    </li>
-                                    <li className="flex items-center gap-3 text-slate-600">
-                                        <i className="fas fa-angle-right text-blue-500"></i>
-                                        Recent Transaction Details
-                                    </li>
-                                    <li className="flex items-center gap-3 text-slate-600">
-                                        <i className="fas fa-angle-right text-blue-500"></i>
-                                        Cheque Book Request
-                                    </li>
-                                    <li className="flex items-center gap-3 text-slate-600">
-                                        <i className="fas fa-angle-right text-blue-500"></i>
-                                        Stop Payment of Cheques
-                                    </li>
-                                </ul>
+                                {data.services_offered_json && (
+                                    <ul className="space-y-4">
+                                        {data.services_offered_json.map((s, idx) => (
+                                            <li key={idx} className="flex items-center gap-3 text-slate-600">
+                                                <i className="fas fa-angle-right text-blue-500"></i>
+                                                {s}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                             <div className="space-y-6">
                                 <h3 className="text-xl font-bold text-red-700 flex items-center gap-2">
                                     <span className="w-1.5 h-6 bg-red-600 rounded-full"></span>
                                     Emergency Services
                                 </h3>
-                                <ul className="space-y-4">
-                                    <li className="flex items-center gap-3 text-slate-600 font-bold">
-                                        <i className="fas fa-exclamation-triangle text-red-500"></i>
-                                        Block ATM / Debit Card
-                                    </li>
-                                    <li className="flex items-center gap-3 text-slate-600">
-                                        <i className="fas fa-exclamation-triangle text-red-500"></i>
-                                        Reporting Unauthorized Transactions
-                                    </li>
-                                    <li className="flex items-center gap-3 text-slate-600">
-                                        <i className="fas fa-exclamation-triangle text-red-500"></i>
-                                        Fraud Alert Reporting
-                                    </li>
-                                </ul>
+                                {data.emergency_services_json && (
+                                    <ul className="space-y-4">
+                                        {data.emergency_services_json.map((s, idx) => (
+                                            <li key={idx} className="flex items-center gap-3 text-slate-600 font-bold">
+                                                <i className="fas fa-exclamation-triangle text-red-500"></i>
+                                                {s}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -109,7 +124,7 @@ const TollFreeBanking = () => {
                                         <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Balance Enquiry</span>
                                         <i className="fas fa-wallet text-blue-600 opacity-50"></i>
                                     </div>
-                                    <a href="tel:02249558043" className="text-xl font-black text-blue-900 group-hover:text-[#E61111] transition">02249558043</a>
+                                    <a href={`tel:${data.sidebar_balance_enquiry}`} className="text-xl font-black text-blue-900 group-hover:text-[#E61111] transition">{data.sidebar_balance_enquiry}</a>
                                 </div>
                             </div>
                         </div>
@@ -117,22 +132,22 @@ const TollFreeBanking = () => {
                         <div className="bg-red-50 p-8 rounded-3xl border border-red-100">
                             <h3 className="text-xl font-bold text-red-900 mb-4">ATM Card Blocking</h3>
                             <p className="text-slate-600 text-sm mb-6">Lost or stolen card? Call immediately to block your card and protect your funds:</p>
-                            <a href="tel:18004258873" className="w-full inline-flex items-center justify-center gap-3 bg-red-600 text-white py-4 rounded-xl font-bold hover:bg-red-700 transition shadow-lg shadow-red-200">
+                            <a href={`tel:${data.sidebar_card_blocking}`} className="w-full inline-flex items-center justify-center gap-3 bg-red-600 text-white py-4 rounded-xl font-bold hover:bg-red-700 transition shadow-lg shadow-red-200">
                                 <i className="fas fa-shield-alt"></i>
-                                <span>08045936080</span>
+                                <span>{data.sidebar_card_blocking}</span>
                             </a>
                         </div>
 
                         <div className="bg-[#002b5c] p-8 rounded-3xl text-white">
                             <h3 className="text-xl font-bold mb-4">Quick Downloads</h3>
                             <p className="text-blue-100/70 text-sm mb-6">Download the Toll Free Banking request form to avail these services.</p>
-                            <a
-                                href="/downloads"
+                            <Link
+                                to={data.sidebar_download_url}
                                 className="w-full inline-flex items-center justify-center gap-3 bg-white text-[#002b5c] py-4 rounded-xl font-bold hover:bg-blue-50 transition"
                             >
                                 <i className="fas fa-file-download"></i>
                                 <span>Download Request Form</span>
-                            </a>
+                            </Link>
                             <p className="text-[10px] text-blue-300/50 mt-4 uppercase tracking-widest font-bold text-center">PDF Format | 1.2 MB</p>
                         </div>
                     </div>

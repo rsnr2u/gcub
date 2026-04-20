@@ -1,68 +1,139 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
+import { apiFetch } from '../utils/api';
+
 const NetBanking = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/net-banking`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching Net Banking content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
-        <div className="net-banking-page">
-            <section className="relative bg-[#002b5c] text-white py-20">
-                <div className="absolute inset-0 bg-black opacity-40"></div>
-                <div className="container mx-auto px-4 relative z-10 text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Internet Banking</h1>
-                    <p className="text-xl text-gray-200 font-light max-w-2xl mx-auto">Banking at your fingertips. Anywhere, Anytime.</p>
+        <div className="bg-white min-h-screen font-inter">
+            <SEO
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
+            />
+
+            {/* Hero Section */}
+            <div className="relative bg-[#003399] py-16 overflow-hidden">
+                <div className="absolute inset-0 bg-black opacity-30"></div>
+
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <nav className="flex items-center gap-2 text-blue-200 text-sm mb-4 font-medium">
+                        <Link to="/" className="hover:text-white transition">Home</Link>
+                        <i className="fas fa-chevron-right text-[10px]"></i>
+                        <span className="text-white">Our Services</span>
+                        <i className="fas fa-chevron-right text-[10px]"></i>
+                        <span className="text-white">{data.hero_title}</span>
+                    </nav>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
+                    <p className="text-xl text-blue-100 max-w-2xl font-light">
+                        {data.hero_description}
+                    </p>
                 </div>
-            </section>
+            </div>
 
-            <main className="container mx-auto px-4 py-16">
-                <div className="flex flex-col lg:flex-row gap-12">
-                    <div className="lg:w-3/4">
-                        <h2 className="text-3xl font-bold text-[#003399] mb-6">Overview</h2>
-                        <p className="text-gray-600 leading-relaxed mb-8 text-justify">
-                            Our <strong>Internet Banking</strong> service provides you with a convenient way to manage your finances from the comfort of your home or office. It is a secure, fast, and easy way to access your bank account 24/7.
-                        </p>
+            {/* Main Content Area */}
+            <div className="max-w-7xl mx-auto px-6 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-                        <h3 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-[#003399] pl-4">Key Features</h3>
-                        <div className="grid md:grid-cols-2 gap-x-8 gap-y-4 mb-10 text-gray-700">
-                            <FeatureItem text="Account Summary & Statement" />
-                            <FeatureItem text="Fund Transfer (Internal & External)" />
-                            <FeatureItem text="Bill Payments" />
-                            <FeatureItem text="Request Cheque Book" />
-                            <FeatureItem text="Stop Cheque Payment" />
-                            <FeatureItem text="TDS Enquiry" />
+                    {/* Content Section */}
+                    <div className="lg:col-span-8">
+                        <div className="mb-12">
+                            <h2 className="text-2xl font-bold text-blue-900 mb-6">{data.intro_title}</h2>
+                            <p className="text-lg text-slate-700 leading-relaxed mb-6">
+                                {data.intro_description}
+                            </p>
                         </div>
 
-                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-8 mb-10">
-                            <h3 className="text-xl font-bold text-[#003399] mb-4">How to Register?</h3>
-                            <p className="text-gray-600 mb-4">Visit your home branch to submit the Internet Banking application form. You will receive your User ID and Password via post/email.</p>
-                            <a href="/downloads" className="inline-flex items-center text-white bg-[#003399] px-6 py-3 rounded hover:bg-blue-800 transition font-medium">
-                                <i className="fas fa-download mr-2"></i> Download Application Form
-                            </a>
-                        </div>
+                        {data.features_json && (
+                            <div className="mb-12">
+                                <h3 className="text-xl font-bold text-blue-900 mb-6">Key Features</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {data.features_json.map((f, idx) => (
+                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-md transition">
+                                            <i className="fas fa-check-circle text-blue-600"></i>
+                                            <span className="font-bold text-slate-800">{f}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
-                        <h3 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-[#003399] pl-4">Security Tips</h3>
-                        <ul className="list-disc list-inside space-y-2 text-gray-600">
-                            <li>Always check the URL starts with <strong>https://</strong></li>
-                            <li>Do not access net banking from public computers (cyber cafes).</li>
-                            <li>Change your password regularly.</li>
-                            <li>Enable SMS alerts for all transactions.</li>
-                        </ul>
+                        <div className="bg-blue-50 p-8 md:p-12 rounded-[40px] border border-blue-100 mb-12">
+                            <h3 className="text-2xl font-bold text-blue-900 mb-4 flex items-center gap-3">
+                                <i className="fas fa-info-circle"></i>
+                                Registration
+                            </h3>
+                            <p className="text-lg text-slate-700 leading-relaxed mb-6">
+                                {data.registration_info}
+                            </p>
+                            <Link to="/downloads" className="inline-flex items-center gap-3 bg-blue-900 text-white px-8 py-4 rounded-2xl font-bold hover:bg-black transition">
+                                <i className="fas fa-file-download"></i>
+                                Download Registration Form
+                            </Link>
+                        </div>
                     </div>
 
-                    <div className="lg:w-1/4 space-y-8">
-                        <div className="bg-[#003399] text-white p-6 rounded-xl shadow-lg text-center">
-                            <i className="fas fa-lock text-4xl mb-3 opacity-80"></i>
-                            <h4 className="font-bold text-xl mb-4">Already Registered?</h4>
-                            <a href="#" className="block w-full bg-white text-[#003399] px-4 py-3 rounded font-bold hover:bg-gray-100 transition mb-3">Retail Login</a>
-                            <a href="#" className="block w-full bg-transparent border border-white text-white px-4 py-3 rounded font-bold hover:bg-blue-800 transition">Corporate Login</a>
+                    {/* Sidebar Section */}
+                    <div className="lg:col-span-4 space-y-8">
+                        <div className="bg-slate-900 p-8 rounded-3xl text-white">
+                            <h3 className="text-xl font-bold mb-6">Login</h3>
+                            {data.sidebar_login_links_json && (
+                                <div className="space-y-4">
+                                    {data.sidebar_login_links_json.map((link, idx) => (
+                                        <button key={idx} className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-4 rounded-xl transition border border-white/10">
+                                            {link}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
+
+                        {data.security_tips_json && (
+                            <div className="p-8 bg-amber-50 rounded-3xl border border-amber-100">
+                                <h4 className="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2">
+                                    <i className="fas fa-shield-alt"></i>
+                                    Security Tips
+                                </h4>
+                                <ul className="space-y-3">
+                                    {data.security_tips_json.map((tip, idx) => (
+                                        <li key={idx} className="flex gap-3 text-sm text-amber-800">
+                                            <i className="fas fa-circle text-[6px] mt-2 text-amber-500"></i>
+                                            {tip}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
+
                 </div>
-            </main>
+            </div>
         </div>
     );
 };
-
-const FeatureItem = ({ text }) => (
-    <div className="flex items-start gap-3">
-        <i className="fas fa-check text-green-500 mt-1"></i>
-        <span>{text}</span>
-    </div>
-);
 
 export default NetBanking;

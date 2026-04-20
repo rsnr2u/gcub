@@ -1,5 +1,29 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+const MegaMenu = ({ activeMenu, menuName, toggleMenu, label, items, iconPrefix }) => (
+    <li className="static group cursor-pointer">
+        <button
+            onClick={(e) => toggleMenu(e, menuName)}
+            className="hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 focus:outline-none"
+        >
+            {label} <span className={`text-[10px] mt-0.5 transition-transform duration-300 ${activeMenu === menuName ? 'rotate-180' : ''}`}>&#9660;</span>
+        </button>
+        {activeMenu === menuName && (
+            <div className="absolute left-0 top-full w-full bg-white text-gray-800 shadow-2xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50">
+                <div className="container mx-auto p-8">
+                    <div className="grid grid-cols-4 gap-6">
+                        {items.map((item, idx) => (
+                            <Link key={idx} to={item.path} className="block p-3 rounded hover:bg-gray-50 hover:text-[#003399] transition font-bold text-sm border border-transparent hover:border-gray-100">
+                                <i className={`${item.icon || iconPrefix} mr-2 text-[#E61111]`}></i> {item.name}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )}
+    </li>
+);
 
 const Header = memo(() => {
     const [activeMenu, setActiveMenu] = useState(null);
@@ -36,44 +60,49 @@ const Header = memo(() => {
         services: []
     });
 
+    const staticRoutes = useMemo(() => ({
+        'mobile-banking': '/mobile-banking',
+        'atm': '/atm-services',
+        'toll-free-banking': '/toll-free-banking',
+        'e-statements': '/e-statements',
+        'positive-pay-system': '/positive-pay-system',
+        'any-branch-banking': '/any-branch-banking',
+        'apbs-service': '/apbs-service',
+        'nach': '/nach-service'
+    }), []);
+
+    const getServicePath = useCallback((slug) => staticRoutes[slug] || '/', [staticRoutes]);
+
+    const staticServices = useMemo(() => [
+        { name: 'Mobile Banking', path: '/mobile-banking', icon: 'fas fa-mobile-alt' },
+        { name: 'ATM Services', path: '/atm-services', icon: 'fas fa-atm' },
+        { name: 'Toll Free Banking', path: '/toll-free-banking', icon: 'fas fa-phone-alt' },
+        { name: 'E-Statements', path: '/e-statements', icon: 'fas fa-file-invoice' },
+        { name: 'Positive Pay System', path: '/positive-pay-system', icon: 'fas fa-check-double' },
+        { name: 'Any Branch Banking', path: '/any-branch-banking', icon: 'fas fa-university' },
+        { name: 'APBS Service', path: '/apbs-service', icon: 'fas fa-exchange-alt' },
+        { name: 'NACH Service', path: '/nach-service', icon: 'fas fa-sync' },
+        { name: 'IMPS', path: '/imps', icon: 'fas fa-bolt' },
+        { name: 'UPI', path: '/upi', icon: 'fas fa-qrcode' },
+        { name: 'RuPay', path: '/rupay', icon: 'fas fa-credit-card' },
+        { name: 'NEFT/RTGS', path: '/neft-rtgs', icon: 'fas fa-paper-plane' },
+        { name: 'Net Banking', path: '/net-banking', icon: 'fas fa-laptop-code' },
+    ], []);
+
     useEffect(() => {
         const fetchMenuData = async () => {
             try {
+                // Fetch Products for Deposits and Loans
                 const productsRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/products`);
                 const products = await productsRes.json();
+
+                // Fetch Dynamic Services from the new services table
+                const servicesRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/services?status=active`);
+                const dynamicServicesData = await servicesRes.json();
 
                 let depositsData = [];
                 let loansData = [];
                 let servicesData = [];
-
-                const staticRoutes = {
-                    'mobile-banking': '/mobile-banking',
-                    'atm': '/atm-services',
-                    'toll-free-banking': '/toll-free-banking',
-                    'e-statements': '/e-statements',
-                    'positive-pay-system': '/positive-pay-system',
-                    'any-branch-banking': '/any-branch-banking',
-                    'apbs-service': '/apbs-service',
-                    'nach': '/nach-service'
-                };
-
-                const getServicePath = (slug) => staticRoutes[slug] || '/';
-
-                const staticServices = [
-                    { name: 'Mobile Banking', path: '/mobile-banking', icon: 'fas fa-mobile-alt' },
-                    { name: 'ATM Services', path: '/atm-services', icon: 'fas fa-atm' },
-                    { name: 'Toll Free Banking', path: '/toll-free-banking', icon: 'fas fa-phone-alt' },
-                    { name: 'E-Statements', path: '/e-statements', icon: 'fas fa-file-invoice' },
-                    { name: 'Positive Pay System', path: '/positive-pay-system', icon: 'fas fa-check-double' },
-                    { name: 'Any Branch Banking', path: '/any-branch-banking', icon: 'fas fa-university' },
-                    { name: 'APBS Service', path: '/apbs-service', icon: 'fas fa-exchange-alt' },
-                    { name: 'NACH Service', path: '/nach-service', icon: 'fas fa-sync' },
-                    { name: 'IMPS', path: '/imps', icon: 'fas fa-bolt' },
-                    { name: 'UPI', path: '/upi', icon: 'fas fa-qrcode' },
-                    { name: 'RuPay', path: '/rupay', icon: 'fas fa-credit-card' },
-                    { name: 'NEFT/RTGS', path: '/neft-rtgs', icon: 'fas fa-paper-plane' },
-                    { name: 'Net Banking', path: '/net-banking', icon: 'fas fa-laptop-code' },
-                ];
 
                 if (Array.isArray(products)) {
                     depositsData = products.filter(p => p && p.category === 'Deposits' && p.status === 'active').map(p => ({
@@ -87,18 +116,20 @@ const Header = memo(() => {
                         path: `/product/${p.slug}`,
                         image: p.icon_type === 'img' ? `/assets/images/cards/${p.icon_value}` : '/assets/images/gcublogo.png'
                     }));
+                }
 
-                    // Combine dynamic services from products table with static ones
-                    const dynamicServices = products
-                        .filter(p => p && p.category === 'Services' && p.status === 'active')
-                        .map(p => ({
-                            name: p.name,
-                            path: getServicePath(p.slug),
-                            icon: 'fas fa-concierge-bell'
-                        }));
+                if (Array.isArray(dynamicServicesData)) {
+                    servicesData = dynamicServicesData.map(s => ({
+                        name: s.title,
+                        path: `/service/${s.slug}`,
+                        icon: 'fas fa-concierge-bell'
+                    }));
+                }
 
-                    servicesData = [...staticServices, ...dynamicServices];
-                } else {
+                // If no dynamic services, fallback to static ones or combine them?
+                // The user wants it dynamic, so we'll primarily use the dynamic ones.
+                // For now, let's combine them if dynamic is empty, or just use dynamic if available.
+                if (servicesData.length === 0) {
                     servicesData = staticServices;
                 }
 
@@ -113,7 +144,7 @@ const Header = memo(() => {
             }
         };
         fetchMenuData();
-    }, []);
+    }, [staticServices]);
 
 
     // Fetch settings for toll-free number
@@ -136,7 +167,7 @@ const Header = memo(() => {
         fetchSettings();
     }, []);
 
-    const menuItems = {
+    const menuItems = useMemo(() => ({
         about: [
             { name: 'About Us', path: '/about' },
             { name: "Chairman's Desk", path: '/chairman-desk' },
@@ -149,7 +180,7 @@ const Header = memo(() => {
         deposits: dynamicMenuItems.deposits,
         loans: dynamicMenuItems.loans,
         services: dynamicMenuItems.services
-    };
+    }), [dynamicMenuItems]);
 
     return (
         <>
@@ -200,7 +231,7 @@ const Header = memo(() => {
                         <i className="fas fa-award text-white text-2xl"></i>
                         <div className="flex flex-col leading-tight">
                             <span className="text-[10px] font-medium opacity-90">Established</span>
-                            <span className="text-sm font-bold">Since 1947</span>
+                            <span className="text-sm font-bold">Since 1949</span>
                         </div>
                     </div>
                 </div>
@@ -239,74 +270,37 @@ const Header = memo(() => {
                             )}
                         </li>
 
+
+
                         {/* Deposits Mega Menu */}
-                        <li className="static group cursor-pointer">
-                            <button
-                                onClick={(e) => toggleMenu(e, 'deposits')}
-                                className="hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 focus:outline-none"
-                            >
-                                Deposits <span className={`text-[10px] mt-0.5 transition-transform duration-300 ${activeMenu === 'deposits' ? 'rotate-180' : ''}`}>▼</span>
-                            </button>
-                            {activeMenu === 'deposits' && (
-                                <div className="absolute left-0 top-full w-full bg-white text-gray-800 shadow-2xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50">
-                                    <div className="container mx-auto p-8">
-                                        <div className="grid grid-cols-4 gap-6">
-                                            {menuItems.deposits.map((item, idx) => (
-                                                <Link key={idx} to={item.path} className="block p-3 rounded hover:bg-gray-50 hover:text-[#003399] transition font-bold text-sm border border-transparent hover:border-gray-100">
-                                                    <i className="fas fa-piggy-bank mr-2 text-[#E61111]"></i> {item.name}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </li>
+                        <MegaMenu
+                            activeMenu={activeMenu}
+                            menuName="deposits"
+                            toggleMenu={toggleMenu}
+                            label="Deposits"
+                            items={menuItems.deposits}
+                            iconPrefix="fas fa-piggy-bank"
+                        />
 
                         {/* Loans Mega Menu */}
-                        <li className="static group cursor-pointer">
-                            <button
-                                onClick={(e) => toggleMenu(e, 'loans')}
-                                className="hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 focus:outline-none"
-                            >
-                                Loans & Advances <span className={`text-[10px] mt-0.5 transition-transform duration-300 ${activeMenu === 'loans' ? 'rotate-180' : ''}`}>▼</span>
-                            </button>
-                            {activeMenu === 'loans' && (
-                                <div className="absolute left-0 top-full w-full bg-white text-gray-800 shadow-2xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50">
-                                    <div className="container mx-auto p-8">
-                                        <div className="grid grid-cols-4 gap-6">
-                                            {menuItems.loans.map((item, idx) => (
-                                                <Link key={idx} to={item.path} className="block p-3 rounded hover:bg-gray-50 hover:text-[#003399] transition font-bold text-sm border border-transparent hover:border-gray-100">
-                                                    <i className="fas fa-hand-holding-usd mr-2 text-[#E61111]"></i> {item.name}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </li>
+                        <MegaMenu
+                            activeMenu={activeMenu}
+                            menuName="loans"
+                            toggleMenu={toggleMenu}
+                            label="Loans & Advances"
+                            items={menuItems.loans}
+                            iconPrefix="fas fa-hand-holding-usd"
+                        />
 
                         {/* Services Mega Menu */}
-                        <li className="static group cursor-pointer">
-                            <button
-                                onClick={(e) => toggleMenu(e, 'services')}
-                                className="hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 focus:outline-none"
-                            >
-                                Our Services <span className={`text-[10px] mt-0.5 transition-transform duration-300 ${activeMenu === 'services' ? 'rotate-180' : ''}`}>▼</span>
-                            </button>
-                            {activeMenu === 'services' && (
-                                <div className="absolute left-0 top-full w-full bg-white text-gray-800 shadow-2xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50">
-                                    <div className="container mx-auto p-8">
-                                        <div className="grid grid-cols-4 gap-6">
-                                            {menuItems.services.map((item, idx) => (
-                                                <Link key={idx} to={item.path} className="block p-3 rounded hover:bg-gray-50 hover:text-[#003399] transition font-bold text-sm border border-transparent hover:border-gray-100">
-                                                    <i className={`${item.icon} mr-2 text-[#E61111]`}></i> {item.name}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </li>
+                        <MegaMenu
+                            activeMenu={activeMenu}
+                            menuName="services"
+                            toggleMenu={toggleMenu}
+                            label="Our Services"
+                            items={menuItems.services}
+                            iconPrefix="" // Services array already has `item.icon` defined
+                        />
 
                         <li><Link to="/interest-rates" className="hover:text-yellow-300 transition-colors duration-200">Interest Rates</Link></li>
                         <li><Link to="/gallery" className="hover:text-yellow-300 transition-colors duration-200">Gallery</Link></li>

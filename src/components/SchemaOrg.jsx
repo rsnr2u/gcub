@@ -16,12 +16,12 @@ export const organizationSchema = {
     "@type": "FinancialService",
     "name": "The Guntur Co-Operative Urban Bank Limited",
     "alternateName": "GCUB",
-    "url": "https://gcub.in",
-    "logo": "https://gcub.in/assets/images/gcublogo.png",
+    "url": "https://guntururban.bank.in",
+    "logo": "https://guntururban.bank.in/assets/images/gcublogo.png",
     "description": "A premier co-operative bank in Andhra Pradesh since 1947, offering comprehensive banking services including savings accounts, fixed deposits, loans, and digital banking solutions.",
     "foundingDate": "1947",
     "telephone": "1800-425-8873",
-    "email": "info@gcub.in",
+    "email": "info@guntururban.bank.in",
     "address": {
         "@type": "PostalAddress",
         "streetAddress": "Main Branch, Guntur",
@@ -48,10 +48,10 @@ export const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "The Guntur Co-Operative Urban Bank Limited",
-    "url": "https://gcub.in",
+    "url": "https://guntururban.bank.in",
     "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://gcub.in/search?q={search_term_string}",
+        "target": "https://guntururban.bank.in/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
     }
 };
@@ -63,7 +63,7 @@ export const createBreadcrumbSchema = (items) => ({
         "@type": "ListItem",
         "position": index + 1,
         "name": item.name,
-        "item": `https://gcub.in${item.url}`
+        "item": `https://guntururban.bank.in${item.url}`
     }))
 });
 
@@ -72,7 +72,7 @@ export const createFinancialProductSchema = (product) => ({
     "@type": "FinancialProduct",
     "name": product.name,
     "description": product.description,
-    "url": `https://gcub.in/product/${product.slug}`,
+    "url": `https://guntururban.bank.in/product/${product.slug}`,
     "provider": {
         "@type": "FinancialService",
         "name": "The Guntur Co-Operative Urban Bank Limited"
@@ -85,7 +85,7 @@ export const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "BankOrCreditUnion",
     "name": "The Guntur Co-Operative Urban Bank Limited",
-    "image": "https://gcub.in/assets/images/gcublogo.png",
+    "image": "https://guntururban.bank.in/assets/images/gcublogo.png",
     "telephone": "1800-425-8873",
     "address": {
         "@type": "PostalAddress",

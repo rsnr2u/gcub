@@ -102,6 +102,10 @@ const AdminContactSubmissions = lazy(() => import('./pages/admin/AdminContactSub
 const AdminViewContactSubmission = lazy(() => import('./pages/admin/AdminViewContactSubmission'));
 const AdminNews = lazy(() => import('./pages/admin/AdminNews'));
 const AdminEditNews = lazy(() => import('./pages/admin/AdminEditNews'));
+const AdminServices = lazy(() => import('./pages/admin/AdminServices'));
+const AdminEditService = lazy(() => import('./pages/admin/AdminEditService'));
+const AdminEditStructuredService = lazy(() => import('./pages/admin/AdminEditStructuredService'));
+const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 
 // Banking Services
 const MobileBanking = lazy(() => import('./pages/services/MobileBanking'));
@@ -179,6 +183,7 @@ function App() {
             <Route path="/deaf-accounts" element={<DeafAccounts />} />
             <Route path="/debit-cards" element={<DebitCards />} />
             <Route path="/news/:id" element={<NewsDetail />} />
+            <Route path="/service/:slug" element={<ServiceDetail />} />
             <Route path="/product/:slug" element={<ProductDetail />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/gallery/:id" element={<GalleryDetail />} />
@@ -252,6 +257,11 @@ function App() {
             <Route path="content/news/new" element={<AdminEditNews />} />
             <Route path="content/news/create" element={<AdminEditNews />} />
             <Route path="content/news/edit/:id" element={<AdminEditNews />} />
+            <Route path="content/services" element={<AdminServices />} />
+            <Route path="content/services/new" element={<AdminEditService />} />
+            <Route path="content/services/create" element={<AdminEditService />} />
+            <Route path="content/services/edit/:id" element={<AdminEditService />} />
+            <Route path="services/:slug" element={<AdminEditStructuredService />} />
             <Route path="content/home-page" element={<AdminHomePageContent />} />
             <Route path="content/statistics" element={<StatisticsSettings />} />
             <Route path="content/missed-call-banking" element={<AdminMissedCallBanking />} />

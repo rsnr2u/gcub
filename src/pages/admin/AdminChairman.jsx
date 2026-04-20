@@ -14,9 +14,11 @@ const AdminChairman = ({ isEmbedded = false }) => {
         achievement_growth: '',
         status: 'draft',
         display_order: 0,
-        image: null
+        image: null,
+        signature: null
     });
     const [previewImage, setPreviewImage] = useState(null);
+    const [previewSignature, setPreviewSignature] = useState(null);
 
     useEffect(() => {
         fetchProfile();
@@ -43,9 +45,11 @@ const AdminChairman = ({ isEmbedded = false }) => {
                     achievement_growth: profile.achievement_growth || '',
                     status: profile.status,
                     display_order: profile.display_order,
-                    image: null
+                    image: null,
+                    signature: null
                 });
                 setPreviewImage(profile.image_path ? `${import.meta.env.VITE_BASE_URL}/${profile.image_path}` : null);
+                setPreviewSignature(profile.signature_path ? `${import.meta.env.VITE_BASE_URL}/${profile.signature_path}` : null);
             }
             setLoading(false);
         } catch (error) {
@@ -60,6 +64,10 @@ const AdminChairman = ({ isEmbedded = false }) => {
             const file = files[0];
             setFormData(prev => ({ ...prev, image: file }));
             setPreviewImage(URL.createObjectURL(file));
+        } else if (name === 'signature') {
+            const file = files[0];
+            setFormData(prev => ({ ...prev, signature: file }));
+            setPreviewSignature(URL.createObjectURL(file));
         } else {
             setFormData(prev => ({ ...prev, [name]: value }));
         }
@@ -181,9 +189,25 @@ const AdminChairman = ({ isEmbedded = false }) => {
                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
                                         <i className="fas fa-camera text-white"></i>
                                     </div>
-                                    <input type="file" name="image" onChange={handleChange} className="absolute inset-0 opacity-0 cursor-pointer" title="Change Photo" />
+                                    <input type="file" name="image" onChange={handleChange} className="absolute inset-0 opacity-0 cursor-pointer" title="Change Photo" accept="image/*" />
                                 </div>
                                 <p className="text-[10px] text-gray-400">Click to upload new photo</p>
+                            </div>
+
+                            <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 text-center">
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Signature Image</label>
+                                <div className="relative w-full max-w-[200px] h-20 mx-auto rounded-lg overflow-hidden border-2 border-white shadow-md mb-4 group cursor-pointer bg-white">
+                                    {previewSignature ? (
+                                        <img src={previewSignature} alt="Signature Preview" className="w-full h-full object-contain" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-400"><i className="fas fa-signature text-2xl"></i></div>
+                                    )}
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                                        <i className="fas fa-camera text-white"></i>
+                                    </div>
+                                    <input type="file" name="signature" onChange={handleChange} className="absolute inset-0 opacity-0 cursor-pointer" title="Change Signature" accept="image/*" />
+                                </div>
+                                <p className="text-[10px] text-gray-400">Click to upload signature</p>
                             </div>
 
                             <div className="bg-gray-50 p-6 rounded-xl border border-gray-100 space-y-4">

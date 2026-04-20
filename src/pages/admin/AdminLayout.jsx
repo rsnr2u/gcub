@@ -81,6 +81,25 @@ const AdminLayout = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/admin/dashboard', icon: 'fas fa-tachometer-alt' },
+        {
+            name: 'Our Services',
+            icon: 'fas fa-concierge-bell',
+            children: [
+                { name: 'Mobile Banking', path: '/admin/services/mobile-banking', icon: 'fas fa-mobile-alt' },
+                { name: 'ATM Services', path: '/admin/services/atm-services', icon: 'fas fa-money-bill-wave' },
+                { name: 'Toll Free Banking', path: '/admin/services/toll-free-banking', icon: 'fas fa-phone-alt' },
+                { name: 'E-Statements', path: '/admin/services/e-statements', icon: 'fas fa-file-invoice' },
+                { name: 'Positive Pay', path: '/admin/services/positive-pay-system', icon: 'fas fa-shield-alt' },
+                { name: 'Any Branch', path: '/admin/services/any-branch-banking', icon: 'fas fa-university' },
+                { name: 'APBS Service', path: '/admin/services/apbs-service', icon: 'fas fa-link' },
+                { name: 'NACH Service', path: '/admin/services/nach-service', icon: 'fas fa-sync' },
+                { name: 'IMPS', path: '/admin/services/imps', icon: 'fas fa-bolt' },
+                { name: 'UPI', path: '/admin/services/upi', icon: 'fas fa-qrcode' },
+                { name: 'RuPay', path: '/admin/services/rupay', icon: 'fas fa-credit-card' },
+                { name: 'NEFT / RTGS', path: '/admin/services/neft-rtgs', icon: 'fas fa-exchange-alt' },
+                { name: 'Net Banking', path: '/admin/services/net-banking', icon: 'fas fa-laptop-code' },
+            ]
+        },
         { name: 'Banking Products', path: '/admin/products', icon: 'fas fa-layer-group' },
 
         {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
@@ -87,7 +88,7 @@ const NewsDetail = () => {
 
                     <div
                         className="prose text-gray-700 max-w-none prose-headings:text-[#003399] prose-a:text-[#003399] prose-img:rounded-3xl whitespace-normal"
-                        dangerouslySetInnerHTML={{ __html: news.content.replace(/&nbsp;/g, ' ') }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(news.content.replace(/&nbsp;/g, ' ')) }}
                     ></div>
 
                     <div className="mt-20 pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">

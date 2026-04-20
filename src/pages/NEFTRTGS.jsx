@@ -1,101 +1,149 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
+import { apiFetch } from '../utils/api';
+
 const NEFTRTGS = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/neft-rtgs`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching NEFT/RTGS content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
-        <div className="neft-rtgs-page">
+        <div className="bg-white min-h-screen font-inter">
+            <SEO
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
+            />
+
             {/* Hero Section */}
-            <section className="relative bg-[#002b5c] text-white py-20">
-                <div className="absolute inset-0 bg-black opacity-40"></div>
-                <div className="container mx-auto px-4 relative z-10 text-center">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">NEFT / RTGS</h1>
-                    <p className="text-xl text-gray-200 font-light max-w-2xl mx-auto">Safe and secure electronic fund transfers for high-value transactions.</p>
+            <div className="relative bg-[#003399] py-16 overflow-hidden">
+                <div className="absolute inset-0 bg-black opacity-30"></div>
+
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <nav className="flex items-center gap-2 text-blue-200 text-sm mb-4 font-medium">
+                        <Link to="/" className="hover:text-white transition">Home</Link>
+                        <i className="fas fa-chevron-right text-[10px]"></i>
+                        <span className="text-white">Our Services</span>
+                        <i className="fas fa-chevron-right text-[10px]"></i>
+                        <span className="text-white">{data.hero_title}</span>
+                    </nav>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
+                    <p className="text-xl text-blue-100 max-w-2xl font-light">
+                        {data.hero_description}
+                    </p>
                 </div>
-            </section>
+            </div>
 
-            <main className="container mx-auto px-4 py-16">
-                <div className="flex flex-col lg:flex-row gap-12">
+            {/* Main Content Area */}
+            <div className="max-w-7xl mx-auto px-6 py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-                    {/* Main Content */}
-                    <div className="lg:w-3/4">
-                        <div className="mb-12">
-                            <h2 className="text-3xl font-bold text-[#003399] mb-4">NEFT (National Electronic Funds Transfer)</h2>
-                            <p className="text-gray-600 leading-relaxed text-justify mb-4">
-                                National Electronic Funds Transfer (NEFT) is a nation-wide payment system facilitating one-to-one funds transfer. Under this Scheme, individuals, firms and corporates can electronically transfer funds to any individual, firm or corporate having an account with any other bank agency in the country participating in the Scheme.
-                            </p>
-                            <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 text-sm text-gray-700">
-                                <strong>Note:</strong> NEFT transactions are settled in batches.
+                    {/* Content Section */}
+                    <div className="lg:col-span-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                            <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
+                                <h3 className="text-xl font-bold text-blue-900 mb-4 uppercase tracking-widest text-xs">NEFT</h3>
+                                <p className="text-slate-700 leading-relaxed text-sm">
+                                    {data.neft_info}
+                                </p>
+                            </div>
+                            <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
+                                <h3 className="text-xl font-bold text-blue-900 mb-4 uppercase tracking-widest text-xs">RTGS</h3>
+                                <p className="text-slate-700 leading-relaxed text-sm">
+                                    {data.rtgs_info}
+                                </p>
                             </div>
                         </div>
 
-                        <div className="mb-12">
-                            <h2 className="text-3xl font-bold text-[#003399] mb-4">RTGS (Real Time Gross Settlement)</h2>
-                            <p className="text-gray-600 leading-relaxed text-justify mb-4">
-                                'RTGS' stands for Real Time Gross Settlement, which can be defined as the continuous (real-time) settlement of funds transfers individually on an order by order basis (without netting). 'Real Time' means the processing of instructions at the time they are received rather than at some later time.
-                            </p>
-                            <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500 text-sm text-gray-700">
-                                <strong>Minimum Limit:</strong> The minimum amount to be remitted through RTGS is ₹ 2,00,000.
+                        {data.comparison_json && (
+                            <div className="mb-12">
+                                <h3 className="text-xl font-bold text-blue-900 mb-6 font-primary">System Comparison</h3>
+                                <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                                    <table className="w-full text-sm text-left">
+                                        <thead className="bg-slate-50 text-slate-500 uppercase font-black text-[10px] tracking-widest border-b border-slate-200">
+                                            <tr>
+                                                <th className="px-6 py-4">Feature</th>
+                                                <th className="px-6 py-4">NEFT</th>
+                                                <th className="px-6 py-4">RTGS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100">
+                                            {data.comparison_json.map((row, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="px-6 py-4 font-bold text-slate-800">{row.feature}</td>
+                                                    <td className="px-6 py-4 text-slate-600">{row.neft}</td>
+                                                    <td className="px-6 py-4 text-slate-600">{row.rtgs}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        <h3 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-[#003399] pl-4">Comparison</h3>
-                        <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200">
-                            <table className="w-full text-sm text-left text-gray-600">
-                                <thead className="text-xs text-white uppercase bg-[#003399]">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-4 border-r border-blue-800">Feature</th>
-                                        <th scope="col" className="px-6 py-4 border-r border-blue-800">NEFT</th>
-                                        <th scope="col" className="px-6 py-4">RTGS</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200">
-                                    <tr className="bg-white">
-                                        <td className="px-6 py-4 font-bold text-gray-900 border-r border-gray-200">Minimum Amount</td>
-                                        <td className="px-6 py-4 border-r border-gray-200">₹ 1</td>
-                                        <td className="px-6 py-4">₹ 2,00,000</td>
-                                    </tr>
-                                    <tr className="bg-gray-50">
-                                        <td className="px-6 py-4 font-bold text-gray-900 border-r border-gray-200">Maximum Amount</td>
-                                        <td className="px-6 py-4 border-r border-gray-200">No Limit</td>
-                                        <td className="px-6 py-4">No Limit</td>
-                                    </tr>
-                                    <tr className="bg-white">
-                                        <td className="px-6 py-4 font-bold text-gray-900 border-r border-gray-200">Settlement Type</td>
-                                        <td className="px-6 py-4 border-r border-gray-200">Batches (Half-hourly)</td>
-                                        <td className="px-6 py-4">Real Time</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="mt-8">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-6 border-l-4 border-[#003399] pl-4">Information Required</h3>
-                            <p className="text-gray-600 mb-4">To initiate a transfer, you need the following details of the beneficiary:</p>
-                            <ul className="list-disc list-inside space-y-2 text-gray-700 font-medium font-inter">
-                                <li>Beneficiary Name</li>
-                                <li>Beneficiary Account App</li>
-                                <li>Beneficiary Bank Name & Branch</li>
-                                <li>Beneficiary Bank IFSC Code</li>
-                            </ul>
-                        </div>
+                        {data.req_info_json && (
+                            <div className="bg-slate-900 p-8 md:p-12 rounded-[40px] text-white">
+                                <h3 className="text-2xl font-bold mb-8">Details Required for Transfer</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {data.req_info_json.map((item, idx) => (
+                                        <div key={idx} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                                            <i className="fas fa-check-circle text-blue-400"></i>
+                                            <span className="font-bold opacity-80">{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Sidebar */}
-                    <div className="lg:w-1/4 space-y-8">
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                            <h4 className="font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Related Services</h4>
-                            <ul className="space-y-3">
-                                <li><a href="/imps" className="text-gray-600 hover:text-[#003399] flex items-center gap-2 transition"><i className="fas fa-chevron-right text-xs"></i> IMPS</a></li>
-                                <li><a href="/upi" className="text-gray-600 hover:text-[#003399] flex items-center gap-2 transition"><i className="fas fa-chevron-right text-xs"></i> UPI Payments</a></li>
-                            </ul>
-                        </div>
+                    {/* Sidebar Section */}
+                    <div className="lg:col-span-4 space-y-8">
+                        {data.sidebar_links_json && (
+                            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
+                                <h3 className="text-xl font-bold text-slate-800 mb-6">Explore Other Ways</h3>
+                                <div className="space-y-3">
+                                    {Object.entries(data.sidebar_links_json).map(([path, label]) => (
+                                        <Link key={path} to={path} className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 hover:border-blue-500 hover:shadow-md transition">
+                                            <span className="font-bold text-slate-700 text-sm">{label}</span>
+                                            <i className="fas fa-chevron-right text-blue-500 text-[10px]"></i>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
-                        <div className="bg-[#002b5c] text-white p-6 rounded-xl shadow-lg">
-                            <h4 className="font-bold text-lg mb-2">Find IFSC Code?</h4>
-                            <p className="text-blue-100 text-sm mb-4">Search for IFSC codes of all our branches.</p>
-                            <a href="/branch-locator" className="inline-block w-full text-center bg-[#E61111] text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-700 transition">Branch Locator</a>
+                        <div className="bg-blue-900 p-8 rounded-3xl text-white">
+                            <h3 className="text-xl font-bold mb-4">IFSC Finder</h3>
+                            <p className="text-blue-200 text-sm leading-relaxed mb-6 italic">{data.sidebar_ifsc_text}</p>
+                            <Link to="/branch-locator" className="block w-full text-center bg-white text-blue-900 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-blue-50 transition">
+                                Go to Branch Locator
+                            </Link>
                         </div>
                     </div>
 
                 </div>
-            </main>
+            </div>
         </div>
     );
 };

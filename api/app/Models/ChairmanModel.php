@@ -19,6 +19,7 @@ class ChairmanModel extends Model
         'tenure_start',
         'experience',
         'image_path',
+        'signature_path',
         'message',
         'achievement_branches',
         'achievement_growth',

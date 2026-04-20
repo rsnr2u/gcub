@@ -1,12 +1,39 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO';
+import { apiFetch } from '../../utils/api';
 
 const APBSService = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/apbs-service`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching APBS content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
         <div className="bg-white min-h-screen font-inter">
             <SEO
-                title="APBS Service - Aadhaar Payment Bridge | GCUB"
-                description="Receive your government benefits and subsidies directly into your bank account with GCUB Aadhaar Payment Bridge System (APBS)."
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
             />
 
             {/* Hero Section */}
@@ -19,11 +46,11 @@ const APBSService = () => {
                         <i className="fas fa-chevron-right text-[10px]"></i>
                         <span className="text-white">Our Services</span>
                         <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">APBS Service</span>
+                        <span className="text-white">{data.hero_title}</span>
                     </nav>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">APBS Service</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
                     <p className="text-xl text-blue-100 max-w-2xl font-light">
-                        Aadhaar Payment Bridge System for seamless disbursement of government benefits.
+                        {data.hero_description}
                     </p>
                 </div>
             </div>
@@ -35,93 +62,71 @@ const APBSService = () => {
                     {/* Content Section */}
                     <div className="lg:col-span-8">
                         <div className="mb-12">
-                            <h2 className="text-2xl font-bold text-blue-900 mb-6">What is Aadhaar Payment Bridge (APB) System?</h2>
+                            <h2 className="text-2xl font-bold text-blue-900 mb-6">{data.intro_title}</h2>
                             <p className="text-lg text-slate-700 leading-relaxed mb-6">
-                                Aadhaar Payment Bridge (APB) System, implemented by NPCI, is a unique payment system that uses Aadhaar number as a central key for electronically channeling government subsidies and benefits in the Aadhaar Linked Bank Accounts (ALBA) of the beneficiaries.
+                                {data.intro_description}
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                            <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
-                                <h3 className="text-xl font-bold text-blue-900 mb-4">For Beneficiaries</h3>
-                                <ul className="space-y-4 text-sm text-slate-600">
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-check-circle text-blue-600 mt-1"></i>
-                                        Eliminates inordinate delays associated with manual processing.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-check-circle text-blue-600 mt-1"></i>
-                                        Direct credit of benefits without any middlemen.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-check-circle text-blue-600 mt-1"></i>
-                                        Provides access to banking services at the doorstep.
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
-                                <h3 className="text-xl font-bold text-blue-900 mb-4">Key Objectives</h3>
-                                <ul className="space-y-4 text-sm text-slate-600">
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-bullseye text-blue-600 mt-1"></i>
-                                        To digitize benefit disbursement processes.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-bullseye text-blue-600 mt-1"></i>
-                                        To promote financial inclusion among the rural population.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-bullseye text-blue-600 mt-1"></i>
-                                        To ensure transparency in government payouts.
-                                    </li>
-                                </ul>
-                            </div>
+                            {data.beneficiary_benefits_json && (
+                                <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
+                                    <h3 className="text-xl font-bold text-blue-900 mb-4">For Beneficiaries</h3>
+                                    <ul className="space-y-4 text-sm text-slate-600">
+                                        {data.beneficiary_benefits_json.map((b, idx) => (
+                                            <li key={idx} className="flex gap-3">
+                                                <i className="fas fa-check-circle text-blue-600 mt-1"></i>
+                                                {b}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            {data.objectives_json && (
+                                <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
+                                    <h3 className="text-xl font-bold text-blue-900 mb-4">Key Objectives</h3>
+                                    <ul className="space-y-4 text-sm text-slate-600">
+                                        {data.objectives_json.map((o, idx) => (
+                                            <li key={idx} className="flex gap-3">
+                                                <i className="fas fa-bullseye text-blue-600 mt-1"></i>
+                                                {o}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="bg-amber-50 border border-amber-200 rounded-3xl p-8 mb-12">
-                            <h3 className="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2">
-                                <i className="fas fa-link"></i>
-                                How to Link Your Aadhaar?
-                            </h3>
-                            <p className="text-amber-800 text-sm mb-6 leading-relaxed">To receive Direct Benefit Transfer (DBT) into your account, you must link your Aadhaar with your GCUB bank account. Follow these steps:</p>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className="bg-white p-4 rounded-2xl shadow-sm">
-                                    <span className="text-[10px] font-black text-amber-500 uppercase">Step 1</span>
-                                    <p className="text-xs font-bold text-slate-700 mt-1">Visit your home branch</p>
-                                </div>
-                                <div className="bg-white p-4 rounded-2xl shadow-sm">
-                                    <span className="text-[10px] font-black text-amber-500 uppercase">Step 2</span>
-                                    <p className="text-xs font-bold text-slate-700 mt-1">Submit Aadhaar copy & Consent</p>
-                                </div>
-                                <div className="bg-white p-4 rounded-2xl shadow-sm">
-                                    <span className="text-[10px] font-black text-amber-500 uppercase">Step 3</span>
-                                    <p className="text-xs font-bold text-slate-700 mt-1">Seed Aadhaar with NPCI mapper</p>
+                        {data.linking_steps_json && (
+                            <div className="bg-amber-50 border border-amber-200 rounded-3xl p-8 mb-12">
+                                <h3 className="text-lg font-bold text-amber-900 mb-4 flex items-center gap-2">
+                                    <i className="fas fa-link"></i>
+                                    How to Link Your Aadhaar?
+                                </h3>
+                                <p className="text-amber-800 text-sm mb-6 leading-relaxed">To receive Direct Benefit Transfer (DBT) into your account, you must link your Aadhaar with your GCUB bank account.</p>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {data.linking_steps_json.map((step, idx) => (
+                                        <div key={idx} className="bg-white p-4 rounded-2xl shadow-sm">
+                                            <span className="text-[10px] font-black text-amber-500 uppercase">Step {idx + 1}</span>
+                                            <p className="text-xs font-bold text-slate-700 mt-1">{step}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Sidebar Section */}
                     <div className="lg:col-span-4 space-y-8">
                         <div className="bg-slate-900 p-8 rounded-3xl text-white">
                             <h3 className="text-xl font-bold mb-4">DBT Benefits</h3>
-                            <p className="text-slate-400 text-sm mb-6 leading-relaxed">Common benefits received through APBS include PM-Kisan, Gas Subsidy, MGNREGA wages, and Old Age Pensions.</p>
-                            <div className="space-y-3">
-                                <div className="p-3 bg-slate-800 rounded-xl flex items-center gap-3">
-                                    <i className="fas fa-university text-blue-400"></i>
-                                    <span className="text-xs">PM-Kisan Samman Nidhi</span>
-                                </div>
-                                <div className="p-3 bg-slate-800 rounded-xl flex items-center gap-3">
-                                    <i className="fas fa-gas-pump text-blue-400"></i>
-                                    <span className="text-xs">LPG Subsidy (PAHAL)</span>
-                                </div>
-                            </div>
+                            <p className="text-slate-400 text-sm mb-6 leading-relaxed">{data.sidebar_dbt_text}</p>
                         </div>
 
                         <div className="p-8 bg-blue-900 rounded-3xl text-white">
                             <h4 className="font-bold mb-2">Check Linking Status</h4>
                             <p className="text-xs text-blue-200 mb-6">You can check your Aadhaar mapping status on the UIDAI official website.</p>
-                            <a href="https://uidai.gov.in" target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-white text-blue-900 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-blue-50 transition">
+                            <a href={data.sidebar_status_url} target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-white text-blue-900 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-blue-50 transition">
                                 Visit UIDAI Website
                             </a>
                         </div>

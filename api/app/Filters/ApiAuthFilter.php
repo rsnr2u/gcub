@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
+use App\Libraries\SecurityNotifier;
 
 class ApiAuthFilter implements FilterInterface
 {
@@ -17,6 +18,12 @@ class ApiAuthFilter implements FilterInterface
         $authHeader = $request->getHeaderLine('Authorization');
 
         if (empty($authHeader) || !preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+            SecurityNotifier::notify('Missing Authentication Token', [
+                'Endpoint' => $request->getUri()->getPath(),
+                'IP Address' => $request->getIPAddress(),
+                'Method' => $request->getMethod()
+            ]);
+
             return service('response')->setJSON([
                 'status' => 'error',
                 'message' => 'Authorization token is required'
@@ -28,6 +35,13 @@ class ApiAuthFilter implements FilterInterface
         $user = $userModel->where('auth_token', $token)->first();
 
         if (!$user) {
+            SecurityNotifier::notify('Invalid Authentication Token', [
+                'Endpoint' => $request->getUri()->getPath(),
+                'IP Address' => $request->getIPAddress(),
+                'Token Used' => substr($token, 0, 15) . '...',
+                'Method' => $request->getMethod()
+            ]);
+
             return service('response')->setJSON([
                 'status' => 'error',
                 'message' => 'Invalid authorization token'

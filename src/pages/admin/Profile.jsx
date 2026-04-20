@@ -210,7 +210,7 @@ const Profile = () => {
                                         </div>
                                         <div className="flex justify-end">
                                             <button type="submit" disabled={saving} className="bg-[#E61111] hover:bg-black text-white px-8 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-red-100 disabled:opacity-50 transform active:scale-95">
-                                                {saving ? 'Processing...' : 'Sync Security Keys'}
+                                                {saving ? 'Processing...' : 'Update'}
                                             </button>
                                         </div>
                                     </form>

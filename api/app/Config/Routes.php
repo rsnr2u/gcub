@@ -228,8 +228,29 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->post('chairman/update/(:num)', 'Chairman::update/$1');
     $routes->post('chairman/delete/(:num)', 'Chairman::delete/$1');
 
+    // Service Structured Content Routes
+    $routes->get('service-content/(:any)', 'ServiceContent::show/$1');
+    $routes->put('service-content/(:any)', 'ServiceContent::update/$1');
+
+    // Services Routes
+    $routes->get('services', 'Services::index');
+    $routes->get('services/show/(:any)', 'Services::show/$1');
+    $routes->post('services/create', 'Services::create');
+    $routes->post('services/update/(:num)', 'Services::update/$1');
+    $routes->post('services/delete/(:num)', 'Services::delete/$1');
+
     // Sitemap Route (Dynamic)
     $routes->get('sitemap.xml', 'Sitemap::index');
 });
 
-
+$routes->get('test-email', function() {
+    $email = \Config\Services::email();
+    $email->setTo('info@digitalks.in');
+    $email->setSubject('SMTP Configuration Test');
+    $email->setMessage('This is a test from the GCUB backend.');
+    if ($email->send()) {
+        return "✅ Email sent successfully.";
+    } else {
+        return $email->printDebugger(['headers', 'subject', 'body']);
+    }
+});

@@ -3,7 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
-use App\Models\AdminModel;
+use App\Models\UserModel;
 use App\Models\SettingsModel;
 use CodeIgniter\API\ResponseTrait;
 
@@ -11,12 +11,12 @@ class Admin extends BaseController
 {
     use ResponseTrait;
 
-    protected $adminModel;
+    protected $userModel;
     protected $settingsModel;
 
     public function __construct()
     {
-        $this->adminModel = new AdminModel();
+        $this->userModel = new UserModel();
         $this->settingsModel = new SettingsModel();
     }
 
@@ -27,12 +27,14 @@ class Admin extends BaseController
             return $this->fail('Admin ID is required', 400);
         }
 
-        $admin = $this->adminModel->find($id);
+        $admin = $this->userModel->find($id);
         if (!$admin) {
             return $this->failNotFound('Admin not found');
         }
 
         unset($admin['password']);
+        $admin['full_name'] = $admin['name'];
+        $admin['username'] = $admin['email'];
         return $this->respond($admin);
     }
 
@@ -45,15 +47,24 @@ class Admin extends BaseController
 
         $data = $this->request->getPost();
 
-        // Handle Password Update
+        if (isset($data['full_name'])) {
+            $data['name'] = $data['full_name'];
+            unset($data['full_name']);
+        }
+        if (isset($data['phone'])) {
+            unset($data['phone']); // phone not in users table yet
+        }
+
+        // Handle Password Update - UserModel handles hashing in beforeUpdate hook
         if (!empty($data['new_password'])) {
-            $data['password'] = password_hash($data['new_password'], PASSWORD_DEFAULT);
+            $data['password'] = $data['new_password'];
         }
         unset($data['new_password']);
 
-        if ($this->adminModel->update($id, $data)) {
-            $updated = $this->adminModel->find($id);
+        if ($this->userModel->update($id, $data)) {
+            $updated = $this->userModel->find($id);
             unset($updated['password']);
+            $updated['full_name'] = $updated['name'];
             return $this->respond(['status' => 'success', 'message' => 'Profile updated successfully', 'data' => $updated]);
         }
 

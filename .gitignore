@@ -22,3 +22,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# IDE / Development Files
+.vscode/
+
+# Temporary / Junk Files
+api/app/app.zip
+api/error.html
+api/test_mail.php
+api/public/uploads/chairman/*
+api/branches.sql
+api/interest_rates.sql
+api/create_gallery_table.php
+api/db_migration_about_us.php
+api/fix_db.php
+api/temp_db.txt
+api/reinvestment.json
+api/reinvestment_v2.json

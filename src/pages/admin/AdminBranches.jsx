@@ -75,6 +75,7 @@ const AdminBranches = () => {
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="bg-gray-50 border-b border-gray-100">
+                                    <th className="px-4 py-4 text-xs font-bold text-gray-600 uppercase tracking-widest text-center w-16">Ord</th>
                                     <th className="px-8 py-4 text-xs font-bold text-gray-600 uppercase tracking-widest">Branch Name</th>
                                     <th className="px-8 py-4 text-xs font-bold text-gray-600 uppercase tracking-widest">Location</th>
                                     <th className="px-8 py-4 text-xs font-bold text-gray-600 uppercase tracking-widest">IFSC / MICR</th>
@@ -85,13 +86,16 @@ const AdminBranches = () => {
                             <tbody className="divide-y divide-gray-50">
                                 {branches.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="px-8 py-20 text-center text-gray-400 uppercase text-xs font-bold tracking-widest">
+                                        <td colSpan="6" className="px-8 py-20 text-center text-gray-400 uppercase text-xs font-bold tracking-widest">
                                             No connectivity nodes registered
                                         </td>
                                     </tr>
                                 ) : (
                                     branches.map((branch) => (
                                         <tr key={branch.id} className="hover:bg-gray-50/50 transition group">
+                                            <td className="px-4 py-5 text-center">
+                                                <span className="text-sm font-bold text-gray-400">{branch.display_order || 0}</span>
+                                            </td>
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-4">
                                                     <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-[#003399] text-sm">

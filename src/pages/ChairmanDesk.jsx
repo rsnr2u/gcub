@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
 
@@ -93,7 +94,7 @@ const ChairmanDesk = () => {
                                     <i className="fas fa-quote-left text-4xl text-[#003399]/10 absolute top-8 left-8"></i>
                                     <div
                                         className="prose prose-blue max-w-none text-gray-700 leading-relaxed text-lg font-light italic"
-                                        dangerouslySetInnerHTML={{ __html: chairman.message }}
+                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chairman.message) }}
                                     >
                                     </div>
 
@@ -101,7 +102,13 @@ const ChairmanDesk = () => {
                                         <div className="w-12 h-[1px] bg-[#E61111]"></div>
                                         <div>
                                             <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">Signed</p>
-                                            <h4 className="font-bold text-[#003399] text-xl">{chairman.name}</h4>
+                                            {chairman.signature_path ? (
+                                                <div className="h-12 mb-2">
+                                                    <img src={`${apiBaseUrl}/${chairman.signature_path}`} alt={`Signature of ${chairman.name}`} className="h-full object-contain" />
+                                                </div>
+                                            ) : (
+                                                <h4 className="font-bold text-[#003399] text-xl">{chairman.name}</h4>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

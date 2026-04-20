@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -30,11 +30,15 @@ const Footer = () => {
         }
     };
 
-    const socialMedia = [
+    const socialMedia = useMemo(() => [
         { name: 'facebook', url: settings.seo_facebook_url, icon: 'fab fa-facebook' },
         { name: 'twitter', url: settings.seo_twitter_url, icon: 'fab fa-twitter' },
         { name: 'linkedin', url: settings.seo_linkedin_url, icon: 'fab fa-linkedin' }
-    ].filter(social => social.url && social.url.trim() !== '');
+    ].filter(social => social.url && social.url.trim() !== ''), [
+        settings.seo_facebook_url,
+        settings.seo_twitter_url,
+        settings.seo_linkedin_url
+    ]);
 
     return (
         <footer className="bg-[#0b1320] text-gray-400 text-sm pt-16 pb-8">

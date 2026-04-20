@@ -22,7 +22,8 @@ class BranchModel extends Model
         'address',
         'google_maps_link',
         'status',
-        'is_head_office'
+        'is_head_office',
+        'display_order'
     ];
 
     // Dates

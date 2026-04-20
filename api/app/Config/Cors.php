@@ -34,7 +34,13 @@ class Cors extends BaseConfig
          *   - ['http://localhost:8080']
          *   - ['https://www.example.com']
          */
-        'allowedOrigins' => ['*'],
+        'allowedOrigins' => [
+            'http://localhost:5173', // Vite dev (default)
+            'http://localhost:3000', // Vite dev (alternate)
+            'http://localhost:8080', // Alternate dev
+            'https://guntururban.bank.in', // Production
+            'http://guntururban.bank.in'
+        ],
 
         /**
          * Origin regex patterns for the `Access-Control-Allow-Origin` header.

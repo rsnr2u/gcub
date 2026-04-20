@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import SEO from '../components/SEO';
 import SchemaOrg, { organizationSchema, createBreadcrumbSchema } from '../components/SchemaOrg';
 
@@ -86,7 +87,7 @@ const DICGCCertificate = () => {
                             {content.body && (
                                 <div
                                     className="prose prose-lg max-w-none"
-                                    dangerouslySetInnerHTML={{ __html: content.body }}
+                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.body) }}
                                 />
                             )}
 

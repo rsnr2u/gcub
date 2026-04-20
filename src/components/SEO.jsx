@@ -10,7 +10,7 @@ const SEO = ({
     author = 'The Guntur Co-Operative Urban Bank Limited',
     robots = 'index, follow'
 }) => {
-    const siteUrl = 'https://gcub.in';
+    const siteUrl = 'https://guntururban.bank.in';
     const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
     const fullImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 

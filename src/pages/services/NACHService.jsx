@@ -1,12 +1,39 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO';
+import { apiFetch } from '../../utils/api';
 
 const NACHService = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/nach-service`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching NACH content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
         <div className="bg-white min-h-screen font-inter">
             <SEO
-                title="NACH Credit & Debit - Automated Payments | GCUB"
-                description="Automate your recurring payments and receive credits directly with National Automated Clearing House (NACH) service at GCUB."
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
             />
 
             {/* Hero Section */}
@@ -19,11 +46,11 @@ const NACHService = () => {
                         <i className="fas fa-chevron-right text-[10px]"></i>
                         <span className="text-white">Our Services</span>
                         <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">NACH Service</span>
+                        <span className="text-white">{data.hero_title}</span>
                     </nav>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">NACH Credit & Debit</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
                     <p className="text-xl text-blue-100 max-w-2xl font-light">
-                        Simplified automated clearing for high-volume, repetitive electronic transactions.
+                        {data.hero_description}
                     </p>
                 </div>
             </div>
@@ -35,83 +62,70 @@ const NACHService = () => {
                     {/* Content Section */}
                     <div className="lg:col-span-8">
                         <div className="mb-12">
-                            <h2 className="text-2xl font-bold text-blue-900 mb-6">What is NACH?</h2>
-                            <p className="text-lg text-slate-700 leading-relaxed mb-6">
-                                National Automated Clearing House (NACH) is a centralized system launched by NPCI for banks, financial institutions, Corporates and Government to facilitate interbank, high volume, electronic transactions which are repetitive and periodic in nature.
+                            <h2 className="text-2xl font-bold text-blue-900 mb-6">{data.intro_title}</h2>
+                            <p className="text-lg text-slate-700 leading-relaxed">
+                                {data.intro_description}
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                            <div className="p-8 rounded-3xl border border-blue-200 bg-blue-50">
-                                <h3 className="text-xl font-bold text-blue-900 mb-4 flex items-center gap-2">
-                                    <i className="fas fa-arrow-down"></i>
-                                    NACH Credit
-                                </h3>
-                                <p className="text-sm text-slate-600 mb-6">Used for making payments to multiple individuals by a single entity.</p>
-                                <ul className="space-y-3 text-sm text-slate-800 font-bold">
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-green-500"></i> Dividend Payments</li>
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-green-500"></i> Salary Disbursements</li>
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-green-500"></i> Pension Payouts</li>
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-green-500"></i> Interest Credits</li>
-                                </ul>
-                            </div>
-                            <div className="p-8 rounded-3xl border border-slate-200 bg-slate-50">
-                                <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-                                    <i className="fas fa-arrow-up"></i>
-                                    NACH Debit
-                                </h3>
-                                <p className="text-sm text-slate-600 mb-6">Used for collecting periodic payments from individuals by a single entity.</p>
-                                <ul className="space-y-3 text-sm text-slate-800 font-bold">
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-blue-500"></i> Utility Bill Payments</li>
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-blue-500"></i> SIP/Insurance Premiums</li>
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-blue-500"></i> Loan EMI Collections</li>
-                                    <li className="flex items-center gap-2"><i className="fas fa-check text-blue-500"></i> School/College Fees</li>
-                                </ul>
-                            </div>
+                            {data.nach_credit_json && (
+                                <div className="p-8 bg-green-50 rounded-3xl border border-green-100">
+                                    <h3 className="text-xl font-bold text-green-900 mb-6 flex items-center gap-3">
+                                        <i className="fas fa-hand-holding-usd text-2xl"></i>
+                                        NACH Credit
+                                    </h3>
+                                    <ul className="space-y-4 text-slate-600">
+                                        {data.nach_credit_json.map((item, idx) => (
+                                            <li key={idx} className="flex items-center gap-3">
+                                                <i className="fas fa-check text-green-500"></i> {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            {data.nach_debit_json && (
+                                <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
+                                    <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-3">
+                                        <i className="fas fa-file-invoice-dollar text-2xl"></i>
+                                        NACH Debit
+                                    </h3>
+                                    <ul className="space-y-4 text-slate-600">
+                                        {data.nach_debit_json.map((item, idx) => (
+                                            <li key={idx} className="flex items-center gap-3">
+                                                <i className="fas fa-check text-blue-500"></i> {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="bg-slate-900 rounded-3xl p-10 text-white">
-                            <h3 className="text-2xl font-bold mb-6">Why Use NACH?</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-2">
-                                    <h4 className="text-blue-400 font-bold">Direct & Fast</h4>
-                                    <p className="text-sm text-slate-400">Eliminates the need for physical checks and manual processing, ensuring faster clearing cycles.</p>
-                                </div>
-                                <div className="space-y-2">
-                                    <h4 className="text-blue-400 font-bold">Reliable</h4>
-                                    <p className="text-sm text-slate-400">Automated process reduces human error and ensures payments are made on time, every time.</p>
-                                </div>
-                                <div className="space-y-2">
-                                    <h4 className="text-blue-400 font-bold">Scalable</h4>
-                                    <p className="text-sm text-slate-400">Handle millions of transactions in a single day across geographical locations.</p>
-                                </div>
-                                <div className="space-y-2">
-                                    <h4 className="text-blue-400 font-bold">Secure</h4>
-                                    <p className="text-sm text-slate-400">Robust security measures implemented by NPCI for all interbank transactions.</p>
+                        {data.why_use_nach_json && (
+                            <div className="space-y-8">
+                                <h3 className="text-2xl font-bold text-blue-900">Why Use NACH?</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    {data.why_use_nach_json.map((reason, idx) => (
+                                        <div key={idx} className="p-6 border border-slate-100 rounded-2xl text-center hover:shadow-md transition">
+                                            <i className="fas fa-circle-check text-blue-600 mb-3 block"></i>
+                                            <p className="font-bold text-slate-800">{reason}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Sidebar Section */}
                     <div className="lg:col-span-4 space-y-8">
-                        <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
-                            <h3 className="text-xl font-bold text-blue-900 mb-6">Mandate Registration</h3>
-                            <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                                To enable NACH Debit, you need to sign a one-time mandate (E-Mandate) form authorizing the collection entity to debit your account.
-                            </p>
-                            <div className="bg-white p-4 rounded-xl border border-blue-200">
-                                <h4 className="text-xs font-black text-blue-900 uppercase mb-2">Download the Form</h4>
-                                <p className="text-xs text-slate-500 mb-3">Download the E-Mandate form to enable NACH Debit.</p>
-                                <a className="text-[10px] font-black uppercase text-blue-600 hover:text-blue-900 transition" href="/downloads">Download the Form</a>
-                            </div>
+                        <div className="bg-slate-900 p-8 rounded-3xl text-white">
+                            <h3 className="text-xl font-bold mb-4">Mandate Info</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed mb-6 italic">{data.sidebar_mandate_text}</p>
                         </div>
 
-                        <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
-                            <h3 className="text-xl font-bold text-slate-800 mb-4">MMS Service</h3>
-                            <p className="text-xs text-slate-500 leading-loose">
-                                Mandate Management System (MMS) allows you to manage your active mandates, including cancellation and modification requests through your bank.
-                            </p>
+                        <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
+                            <h4 className="font-bold text-slate-800 mb-2">Management</h4>
+                            <p className="text-xs text-slate-500">{data.sidebar_mms_text}</p>
                         </div>
                     </div>
 

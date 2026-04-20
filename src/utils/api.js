@@ -26,3 +26,15 @@ export const authFetch = async (url, options = {}) => {
 
     return response;
 };
+export const apiFetch = async (url, options = {}) => {
+    const headers = {
+        ...options.headers,
+    };
+
+    if (!(options.body instanceof FormData) && !headers['Content-Type'] && options.method && options.method !== 'GET') {
+        headers['Content-Type'] = 'application/json';
+    }
+
+    const response = await fetch(url, { ...options, headers });
+    return response;
+};

@@ -32,13 +32,21 @@ class Chairman extends ResourceController
     {
         $model = new ChairmanModel();
 
-        // Handle File Upload
         $file = $this->request->getFile('image');
         $filePath = null;
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $newName = $file->getRandomName();
             $file->move(FCPATH . 'uploads/chairman', $newName);
             $filePath = 'uploads/chairman/' . $newName;
+        }
+
+        // Handle Signature Upload
+        $signatureFile = $this->request->getFile('signature');
+        $signatureFilePath = null;
+        if ($signatureFile && $signatureFile->isValid() && !$signatureFile->hasMoved()) {
+            $newName = $signatureFile->getRandomName();
+            $signatureFile->move(FCPATH . 'uploads/chairman', $newName);
+            $signatureFilePath = 'uploads/chairman/' . $newName;
         }
 
         $data = [
@@ -48,6 +56,7 @@ class Chairman extends ResourceController
             'tenure_start' => $this->request->getVar('tenure_start'),
             'experience' => $this->request->getVar('experience'),
             'image_path' => $filePath,
+            'signature_path' => $signatureFilePath,
             'message' => $this->request->getVar('message'),
             'achievement_branches' => $this->request->getVar('achievement_branches') ?? 0,
             'achievement_growth' => $this->request->getVar('achievement_growth'),
@@ -84,6 +93,20 @@ class Chairman extends ResourceController
             }
         }
 
+        // Handle Signature Upload
+        $signatureFile = $this->request->getFile('signature');
+        $signatureFilePath = $existing['signature_path'] ?? null; // Default to existing
+        if ($signatureFile && $signatureFile->isValid() && !$signatureFile->hasMoved()) {
+            $newName = $signatureFile->getRandomName();
+            $signatureFile->move(FCPATH . 'uploads/chairman', $newName);
+            $signatureFilePath = 'uploads/chairman/' . $newName;
+
+            // Optionally delete old file
+            if (!empty($existing['signature_path']) && file_exists(FCPATH . $existing['signature_path'])) {
+                @unlink(FCPATH . $existing['signature_path']);
+            }
+        }
+
         // Get raw input if JSON, but getVar works for both form-data and json typically if configured right.
         // Since we are uploading files, we expect FormData.
         // Note: request->getVar() might not work for all PUT requests with FormData depending on server config.
@@ -97,6 +120,7 @@ class Chairman extends ResourceController
             'tenure_start' => $this->request->getVar('tenure_start') ?? $existing['tenure_start'],
             'experience' => $this->request->getVar('experience') ?? $existing['experience'],
             'image_path' => $filePath,
+            'signature_path' => $signatureFilePath,
             'message' => $this->request->getVar('message') ?? $existing['message'],
             'achievement_branches' => $this->request->getVar('achievement_branches') ?? $existing['achievement_branches'],
             'achievement_growth' => $this->request->getVar('achievement_growth') ?? $existing['achievement_growth'],

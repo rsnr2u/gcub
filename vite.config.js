@@ -6,9 +6,26 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
+    tailwindcss()
   ],
   server: {
     port: 3000,
+  },
+  build: {
+    target: 'esnext',
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
+  },
+  esbuild: {
+    drop: ['console', 'debugger'],
   },
 })

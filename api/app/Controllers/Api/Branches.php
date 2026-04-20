@@ -12,7 +12,7 @@ class Branches extends ResourceController
 
     public function index()
     {
-        return $this->respond($this->model->orderBy('is_head_office', 'DESC')->orderBy('name', 'ASC')->findAll());
+        return $this->respond($this->model->orderBy('is_head_office', 'DESC')->orderBy('display_order', 'ASC')->orderBy('name', 'ASC')->findAll());
     }
 
     public function show($id = null)
@@ -37,6 +37,7 @@ class Branches extends ResourceController
             'google_maps_link' => $this->request->getVar('google_maps_link'),
             'status' => $this->request->getVar('status') ?? 'active',
             'is_head_office' => $this->request->getVar('is_head_office') ?? 0,
+            'display_order' => $this->request->getVar('display_order') ?? 0,
         ];
 
         if ($this->model->insert($data)) {
@@ -52,7 +53,7 @@ class Branches extends ResourceController
 
         // Handle FormData-like structure or JSON
         $updateData = [];
-        $fields = ['name', 'region', 'ifsc', 'micr', 'contact', 'email', 'address', 'google_maps_link', 'status', 'is_head_office'];
+        $fields = ['name', 'region', 'ifsc', 'micr', 'contact', 'email', 'address', 'google_maps_link', 'status', 'is_head_office', 'display_order'];
 
         foreach ($fields as $field) {
             if ($this->request->getVar($field) !== null) {

@@ -1,12 +1,39 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO';
+import { apiFetch } from '../../utils/api';
 
 const EStatements = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/e-statements`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching E-statements content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
         <div className="bg-white min-h-screen font-inter">
             <SEO
-                title="E-Statements - Go Paperless | GCUB"
-                description="Subscribe to E-Statements and receive your account statements directly in your inbox. Eco-friendly, secure, and fast."
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
             />
 
             {/* Hero Section */}
@@ -19,11 +46,11 @@ const EStatements = () => {
                         <i className="fas fa-chevron-right text-[10px]"></i>
                         <span className="text-white">Our Services</span>
                         <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">E-Statements</span>
+                        <span className="text-white">{data.hero_title}</span>
                     </nav>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">E-Statements</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
                     <p className="text-xl text-blue-100 max-w-2xl font-light">
-                        Receive your bank statements securely in your email. Fast, free, and eco-friendly.
+                        {data.hero_description}
                     </p>
                 </div>
             </div>
@@ -35,103 +62,59 @@ const EStatements = () => {
                     {/* Content Section */}
                     <div className="lg:col-span-8">
                         <div className="mb-12">
-                            <h2 className="text-2xl font-bold text-blue-900 mb-6">Switch to Digital Statements</h2>
+                            <h2 className="text-2xl font-bold text-blue-900 mb-6">{data.intro_title}</h2>
                             <p className="text-lg text-slate-700 leading-relaxed mb-6">
-                                E-Statement is an electronic version of your bank statement, delivered as a PDF to your registered email address. It’s exactly the same as the paper statement you receive via mail, but without the clutter and delay.
+                                {data.intro_description}
                             </p>
                         </div>
 
-                        <div className="space-y-12">
-                            <div>
-                                <h3 className="text-xl font-bold text-blue-900 mb-8 flex items-center gap-3">
-                                    <span className="w-2 h-8 bg-green-500 rounded-full"></span>
-                                    Benefits of E-Statements
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div className="flex gap-4">
-                                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0">
-                                            <i className="fas fa-leaf"></i>
+                        {data.benefits_json && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                                {data.benefits_json.map((b, idx) => (
+                                    <div key={idx} className="p-8 bg-slate-50 rounded-3xl border border-slate-100 border-b-4 border-b-blue-600 transition-all hover:shadow-xl group">
+                                        <div className="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                            <i className={`fas fa-${b.icon} text-2xl text-blue-900`}></i>
                                         </div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 mb-1">Eco-Friendly</h4>
-                                            <p className="text-sm text-slate-500">Reduce paper waste and save trees by choosing digital delivery.</p>
-                                        </div>
+                                        <h3 className="text-lg font-bold text-blue-900 mb-2">{b.title}</h3>
+                                        <p className="text-sm text-slate-500 leading-relaxed">{b.desc}</p>
                                     </div>
-                                    <div className="flex gap-4">
-                                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0">
-                                            <i className="fas fa-bolt"></i>
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 mb-1">Instant Delivery</h4>
-                                            <p className="text-sm text-slate-500">No more waiting for the mail. Get your statements as soon as they're generated.</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0">
-                                            <i className="fas fa-lock"></i>
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 mb-1">Secure Storage</h4>
-                                            <p className="text-sm text-slate-500">Your statements are password-protected and safely archived in your email.</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0">
-                                            <i className="fas fa-wallet"></i>
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-slate-800 mb-1">Completely Free</h4>
-                                            <p className="text-sm text-slate-500">Subscribe to E-Statements at zero cost and avoid physical postal charges.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
+                        )}
 
-                            <div className="bg-slate-900 rounded-3xl p-10 text-white flex flex-col md:flex-row items-center gap-10">
-                                <div className="flex-1">
-                                    <h3 className="text-2xl font-bold mb-4">How to Subscribe?</h3>
-                                    <p className="text-slate-400 mb-6 font-light leading-relaxed">It takes less than a minute to go paperless. Choose any of these easy methods:</p>
-                                    <ul className="space-y-4">
-                                        <li className="flex items-center gap-3">
-                                            <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold">1</div>
-                                            <span>Via Mobile Banking App</span>
-                                        </li>
-                                        <li className="flex items-center gap-3">
-                                            <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold">2</div>
-                                            <span>Visit your nearest branch</span>
-                                        </li>
-                                        <li className="flex items-center gap-3">
-                                            <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold">3</div>
-                                            <span>Send SMS 'ESTMT' to 56767</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="hidden md:block">
-                                    <i className="fas fa-paper-plane text-[100px] text-blue-500/20"></i>
+                        {data.subscription_methods_json && (
+                            <div className="bg-slate-900 p-8 md:p-12 rounded-[40px] text-white relative overflow-hidden">
+                                <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[120px] opacity-20 translate-y-1/2 translate-x-1/2"></div>
+                                <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                                    <span className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-sm">
+                                        <i className="fas fa-plus"></i>
+                                    </span>
+                                    How to Subscribe?
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                                    {data.subscription_methods_json.map((m, idx) => (
+                                        <div key={idx} className="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+                                            <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block mb-1">Option 0{idx + 1}</span>
+                                            <p className="font-bold text-lg">{m}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Sidebar Section */}
                     <div className="lg:col-span-4 space-y-8">
-                        <div className="bg-blue-50 p-8 rounded-3xl border border-blue-100">
-                            <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
-                                <i className="fas fa-info-circle"></i>
-                                Important Note
-                            </h3>
-                            <p className="text-sm text-slate-600 leading-relaxed">
-                                E-Statements are sent as password-protected PDF files. Generally, the password is your **PAN Number** (in uppercase) or a combination of your **Date of Birth**.
-                                <br /><br />
-                                Please check your welcome email for specific password instructions.
-                            </p>
+                        <div className="bg-blue-900 p-8 rounded-3xl text-white">
+                            <h3 className="text-xl font-bold mb-4">Note</h3>
+                            <p className="text-blue-100 text-sm leading-relaxed mb-6 opacity-70 italic">{data.sidebar_note}</p>
                         </div>
 
-                        <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
-                            <h3 className="text-xl font-bold text-slate-800 mb-6">Need help?</h3>
-                            <p className="text-sm text-slate-600 mb-6">Can't open your e-statement or didn't receive one? Contact our support.</p>
-                            <a href="tel:18001234567" className="block w-full text-center bg-blue-900 py-4 rounded-2xl text-white font-bold hover:bg-black transition">
-                                Contact Support
+                        <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
+                            <h4 className="font-bold text-slate-800 mb-2">Need Support?</h4>
+                            <p className="text-xs text-slate-500 mb-4">If you face any issues while accessing your e-statements, contact us.</p>
+                            <a href={`tel:${data.sidebar_support_phone}`} className="text-blue-900 font-black text-xl hover:text-blue-700 transition">
+                                {data.sidebar_support_phone}
                             </a>
                         </div>
                     </div>

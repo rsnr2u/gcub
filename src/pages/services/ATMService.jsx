@@ -1,12 +1,39 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO';
+import { apiFetch } from '../../utils/api';
 
 const ATMService = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await apiFetch(`${import.meta.env.VITE_API_BASE_URL}/service-content/atm-services`);
+                const result = await res.json();
+                setData(result);
+            } catch (err) {
+                console.error('Error fetching ATM service content:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContent();
+    }, []);
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+    </div>;
+
+    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+
     return (
         <div className="bg-white min-h-screen font-inter">
             <SEO
-                title="ATM Services - 24/7 Cash Access | GCUB"
-                description="Our wide network of ATMs ensures you have access to cash whenever you need it. Secure, fast, and accessible 24/7."
+                title={data.meta_title}
+                description={data.meta_description}
+                keywords={data.meta_keywords}
             />
 
             {/* Hero Section */}
@@ -19,11 +46,11 @@ const ATMService = () => {
                         <i className="fas fa-chevron-right text-[10px]"></i>
                         <span className="text-white">Our Services</span>
                         <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">ATM Services</span>
+                        <span className="text-white">{data.hero_title}</span>
                     </nav>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">ATM Services</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
                     <p className="text-xl text-blue-100 max-w-2xl font-light">
-                        Experience 24/7 convenience with our state-of-the-art ATM network.
+                        {data.hero_description}
                     </p>
                 </div>
             </div>
@@ -35,83 +62,57 @@ const ATMService = () => {
                     {/* Content Section */}
                     <div className="lg:col-span-8">
                         <div className="mb-12">
-                            <h2 className="text-2xl font-bold text-blue-900 mb-6">Banking at Your Convenience</h2>
+                            <h2 className="text-2xl font-bold text-blue-900 mb-6">{data.intro_title}</h2>
                             <p className="text-lg text-slate-700 leading-relaxed mb-6">
-                                With the GCUB ATM network, you don't need to visit a branch for your basic banking needs. Our ATMs are strategically located and provide a range of services beyond just cash withdrawal.
+                                {data.intro_description}
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
-                                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <i className="fas fa-money-bill-wave text-xl"></i>
-                                </div>
-                                <h3 className="font-bold text-slate-800 mb-2">Fast Cash</h3>
-                                <p className="text-xs text-slate-500">Quickly withdraw preset amounts of cash.</p>
+                        {data.highlights_json && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                                {data.highlights_json.map((h, idx) => (
+                                    <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <i className={`fas fa-${h.icon} text-xl`}></i>
+                                        </div>
+                                        <h3 className="font-bold text-slate-800 mb-2">{h.title}</h3>
+                                        <p className="text-xs text-slate-500">{h.desc}</p>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
-                                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <i className="fas fa-unlock-alt text-xl"></i>
-                                </div>
-                                <h3 className="font-bold text-slate-800 mb-2">PIN Change</h3>
-                                <p className="text-xs text-slate-500">Change your debit card PIN securely anytime.</p>
-                            </div>
-                            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 text-center">
-                                <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <i className="fas fa-receipt text-xl"></i>
-                                </div>
-                                <h3 className="font-bold text-slate-800 mb-2">Mini Statements</h3>
-                                <p className="text-xs text-slate-500">Get a print-out of your latest transactions.</p>
-                            </div>
-                        </div>
+                        )}
 
                         <div className="space-y-10">
-                            <div>
-                                <h3 className="text-xl font-bold text-blue-900 mb-6">Features & Facilities</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="flex items-center gap-4 p-4 border border-slate-100 rounded-xl">
-                                        <i className="fas fa-check text-green-500"></i>
-                                        <span className="text-slate-700">Cash Withdrawal (Own & Other Bank)</span>
-                                    </div>
-                                    <div className="flex items-center gap-4 p-4 border border-slate-100 rounded-xl">
-                                        <i className="fas fa-check text-green-500"></i>
-                                        <span className="text-slate-700">Balance Inquiry</span>
-                                    </div>
-                                    <div className="flex items-center gap-4 p-4 border border-slate-100 rounded-xl">
-                                        <i className="fas fa-check text-green-500"></i>
-                                        <span className="text-slate-700">Mini Statement</span>
-                                    </div>
-                                    <div className="flex items-center gap-4 p-4 border border-slate-100 rounded-xl">
-                                        <i className="fas fa-check text-green-500"></i>
-                                        <span className="text-slate-700">PIN Change Facility</span>
+                            {data.features_json && (
+                                <div>
+                                    <h3 className="text-xl font-bold text-blue-900 mb-6">Features & Facilities</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {data.features_json.map((f, idx) => (
+                                            <div key={idx} className="flex items-center gap-4 p-4 border border-slate-100 rounded-xl">
+                                                <i className="fas fa-check text-green-500"></i>
+                                                <span className="text-slate-700">{f}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
-                            <div className="bg-blue-50 p-8 rounded-3xl border border-blue-100">
-                                <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
-                                    <i className="fas fa-shield-alt"></i>
-                                    ATM Security Tips
-                                </h3>
-                                <ul className="space-y-3 text-sm text-slate-700">
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-circle text-[6px] mt-2 text-blue-400"></i>
-                                        Keep your PIN secret. Never write it on your card or share it.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-circle text-[6px] mt-2 text-blue-400"></i>
-                                        Shield the keypad while entering your PIN.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-circle text-[6px] mt-2 text-blue-400"></i>
-                                        Be wary of strangers offering help at the ATM.
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <i className="fas fa-circle text-[6px] mt-2 text-blue-400"></i>
-                                        Check for any suspicious attachments on the card slot.
-                                    </li>
-                                </ul>
-                            </div>
+                            {data.security_tips_json && (
+                                <div className="bg-blue-50 p-8 rounded-3xl border border-blue-100">
+                                    <h3 className="text-lg font-bold text-blue-900 mb-4 flex items-center gap-2">
+                                        <i className="fas fa-shield-alt"></i>
+                                        ATM Security Tips
+                                    </h3>
+                                    <ul className="space-y-3 text-sm text-slate-700">
+                                        {data.security_tips_json.map((tip, idx) => (
+                                            <li key={idx} className="flex gap-3">
+                                                <i className="fas fa-circle text-[6px] mt-2 text-blue-400"></i>
+                                                {tip}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -120,7 +121,7 @@ const ATMService = () => {
                         <div className="bg-slate-900 text-white p-8 rounded-3xl">
                             <h3 className="text-xl font-bold mb-6">ATM Locator</h3>
                             <p className="text-slate-400 text-sm mb-6">Find the nearest GCUB ATM in seconds using our interactive branch & ATM locator.</p>
-                            <Link to="/branch-locator" className="block w-full text-center bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-500 transition">
+                            <Link to={data.sidebar_locator_link} className="block w-full text-center bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-500 transition">
                                 Find Nearest ATM
                             </Link>
                         </div>
@@ -129,9 +130,9 @@ const ATMService = () => {
                             <h3 className="text-xl font-bold text-slate-800 mb-6">Emergency</h3>
                             <p className="text-sm text-slate-600 mb-4">Lost your debit card? Block it immediately to prevent unauthorized transactions.</p>
                             <div className="space-y-3">
-                                <a href="tel:18001234567" className="flex items-center gap-3 text-red-600 font-bold hover:underline">
+                                <a href={`tel:${data.sidebar_emergency_phone}`} className="flex items-center gap-3 text-red-600 font-bold hover:underline">
                                     <i className="fas fa-phone-alt"></i>
-                                    1800-456-7890
+                                    {data.sidebar_emergency_phone}
                                 </a>
                                 <p className="text-xs text-slate-400 italic">Available 24/7 for card blocking.</p>
                             </div>
