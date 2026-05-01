@@ -101,6 +101,8 @@ const Footer = () => {
                             <li><Link to="/interest-rates" className="hover:text-white transition">Interest Rates</Link></li>
                             <li><Link to="/missed-call-banking" className="hover:text-white transition">Missed Call Banking</Link></li>
                             <li><Link to="/holiday-list" className="hover:text-white transition">Holiday List</Link></li>
+                            <li><Link to="/mobile-banking" className="hover:text-white transition">Mobile Banking</Link></li>
+                            <li><Link to="/atm-services" className="hover:text-white transition">ATM Services</Link></li>
                             <li><Link to="/kyc-norms" className="hover:text-white transition">KYC Norms</Link></li>
                             <li><Link to="/customer-service-charges" className="hover:text-white transition">Service Charges</Link></li>
                             <li><Link to="/downloads" className="hover:text-white transition">Downloads</Link></li>

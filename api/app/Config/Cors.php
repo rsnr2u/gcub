@@ -37,6 +37,11 @@ class Cors extends BaseConfig
         'allowedOrigins' => [
             'http://localhost:5173', // Vite dev (default)
             'http://localhost:3000', // Vite dev (alternate)
+            'http://localhost:3001', // Alternate dev (e.g. if 3000 is occupied)
+            'http://localhost:3002', // Alternate dev (e.g. if 3000 & 3001 are occupied)
+            'http://localhost:3003',
+            'http://localhost:3004',
+            'http://localhost:3005',
             'http://localhost:8080', // Alternate dev
             'https://guntururban.bank.in', // Production
             'http://guntururban.bank.in'

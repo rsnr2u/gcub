@@ -90,10 +90,16 @@ const AnyBranchBanking = () => {
                                         <i className="fas fa-exclamation-circle text-amber-500"></i>
                                         Guidelines
                                     </h3>
-                                    <ul className="space-y-4 text-slate-400 text-sm">
+                                    <ul className="space-y-6 text-slate-400 text-sm">
                                         {data.guidelines_json.map((g, idx) => (
-                                            <li key={idx} className="leading-relaxed">
-                                                {g}
+                                            <li key={idx} className="leading-relaxed bg-white/5 p-4 rounded-2xl border border-white/5">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0"></div>
+                                                    <div>
+                                                        <span className="block font-bold text-white text-base mb-1 uppercase tracking-wide">{g.title}</span>
+                                                        <p className="text-slate-400 leading-relaxed italic">{g.desc}</p>
+                                                    </div>
+                                                </div>
                                             </li>
                                         ))}
                                     </ul>
@@ -102,27 +108,35 @@ const AnyBranchBanking = () => {
                         </div>
 
                         {data.txn_table_json && (
-                            <div>
-                                <h3 className="text-xl font-bold text-blue-900 mb-6">Transaction Information</h3>
-                                <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                            <div className="animate-in fade-in slide-in-from-bottom-8 delay-300">
+                                <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-3">
+                                    <i className="fas fa-table text-blue-500"></i>
+                                    Transaction Information Table
+                                </h3>
+                                <div className="overflow-x-auto rounded-3xl border border-slate-200 shadow-sm bg-white">
                                     <table className="w-full text-sm text-left">
                                         <thead className="bg-slate-50 text-slate-500 uppercase font-black text-[10px] tracking-widest border-b border-slate-200">
                                             <tr>
-                                                <th className="px-6 py-4">Service</th>
-                                                <th className="px-6 py-4">Limit / Detail</th>
+                                                <th className="px-8 py-5">Transaction Type</th>
+                                                <th className="px-8 py-5 text-center bg-green-50/50 text-green-700">Home Branch</th>
+                                                <th className="px-8 py-5 text-center bg-blue-50/50 text-blue-700">Non-Home Branch</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-100">
                                             {data.txn_table_json.map((row, idx) => (
-                                                <tr key={idx}>
-                                                    <td className="px-6 py-4 font-bold text-slate-800">{row.service}</td>
-                                                    <td className="px-6 py-4 text-slate-600">{row.limit}</td>
+                                                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                                                    <td className="px-8 py-5 font-bold text-slate-800">{row.type}</td>
+                                                    <td className="px-8 py-5 text-center font-black text-green-600">{row.home}</td>
+                                                    <td className="px-8 py-5 text-center text-slate-600 font-medium">{row.non_home}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                 </div>
-                                <p className="text-[10px] text-slate-400 mt-4 uppercase tracking-widest font-bold">* Charges exclude GST and other statutory levies.</p>
+                                <p className="text-[10px] text-slate-400 mt-4 uppercase tracking-widest font-bold flex items-center gap-2">
+                                    <i className="fas fa-info-circle"></i>
+                                    * Charges exclude GST and other statutory levies.
+                                </p>
                             </div>
                         )}
                     </div>

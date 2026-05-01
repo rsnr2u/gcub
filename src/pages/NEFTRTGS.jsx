@@ -22,78 +22,99 @@ const NEFTRTGS = () => {
         fetchContent();
     }, []);
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
-    </div>;
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center bg-white">
+            <div className="flex flex-col items-center gap-4">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#001b44]"></div>
+                <p className="text-gray-500 font-medium animate-pulse">Loading Services...</p>
+            </div>
+        </div>
+    );
 
-    if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
+    if (!data) return <div className="min-h-screen flex items-center justify-center font-inter text-gray-500 font-medium">Service configuration is being initialized...</div>;
 
     return (
-        <div className="bg-white min-h-screen font-inter">
+        <div className="bg-white min-h-screen font-inter pb-20">
             <SEO
-                title={data.meta_title}
+                title={data.meta_title || 'NEFT / RTGS - GCUB'}
                 description={data.meta_description}
                 keywords={data.meta_keywords}
             />
 
-            {/* Hero Section */}
-            <div className="relative bg-[#003399] py-16 overflow-hidden">
-                <div className="absolute inset-0 bg-black opacity-30"></div>
-
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <nav className="flex items-center gap-2 text-blue-200 text-sm mb-4 font-medium">
-                        <Link to="/" className="hover:text-white transition">Home</Link>
-                        <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">Our Services</span>
-                        <i className="fas fa-chevron-right text-[10px]"></i>
-                        <span className="text-white">{data.hero_title}</span>
-                    </nav>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{data.hero_title}</h1>
-                    <p className="text-xl text-blue-100 max-w-2xl font-light">
-                        {data.hero_description}
+            {/* Hero Section (Exactly as per image: Dark Blue, Centered) */}
+            <div className="bg-[#001b44] py-20 text-center text-white">
+                <div className="max-w-7xl mx-auto px-6">
+                    <h1 className="text-5xl font-bold mb-4 tracking-tight uppercase">{data.hero_title || 'NEFT / RTGS'}</h1>
+                    <p className="text-lg text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
+                        {data.hero_description || 'Safe and secure electronic fund transfers for high-value transactions.'}
                     </p>
                 </div>
             </div>
 
             {/* Main Content Area */}
-            <div className="max-w-7xl mx-auto px-6 py-12">
+            <div className="max-w-7xl mx-auto px-6 py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-                    {/* Content Section */}
-                    <div className="lg:col-span-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                            <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
-                                <h3 className="text-xl font-bold text-blue-900 mb-4 uppercase tracking-widest text-xs">NEFT</h3>
-                                <p className="text-slate-700 leading-relaxed text-sm">
-                                    {data.neft_info}
-                                </p>
-                            </div>
-                            <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
-                                <h3 className="text-xl font-bold text-blue-900 mb-4 uppercase tracking-widest text-xs">RTGS</h3>
-                                <p className="text-slate-700 leading-relaxed text-sm">
-                                    {data.rtgs_info}
-                                </p>
-                            </div>
+                    {/* Content Column (Left) */}
+                    <div className="lg:col-span-8 space-y-12">
+                        
+                        {/* NEFT Section */}
+                        <div className="space-y-6">
+                            <h2 className="text-3xl font-bold text-[#003399] tracking-tight">
+                                NEFT (National Electronic Funds Transfer)
+                            </h2>
+                            <p className="text-[15px] text-slate-700 leading-relaxed font-bold">
+                                {data.neft_info || 'National Electronic Funds Transfer (NEFT) is a nation-wide payment system facilitating one-to-one funds transfer. Under this Scheme, individuals, firms and corporates can electronically transfer funds to any individual, firm or corporate having an account with any other bank agency in the country participating in the Scheme.'}
+                            </p>
+                            {data.neft_note && (
+                                <div className="p-6 bg-[#F0F7FF] border-l-4 border-[#0066CC] rounded-r-xl">
+                                    <p className="text-[#004C99] font-bold text-sm">
+                                        {data.neft_note}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
+                        {/* RTGS Section */}
+                        <div className="space-y-6">
+                            <h2 className="text-3xl font-bold text-[#003399] tracking-tight">
+                                RTGS (Real Time Gross Settlement)
+                            </h2>
+                            <p className="text-[15px] text-slate-700 leading-relaxed font-bold">
+                                {data.rtgs_info || '\'RTGS\' stands for Real Time Gross Settlement, which can be defined as the continuous (real-time) settlement of funds transfers individually on an order by order basis (without netting). \'Real Time\' means the processing of instructions at the time they are received rather than at some later time.'}
+                            </p>
+                            {data.rtgs_note && (
+                                <div className="p-6 bg-[#FFF2F2] border-l-4 border-[#E61111] rounded-r-xl">
+                                    <p className="text-[#990000] font-bold text-sm">
+                                        {data.rtgs_note}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Comparison Table */}
                         {data.comparison_json && (
-                            <div className="mb-12">
-                                <h3 className="text-xl font-bold text-blue-900 mb-6 font-primary">System Comparison</h3>
-                                <div className="overflow-x-auto rounded-2xl border border-slate-200">
-                                    <table className="w-full text-sm text-left">
-                                        <thead className="bg-slate-50 text-slate-500 uppercase font-black text-[10px] tracking-widest border-b border-slate-200">
-                                            <tr>
-                                                <th className="px-6 py-4">Feature</th>
-                                                <th className="px-6 py-4">NEFT</th>
-                                                <th className="px-6 py-4">RTGS</th>
+                            <div className="space-y-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-1.5 h-10 bg-[#003399] rounded-full"></div>
+                                    <h3 className="text-2xl font-bold text-gray-900 tracking-tight uppercase">Comparison</h3>
+                                </div>
+                                
+                                <div className="overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="bg-[#003399] text-white">
+                                                <th className="px-8 py-4 font-bold uppercase tracking-widest text-[10px]">Feature</th>
+                                                <th className="px-8 py-4 font-bold uppercase tracking-widest text-[10px]">NEFT</th>
+                                                <th className="px-8 py-4 font-bold uppercase tracking-widest text-[10px]">RTGS</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-slate-100">
+                                        <tbody className="divide-y divide-gray-100">
                                             {data.comparison_json.map((row, idx) => (
-                                                <tr key={idx}>
-                                                    <td className="px-6 py-4 font-bold text-slate-800">{row.feature}</td>
-                                                    <td className="px-6 py-4 text-slate-600">{row.neft}</td>
-                                                    <td className="px-6 py-4 text-slate-600">{row.rtgs}</td>
+                                                <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]'}>
+                                                    <td className="px-8 py-4 font-bold text-gray-800 text-[14px]">{row.feature}</td>
+                                                    <td className="px-8 py-4 text-slate-600 font-medium text-[14px]">{row.neft}</td>
+                                                    <td className="px-8 py-4 text-slate-600 font-medium text-[14px]">{row.rtgs}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -102,44 +123,66 @@ const NEFTRTGS = () => {
                             </div>
                         )}
 
-                        {data.req_info_json && (
-                            <div className="bg-slate-900 p-8 md:p-12 rounded-[40px] text-white">
-                                <h3 className="text-2xl font-bold mb-8">Details Required for Transfer</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {data.req_info_json.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
-                                            <i className="fas fa-check-circle text-blue-400"></i>
-                                            <span className="font-bold opacity-80">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                        {/* Information Required */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-4">
+                                <div className="w-1.5 h-10 bg-[#003399] rounded-full"></div>
+                                <h3 className="text-2xl font-bold text-gray-900 tracking-tight uppercase">Information Required</h3>
                             </div>
-                        )}
+                            
+                            <div className="space-y-6">
+                                <p className="text-slate-700 text-lg font-medium">
+                                    {data.req_info_description || 'To initiate a transfer, you need the following details of the beneficiary:'}
+                                </p>
+                                
+                                <ul className="space-y-3">
+                                    {(data.req_info_json || []).map((item, idx) => (
+                                        <li key={idx} className="flex items-center gap-3 text-slate-700 font-bold text-base">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#003399]"></span>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Sidebar Section */}
+                    {/* Sidebar Section (Right) */}
                     <div className="lg:col-span-4 space-y-8">
-                        {data.sidebar_links_json && (
-                            <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100">
-                                <h3 className="text-xl font-bold text-slate-800 mb-6">Explore Other Ways</h3>
-                                <div className="space-y-3">
-                                    {Object.entries(data.sidebar_links_json).map(([path, label]) => (
-                                        <Link key={path} to={path} className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 hover:border-blue-500 hover:shadow-md transition">
-                                            <span className="font-bold text-slate-700 text-sm">{label}</span>
-                                            <i className="fas fa-chevron-right text-blue-500 text-[10px]"></i>
-                                        </Link>
-                                    ))}
-                                </div>
+                        
+                        {/* Related Services */}
+                        <div className="bg-white border border-slate-100 p-8 rounded-2xl shadow-sm">
+                            <h4 className="text-[15px] font-bold text-slate-800 mb-6 tracking-tight uppercase">Related Services</h4>
+                            <div className="space-y-4">
+                                {(Array.isArray(data.sidebar_links_json) ? data.sidebar_links_json : []).map((link, idx) => (
+                                    <Link 
+                                        key={idx} 
+                                        to={link.url} 
+                                        className="flex items-center gap-3 text-slate-600 hover:text-[#003399] font-bold text-sm transition group"
+                                    >
+                                        <span className="text-slate-400 group-hover:text-[#003399] transition-colors">›</span>
+                                        {link.label}
+                                    </Link>
+                                ))}
                             </div>
-                        )}
-
-                        <div className="bg-blue-900 p-8 rounded-3xl text-white">
-                            <h3 className="text-xl font-bold mb-4">IFSC Finder</h3>
-                            <p className="text-blue-200 text-sm leading-relaxed mb-6 italic">{data.sidebar_ifsc_text}</p>
-                            <Link to="/branch-locator" className="block w-full text-center bg-white text-blue-900 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-blue-50 transition">
-                                Go to Branch Locator
-                            </Link>
                         </div>
+
+                        {/* IFSC Promo (Exactly as per image) */}
+                        <div className="bg-[#001b44] rounded-2xl p-8 text-white space-y-6">
+                            <div className="space-y-4">
+                                <h4 className="text-xl font-bold tracking-tight">Find IFSC Code?</h4>
+                                <p className="text-slate-400 text-[13px] font-medium leading-relaxed">
+                                    {data.sidebar_ifsc_text || 'Search for IFSC codes of all our branches.'}
+                                </p>
+                                <Link 
+                                    to="/branch-locator" 
+                                    className="block w-full bg-[#E61111] hover:bg-red-700 text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest text-center transition-all shadow-lg"
+                                >
+                                    Branch Locator
+                                </Link>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>

@@ -10,7 +10,7 @@ const MegaMenu = ({ activeMenu, menuName, toggleMenu, label, items, iconPrefix }
             {label} <span className={`text-[10px] mt-0.5 transition-transform duration-300 ${activeMenu === menuName ? 'rotate-180' : ''}`}>&#9660;</span>
         </button>
         {activeMenu === menuName && (
-            <div className="absolute left-0 top-full w-full bg-white text-gray-800 shadow-2xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50">
+            <div className="absolute left-0 top-full w-full bg-white text-gray-800 shadow-2xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50" onClick={(e) => e.stopPropagation()}>
                 <div className="container mx-auto p-8">
                     <div className="grid grid-cols-4 gap-6">
                         {items.map((item, idx) => (
@@ -62,16 +62,22 @@ const Header = memo(() => {
 
     const staticRoutes = useMemo(() => ({
         'mobile-banking': '/mobile-banking',
-        'atm': '/atm-services',
+        'atm-services': '/atm-services',
         'toll-free-banking': '/toll-free-banking',
         'e-statements': '/e-statements',
         'positive-pay-system': '/positive-pay-system',
         'any-branch-banking': '/any-branch-banking',
         'apbs-service': '/apbs-service',
-        'nach': '/nach-service'
+        'nach-service': '/nach-service',
+        'nach': '/nach-service',
+        'imps': '/imps',
+        'upi': '/upi',
+        'rupay-cards': '/rupay-cards',
+        'neft-rtgs': '/neft-rtgs',
+        'net-banking': '/net-banking'
     }), []);
 
-    const getServicePath = useCallback((slug) => staticRoutes[slug] || '/', [staticRoutes]);
+    const getServicePath = useCallback((slug) => staticRoutes[slug] || `/service/${slug}`, [staticRoutes]);
 
     const staticServices = useMemo(() => [
         { name: 'Mobile Banking', path: '/mobile-banking', icon: 'fas fa-mobile-alt' },
@@ -84,7 +90,7 @@ const Header = memo(() => {
         { name: 'NACH Service', path: '/nach-service', icon: 'fas fa-sync' },
         { name: 'IMPS', path: '/imps', icon: 'fas fa-bolt' },
         { name: 'UPI', path: '/upi', icon: 'fas fa-qrcode' },
-        { name: 'RuPay', path: '/rupay', icon: 'fas fa-credit-card' },
+        { name: 'RuPay', path: '/rupay-cards', icon: 'fas fa-credit-card' },
         { name: 'NEFT/RTGS', path: '/neft-rtgs', icon: 'fas fa-paper-plane' },
         { name: 'Net Banking', path: '/net-banking', icon: 'fas fa-laptop-code' },
     ], []);
@@ -121,7 +127,7 @@ const Header = memo(() => {
                 if (Array.isArray(dynamicServicesData)) {
                     servicesData = dynamicServicesData.map(s => ({
                         name: s.title,
-                        path: `/service/${s.slug}`,
+                        path: getServicePath(s.slug),
                         icon: 'fas fa-concierge-bell'
                     }));
                 }
@@ -258,7 +264,7 @@ const Header = memo(() => {
                                 About Us <span className={`text-[10px] mt-0.5 transition-transform duration-300 ${activeMenu === 'about' ? 'rotate-180' : ''}`}>▼</span>
                             </button>
                             {activeMenu === 'about' && (
-                                <div className="absolute left-0 top-[35px] w-56 bg-white text-gray-800 shadow-xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50 rounded-b-lg">
+                                <div className="absolute left-0 top-[35px] w-56 bg-white text-gray-800 shadow-xl border-t-[3px] border-[#E61111] transition-all duration-300 z-50 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
                                     <ul className="py-2">
                                         {menuItems.about.map((item, idx) => (
                                             <li key={idx}>

@@ -84,6 +84,17 @@ const ProductDetail = () => {
     };
     const documentsList = getDocumentsList(product.documents);
 
+    const getSchemesList = (data) => {
+        if (!data) return [];
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            return [];
+        }
+    };
+    const schemesList = getSchemesList(product.schemes);
+
 
     return (
         <div className="bg-white min-h-screen">
@@ -174,6 +185,40 @@ const ProductDetail = () => {
                                         </li>
                                     ))}
                                 </ul>
+                            </div>
+                        )}
+
+                        {/* Product Schemes */}
+                        {schemesList.length > 0 && (
+                            <div className="mb-12 space-y-10">
+                                {schemesList.map((scheme, sIdx) => (
+                                    <div key={sIdx} className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+                                        <div className="bg-[#003399] p-6 text-white">
+                                            <h3 className="text-xl font-bold">{scheme.title}</h3>
+                                            {scheme.description && (
+                                                <p className="text-blue-50 mt-2 text-sm opacity-90 leading-relaxed">{scheme.description}</p>
+                                            )}
+                                        </div>
+                                        {scheme.qa && scheme.qa.length > 0 && (
+                                            <div className="overflow-hidden">
+                                                <table className="w-full border-collapse">
+                                                    <tbody>
+                                                        {scheme.qa.map((item, qIdx) => (
+                                                            <tr key={qIdx} className={`${qIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'} border-b border-gray-100 last:border-0 hover:bg-blue-50/30 transition-colors`}>
+                                                                <td className="py-4 px-8 w-1/3 align-top">
+                                                                    <h4 className="font-bold text-gray-800 text-sm leading-tight">{item.q}</h4>
+                                                                </td>
+                                                                <td className="py-4 px-8 w-2/3 align-top border-l border-gray-100">
+                                                                    <p className="text-sm text-gray-600 leading-relaxed">{item.a}</p>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         )}
 

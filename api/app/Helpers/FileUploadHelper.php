@@ -19,7 +19,7 @@ class FileUploadHelper
             $newName = $file->getRandomName();
 
             // Base path: public/assets/uploads/
-            $uploadPath = FCPATH . 'assets/uploads/' . $subfolder;
+            $uploadPath = FCPATH . 'assets' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . $subfolder;
 
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);

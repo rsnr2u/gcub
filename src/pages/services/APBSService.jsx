@@ -28,6 +28,12 @@ const APBSService = () => {
 
     if (!data) return <div className="min-h-screen flex items-center justify-center">Service content not found.</div>;
 
+    // Normalize JSON data structures
+    const beneficiaryBenefits = Array.isArray(data.beneficiary_benefits_json) ? data.beneficiary_benefits_json : [];
+    const objectives = Array.isArray(data.objectives_json) ? data.objectives_json : [];
+    const linkingSteps = Array.isArray(data.linking_steps_json) ? data.linking_steps_json : [];
+    const sidebarBenefits = Array.isArray(data.sidebar_benefits_json) ? data.sidebar_benefits_json : [];
+
     return (
         <div className="bg-white min-h-screen font-inter">
             <SEO
@@ -73,7 +79,7 @@ const APBSService = () => {
                                 <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100">
                                     <h3 className="text-xl font-bold text-blue-900 mb-4">For Beneficiaries</h3>
                                     <ul className="space-y-4 text-sm text-slate-600">
-                                        {data.beneficiary_benefits_json.map((b, idx) => (
+                                        {beneficiaryBenefits.map((b, idx) => (
                                             <li key={idx} className="flex gap-3">
                                                 <i className="fas fa-check-circle text-blue-600 mt-1"></i>
                                                 {b}
@@ -86,7 +92,7 @@ const APBSService = () => {
                                 <div className="p-8 bg-blue-50 rounded-3xl border border-blue-100">
                                     <h3 className="text-xl font-bold text-blue-900 mb-4">Key Objectives</h3>
                                     <ul className="space-y-4 text-sm text-slate-600">
-                                        {data.objectives_json.map((o, idx) => (
+                                        {objectives.map((o, idx) => (
                                             <li key={idx} className="flex gap-3">
                                                 <i className="fas fa-bullseye text-blue-600 mt-1"></i>
                                                 {o}
@@ -105,7 +111,7 @@ const APBSService = () => {
                                 </h3>
                                 <p className="text-amber-800 text-sm mb-6 leading-relaxed">To receive Direct Benefit Transfer (DBT) into your account, you must link your Aadhaar with your GCUB bank account.</p>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {data.linking_steps_json.map((step, idx) => (
+                                    {linkingSteps.map((step, idx) => (
                                         <div key={idx} className="bg-white p-4 rounded-2xl shadow-sm">
                                             <span className="text-[10px] font-black text-amber-500 uppercase">Step {idx + 1}</span>
                                             <p className="text-xs font-bold text-slate-700 mt-1">{step}</p>
@@ -121,6 +127,18 @@ const APBSService = () => {
                         <div className="bg-slate-900 p-8 rounded-3xl text-white">
                             <h3 className="text-xl font-bold mb-4">DBT Benefits</h3>
                             <p className="text-slate-400 text-sm mb-6 leading-relaxed">{data.sidebar_dbt_text}</p>
+                            {data.sidebar_benefits_json && (
+                                <div className="space-y-3">
+                                    {sidebarBenefits.map((benefit, idx) => (
+                                        <div key={idx} className="bg-white/5 p-4 rounded-2xl border border-white/5 flex items-center gap-4 group hover:bg-white/10 transition-colors">
+                                            <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                                                <i className={`fas fa-${benefit.icon || 'university'}`}></i>
+                                            </div>
+                                            <span className="font-bold text-sm tracking-wide">{benefit.title}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         <div className="p-8 bg-blue-900 rounded-3xl text-white">

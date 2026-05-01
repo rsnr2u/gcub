@@ -21,6 +21,7 @@ const AdminEditProduct = () => {
         image_path: '',
         terms_heading: '',
         terms_content: '',
+        schemes: [], // Dynamic schemes: {title, description, qa: [{q, a}]}
         status: 'active'
     });
     const [loading, setLoading] = useState(!isNew);
@@ -80,6 +81,7 @@ const AdminEditProduct = () => {
                     image_path: product.image_path || '',
                     terms_heading: product.terms_heading || '',
                     terms_content: product.terms_content || '',
+                    schemes: product.schemes ? JSON.parse(product.schemes) : [],
                     status: product.status || 'active'
                 });
             } else {
@@ -150,6 +152,41 @@ const AdminEditProduct = () => {
         setFormData({ ...formData, facilities: newFacilities });
     };
 
+    // Schemes Management
+    const addScheme = () => {
+        const newScheme = { title: '', description: '', qa: [{ q: '', a: '' }] };
+        setFormData({ ...formData, schemes: [...formData.schemes, newScheme] });
+    };
+
+    const removeScheme = (index) => {
+        const newSchemes = formData.schemes.filter((_, i) => i !== index);
+        setFormData({ ...formData, schemes: newSchemes });
+    };
+
+    const updateScheme = (index, field, value) => {
+        const newSchemes = [...formData.schemes];
+        newSchemes[index][field] = value;
+        setFormData({ ...formData, schemes: newSchemes });
+    };
+
+    const addSchemeQA = (schemeIdx) => {
+        const newSchemes = [...formData.schemes];
+        newSchemes[schemeIdx].qa.push({ q: '', a: '' });
+        setFormData({ ...formData, schemes: newSchemes });
+    };
+
+    const removeSchemeQA = (schemeIdx, qaIdx) => {
+        const newSchemes = [...formData.schemes];
+        newSchemes[schemeIdx].qa = newSchemes[schemeIdx].qa.filter((_, i) => i !== qaIdx);
+        setFormData({ ...formData, schemes: newSchemes });
+    };
+
+    const updateSchemeQA = (schemeIdx, qaIdx, field, value) => {
+        const newSchemes = [...formData.schemes];
+        newSchemes[schemeIdx].qa[qaIdx][field] = value;
+        setFormData({ ...formData, schemes: newSchemes });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
@@ -161,7 +198,7 @@ const AdminEditProduct = () => {
 
         const postData = new FormData();
         Object.keys(formData).forEach(key => {
-            if (['documents', 'features', 'facilities'].includes(key)) {
+            if (['documents', 'features', 'facilities', 'schemes'].includes(key)) {
                 // Map facilities back to eligibility column
                 const apiKey = key === 'facilities' ? 'eligibility' : key;
                 postData.append(apiKey, JSON.stringify(formData[key]));
@@ -558,6 +595,114 @@ const AdminEditProduct = () => {
                                     <button type="button" onClick={addDocCard} className="text-[#003399] text-xs font-bold underline mt-2">Create first card</button>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Product Schemes Section */}
+                        <div className="space-y-8 pt-10 border-t border-gray-100">
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-gray-900 flex items-center gap-3 text-xl tracking-tight">
+                                    <span className="w-1.5 h-8 bg-pink-500 rounded-full"></span>
+                                    Product Schemes & Details
+                                </h3>
+                                <button
+                                    type="button"
+                                    onClick={addScheme}
+                                    className="bg-pink-50 text-pink-600 px-6 py-2.5 rounded-2xl font-black text-xs hover:bg-pink-600 hover:text-white transition flex items-center gap-2 shadow-sm"
+                                >
+                                    <i className="fas fa-plus"></i> Add New Scheme
+                                </button>
+                            </div>
+
+                            <div className="space-y-10">
+                                {formData.schemes.map((scheme, sIdx) => (
+                                    <div key={sIdx} className="bg-white border-2 border-gray-100 rounded-[2.5rem] p-8 md:p-10 relative group hover:border-pink-200 transition-all shadow-sm overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-6">
+                                            <button
+                                                type="button"
+                                                onClick={() => removeScheme(sIdx)}
+                                                className="w-10 h-10 rounded-full bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition flex items-center justify-center"
+                                            >
+                                                <i className="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+                                            <div className="space-y-6">
+                                                <div>
+                                                    <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest px-1">Scheme Title</label>
+                                                    <input
+                                                        type="text"
+                                                        value={scheme.title}
+                                                        onChange={(e) => updateScheme(sIdx, 'title', e.target.value)}
+                                                        className="w-full px-6 py-3 bg-gray-50 border-1 border-gray-200 rounded-2xl text-lg font-bold focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-50 outline-none transition-all"
+                                                        placeholder="e.g. Platinum Savings Scheme"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest px-1">Scheme Description</label>
+                                                    <textarea
+                                                        value={scheme.description}
+                                                        onChange={(e) => updateScheme(sIdx, 'description', e.target.value)}
+                                                        rows="3"
+                                                        className="w-full px-6 py-4 bg-gray-50 border-1 border-gray-200 rounded-2xl text-sm focus:bg-white focus:border-pink-500 focus:ring-4 focus:ring-pink-50 outline-none transition-all leading-relaxed"
+                                                        placeholder="Briefly describe what this scheme offers..."
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-6">
+                                                <div className="flex justify-between items-center px-1">
+                                                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Questions & Answers</label>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => addSchemeQA(sIdx)}
+                                                        className="text-[10px] font-black text-pink-500 uppercase tracking-widest hover:text-pink-700 transition"
+                                                    >
+                                                        + Add Q&A Pair
+                                                    </button>
+                                                </div>
+                                                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                                    {scheme.qa.map((qa, qIdx) => (
+                                                        <div key={qIdx} className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 space-y-3 relative group/qa">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => removeSchemeQA(sIdx, qIdx)}
+                                                                className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white text-gray-300 hover:text-red-500 shadow-sm flex items-center justify-center opacity-0 group-hover/qa:opacity-100 transition"
+                                                            >
+                                                                <i className="fas fa-times text-[10px]"></i>
+                                                            </button>
+                                                            <input
+                                                                type="text"
+                                                                value={qa.q}
+                                                                onChange={(e) => updateSchemeQA(sIdx, qIdx, 'q', e.target.value)}
+                                                                className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 focus:border-pink-300 outline-none transition-all"
+                                                                placeholder="Question (e.g. Minimum Balance?)"
+                                                            />
+                                                            <textarea
+                                                                value={qa.a}
+                                                                onChange={(e) => updateSchemeQA(sIdx, qIdx, 'a', e.target.value)}
+                                                                rows="2"
+                                                                className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs text-gray-600 focus:border-pink-300 outline-none transition-all"
+                                                                placeholder="Answer details..."
+                                                            ></textarea>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {formData.schemes.length === 0 && (
+                                    <div onClick={addScheme} className="cursor-pointer text-center py-16 bg-gray-50/50 rounded-[3rem] border-2 border-dashed border-gray-200 hover:border-pink-300 hover:bg-pink-50/30 transition-all group">
+                                        <div className="w-20 h-20 bg-white rounded-3xl shadow-sm flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-layer-group text-3xl text-gray-200 group-hover:text-pink-400"></i>
+                                        </div>
+                                        <p className="text-sm font-black text-gray-400 uppercase tracking-[0.2em] group-hover:text-pink-600">Click to add Dynamic Schemes</p>
+                                        <p className="text-xs text-gray-400 mt-2">Add custom titles, descriptions, and FAQs for specific product variants.</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Banner Image */}

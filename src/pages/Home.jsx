@@ -154,7 +154,7 @@ const Home = () => {
                     'nach': '/nach-service',
                     'imps': '/imps',
                     'upi': '/upi',
-                    'rupay': '/rupay',
+                    'rupay-cards': '/rupay-cards',
                     'neft-rtgs': '/neft-rtgs',
                     'net-banking': '/net-banking'
                 };
@@ -395,9 +395,9 @@ const Home = () => {
                     </div>
                     <div className="flex-1 py-2 overflow-hidden">
                         <div className="animate-marquee whitespace-nowrap text-sm font-medium tracking-wide">
-                            {latestNews.length > 0 ? latestNews.map((item, idx) => (
-                                <span key={idx} className="inline-flex items-center">
-                                    <Link to={`/news/${item.id}`} className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ {item.title}</Link>
+                             {latestNews.length > 0 ? latestNews.filter(item => item && item.id).map((item, idx) => (
+                                 <span key={idx} className="inline-flex items-center">
+                                     <Link to={`/news/${item.id}`} className="mx-4 font-bold text-[#003399] hover:text-[#E61111] transition">★ {item.title}</Link>
                                     {idx < latestNews.length - 1 && <span className="text-blue-500">|</span>}
                                 </span>
                             )) : (
@@ -547,10 +547,11 @@ const ProductFinder = ({ products }) => {
 
     const categoriesMap = useMemo(() => {
         return (products || []).reduce((acc, p) => {
+            if (!p || !p.slug) return acc;
             const cat = p.category || 'Other';
             if (!acc[cat]) acc[cat] = [];
             acc[cat].push({
-                name: p.name,
+                name: p.name || 'Unnamed Product',
                 url: `/product/${p.slug}`
             });
             return acc;

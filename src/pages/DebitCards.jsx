@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const DebitCards = () => {
     return (
         <div className="debit-cards-page">
@@ -53,7 +55,7 @@ const DebitCards = () => {
                         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                             <h4 className="font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100">Related Services</h4>
                             <ul className="space-y-3">
-                                <li><a href="/rupay" className="text-gray-600 hover:text-[#003399] flex items-center gap-2 transition"><i className="fas fa-chevron-right text-xs"></i> RuPay Cards</a></li>
+                                <li><Link to="/rupay-cards" className="text-gray-600 hover:text-[#003399] flex items-center gap-2 transition"><i className="fas fa-chevron-right text-xs"></i> RuPay Cards</Link></li>
                                 <li><a href="/net-banking" className="text-gray-600 hover:text-[#003399] flex items-center gap-2 transition"><i className="fas fa-chevron-right text-xs"></i> Net Banking</a></li>
                             </ul>
                         </div>

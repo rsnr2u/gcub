@@ -12,7 +12,7 @@ class ProductModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['name', 'slug', 'category', 'description', 'icon_type', 'icon_value', 'status', 'hero_description', 'long_description', 'features', 'eligibility', 'documents', 'image_path', 'terms_heading', 'terms_content'];
+    protected $allowedFields = ['name', 'slug', 'category', 'description', 'icon_type', 'icon_value', 'status', 'hero_description', 'long_description', 'features', 'eligibility', 'documents', 'image_path', 'terms_heading', 'terms_content', 'schemes'];
 
     protected $useTimestamps = true;
     protected $createdField = ''; // Handled by MySQL

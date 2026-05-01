@@ -22,6 +22,7 @@ class ServiceContent extends ResourceController
             'imps' => \App\Models\Services\ImpsModel::class,
             'upi' => \App\Models\Services\UpiModel::class,
             'rupay' => \App\Models\Services\RupayModel::class,
+            'rupay-cards' => \App\Models\Services\RupayModel::class,
             'neft-rtgs' => \App\Models\Services\NeftRtgsModel::class,
             'net-banking' => \App\Models\Services\NetBankingModel::class,
         ];
@@ -33,6 +34,8 @@ class ServiceContent extends ResourceController
 
     public function show($slug = null)
     {
+        if ($slug === 'rupay') $slug = 'rupay-cards';
+        
         $model = $this->getModel($slug);
         if (!$model) return $this->failNotFound('Service not found');
 
@@ -51,6 +54,8 @@ class ServiceContent extends ResourceController
 
     public function update($slug = null)
     {
+        if ($slug === 'rupay') $slug = 'rupay-cards';
+        
         $model = $this->getModel($slug);
         if (!$model) return $this->failNotFound('Service not found');
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import SEO from '../components/SEO';
 import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
@@ -32,6 +32,13 @@ const ServiceDetail = () => {
         fetchService();
         window.scrollTo(0, 0);
     }, [slug, apiBaseUrl]);
+
+    if (slug === 'mobile-banking') {
+        return <Navigate to="/mobile-banking" replace />;
+    }
+    if (slug === 'atm-services') {
+        return <Navigate to="/atm-services" replace />;
+    }
 
     if (loading) {
         return (

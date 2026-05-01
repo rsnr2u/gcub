@@ -95,7 +95,7 @@ const AdminLayout = () => {
                 { name: 'NACH Service', path: '/admin/services/nach-service', icon: 'fas fa-sync' },
                 { name: 'IMPS', path: '/admin/services/imps', icon: 'fas fa-bolt' },
                 { name: 'UPI', path: '/admin/services/upi', icon: 'fas fa-qrcode' },
-                { name: 'RuPay', path: '/admin/services/rupay', icon: 'fas fa-credit-card' },
+                { name: 'RuPay', path: '/admin/services/rupay-cards', icon: 'fas fa-credit-card' },
                 { name: 'NEFT / RTGS', path: '/admin/services/neft-rtgs', icon: 'fas fa-exchange-alt' },
                 { name: 'Net Banking', path: '/admin/services/net-banking', icon: 'fas fa-laptop-code' },
             ]
@@ -167,7 +167,7 @@ const AdminLayout = () => {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100 font-inter overflow-hidden">
+        <div className="fixed inset-0 flex bg-gray-100 font-inter overflow-hidden">
             {/* Sidebar */}
             <aside className="w-64 bg-[#0b1320] text-gray-300 flex flex-col flex-shrink-0 transition-all duration-300">
                 <div className="h-16 flex items-center justify-center border-b border-gray-800 bg-[#003399]">
@@ -190,7 +190,7 @@ const AdminLayout = () => {
                                             </div>
                                             <i className={`fas fa-chevron-right text-xs transition-transform duration-200 ${expandedMenu[item.name] ? 'rotate-90' : ''}`}></i>
                                         </button>
-                                        <div className={`overflow-hidden transition-all duration-300 ${expandedMenu[item.name] ? 'max-h-96' : 'max-h-0'}`}>
+                                        <div className={`overflow-hidden transition-all duration-300 ${expandedMenu[item.name] ? 'max-h-[1000px]' : 'max-h-0'}`}>
                                             <ul className="bg-[#080e18] py-1">
                                                 {item.children.map((child, cIdx) => (
                                                     <li key={cIdx}>

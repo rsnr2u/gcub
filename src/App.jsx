@@ -160,7 +160,7 @@ function App() {
             {/* Services & Products */}
             <Route path="/imps" element={<IMPS />} />
             <Route path="/upi" element={<UPI />} />
-            <Route path="/rupay" element={<RuPay />} />
+            <Route path="/rupay-cards" element={<RuPay />} />
             <Route path="/neft-rtgs" element={<NEFTRTGS />} />
             <Route path="/net-banking" element={<NetBanking />} />
             <Route path="/housing-loans" element={<HousingLoans />} />
