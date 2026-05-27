@@ -322,7 +322,7 @@ const AdminEditProduct = () => {
                                                 {formData.icon_value && !iconFile && (
                                                     <div className="w-14 h-14 rounded-xl border border-gray-100 bg-gray-50 p-2 overflow-hidden flex-shrink-0 shadow-inner">
                                                         <img
-                                                            src={`/assets/images/icons/${formData.icon_value}`}
+                                                            src={`${import.meta.env.VITE_BASE_URL}/assets/images/icons/${formData.icon_value}`}
                                                             className="w-full h-full object-contain"
                                                             alt="Current"
                                                             onError={(e) => {
@@ -715,7 +715,7 @@ const AdminEditProduct = () => {
                                     {(bannerFile || formData.image_path) ? (
                                         <div className="relative w-full">
                                             <img
-                                                src={bannerFile ? URL.createObjectURL(bannerFile) : `/assets/images/banner/${formData.image_path}`}
+                                                src={bannerFile ? URL.createObjectURL(bannerFile) : `${import.meta.env.VITE_BASE_URL}/assets/images/banner/${formData.image_path}`}
                                                 className="w-full h-auto rounded-xl shadow-sm"
                                                 onError={(e) => e.target.src = '/assets/images/placeholder_banner.jpg'}
                                             />

@@ -54,7 +54,11 @@ class Products extends BaseController
         $iconFile = $this->request->getFile('icon_file');
         if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
             $newName = $iconFile->getRandomName();
-            $iconFile->move(FCPATH . '../../gcub/public/assets/images/icons', $newName);
+            $uploadPath = FCPATH . 'assets/images/icons';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            $iconFile->move($uploadPath, $newName);
             $data['icon_value'] = $newName;
         }
 
@@ -62,7 +66,11 @@ class Products extends BaseController
         $bannerFile = $this->request->getFile('image_file');
         if ($bannerFile && $bannerFile->isValid() && !$bannerFile->hasMoved()) {
             $newName = $bannerFile->getRandomName();
-            $bannerFile->move(FCPATH . '../../gcub/public/assets/images/banner', $newName);
+            $uploadPath = FCPATH . 'assets/images/banner';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            $bannerFile->move($uploadPath, $newName);
             $data['image_path'] = $newName;
         }
 
@@ -85,7 +93,11 @@ class Products extends BaseController
         $iconFile = $this->request->getFile('icon_file');
         if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
             $newName = $iconFile->getRandomName();
-            $iconFile->move(FCPATH . '../../gcub/public/assets/images/icons', $newName);
+            $uploadPath = FCPATH . 'assets/images/icons';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            $iconFile->move($uploadPath, $newName);
             $data['icon_value'] = $newName;
         }
 
@@ -93,7 +105,11 @@ class Products extends BaseController
         $bannerFile = $this->request->getFile('image_file');
         if ($bannerFile && $bannerFile->isValid() && !$bannerFile->hasMoved()) {
             $newName = $bannerFile->getRandomName();
-            $bannerFile->move(FCPATH . '../../gcub/public/assets/images/banner', $newName);
+            $uploadPath = FCPATH . 'assets/images/banner';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            $bannerFile->move($uploadPath, $newName);
             $data['image_path'] = $newName;
         }
 

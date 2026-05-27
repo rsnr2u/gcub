@@ -94,7 +94,7 @@ const AdminProducts = () => {
                                 <div className="p-5 flex items-center gap-4">
                                     {product.icon_type === 'img' ? (
                                         <img
-                                            src={`/assets/images/icons/${product.icon_value}`}
+                                            src={`${import.meta.env.VITE_BASE_URL}/assets/images/icons/${product.icon_value}`}
                                             alt={product.name}
                                             className="w-16 h-16 rounded-lg object-cover bg-gray-50 p-1 border border-gray-100"
                                             onError={(e) => {

@@ -250,7 +250,7 @@ const Home = () => {
 
     const getProductImage = useCallback((p) => {
         if (p.icon_type === 'img') {
-            return `/assets/images/icons/${p.icon_value}`;
+            return `${import.meta.env.VITE_BASE_URL}/assets/images/icons/${p.icon_value}`;
         }
         return '/assets/images/gcublogo.png';
     }, []);

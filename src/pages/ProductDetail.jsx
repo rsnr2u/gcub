@@ -145,7 +145,7 @@ const ProductDetail = () => {
                         {/* Banner Image */}
                         <div className="mb-8 rounded-lg overflow-hidden shadow-sm border border-gray-100">
                             <img
-                                src={`/assets/images/banner/${product.image_path || 'default_banner.jpg'}`}
+                                src={`${import.meta.env.VITE_BASE_URL}/assets/images/banner/${product.image_path || 'default_banner.jpg'}`}
                                 alt={product.name}
                                 className="w-full h-auto object-cover max-h-[400px]"
                                 onError={(e) => e.target.src = '/assets/images/savings_account/banner.png'}

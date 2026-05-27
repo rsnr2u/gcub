@@ -4,6 +4,7 @@ import SchemaOrg, { createBreadcrumbSchema } from '../components/SchemaOrg';
 
 const BranchLocator = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedRegion, setSelectedRegion] = useState('');
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -27,12 +28,23 @@ const BranchLocator = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const filteredBranches = branches.filter(branch =>
-        branch.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (branch.region && branch.region.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        branch.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        branch.ifsc.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredBranches = branches.filter(branch => {
+        const matchesSearch = branch.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (branch.region && branch.region.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            branch.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            branch.ifsc.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesRegion = selectedRegion ? branch.region === selectedRegion : true;
+        return matchesSearch && matchesRegion;
+    });
+
+    const regions = [...new Set(branches.map(b => b.region).filter(Boolean))].sort();
+
+    const groupedBranches = filteredBranches.reduce((acc, branch) => {
+        const region = branch.region || 'Other Regions';
+        if (!acc[region]) acc[region] = [];
+        acc[region].push(branch);
+        return acc;
+    }, {});
 
     return (
         <div className="branch-locator-page bg-[#fcfcfc] min-h-screen">
@@ -75,6 +87,22 @@ const BranchLocator = () => {
                                     />
                                 </div>
                             </div>
+                            <div className="w-full md:w-64">
+                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2">Filter by Region</label>
+                                <div className="relative">
+                                    <select 
+                                        className="w-full px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-lg text-gray-700 focus:outline-none focus:border-[#003399]/30 transition shadow-inner appearance-none cursor-pointer"
+                                        value={selectedRegion}
+                                        onChange={(e) => setSelectedRegion(e.target.value)}
+                                    >
+                                        <option value="">All Regions</option>
+                                        {regions.map(region => (
+                                            <option key={region} value={region}>{region}</option>
+                                        ))}
+                                    </select>
+                                    <i className="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,64 +115,77 @@ const BranchLocator = () => {
                         <div className="text-center py-20">
                             <div className="inline-block w-8 h-8 border-2 border-[#003399] border-t-transparent rounded-full animate-spin"></div>
                         </div>
-                    ) : filteredBranches.length > 0 ? (
-                        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            {filteredBranches.map((branch, idx) => (
-                                <div key={branch.id || idx} className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 group flex flex-col h-full overflow-hidden">
-                                    <div className={`p-6 border-b border-gray-50 flex justify-between items-start ${branch.is_head_office == 1 ? 'bg-blue-50/30' : ''}`}>
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <h3 className="font-bold text-[#003399] text-xl group-hover:text-[#E61111] transition uppercase tracking-tight">{branch.name}</h3>
-                                                {branch.is_head_office == 1 && (
-                                                    <span className="bg-[#003399] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter">H.O</span>
-                                                )}
-                                            </div>
-                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-2">
-                                                <i className="fas fa-map-marked-alt text-[#E61111]"></i> {branch.region}
-                                            </p>
-                                        </div>
-                                    </div>
+                    ) : Object.keys(groupedBranches).length > 0 ? (
+                        <div className="space-y-12">
+                            {Object.entries(groupedBranches).map(([region, regionBranches]) => (
+                                <div key={region} className="region-section">
+                                    <h2 className="text-2xl font-bold text-[#001a37] mb-6 flex items-center gap-3 border-b border-gray-200 pb-3">
+                                        <i className="fas fa-map-marker-alt text-[#E61111]"></i> 
+                                        {region}
+                                        <span className="text-sm font-normal text-gray-400 bg-gray-100 px-3 py-1 rounded-full ml-auto">
+                                            {regionBranches.length} {regionBranches.length === 1 ? 'Branch' : 'Branches'}
+                                        </span>
+                                    </h2>
+                                    <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                        {regionBranches.map((branch, idx) => (
+                                            <div key={branch.id || idx} className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 group flex flex-col h-full overflow-hidden">
+                                                <div className={`p-6 border-b border-gray-50 flex justify-between items-start ${branch.is_head_office == 1 ? 'bg-blue-50/30' : ''}`}>
+                                                    <div>
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <h3 className="font-bold text-[#003399] text-xl group-hover:text-[#E61111] transition uppercase tracking-tight">{branch.name}</h3>
+                                                            {branch.is_head_office == 1 && (
+                                                                <span className="bg-[#003399] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter">H.O</span>
+                                                            )}
+                                                        </div>
+                                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                                                            <i className="fas fa-map-marked-alt text-[#E61111]"></i> {branch.region}
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                    <div className="p-6 flex-grow space-y-5">
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-[#003399] flex-shrink-0 group-hover:bg-[#003399] group-hover:text-white transition-colors">
-                                                <i className="fas fa-location-dot text-sm"></i>
-                                            </div>
-                                            <p className="text-sm text-gray-600 leading-relaxed font-regular">{branch.address}</p>
-                                        </div>
+                                                <div className="p-6 flex-grow space-y-5">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-[#003399] flex-shrink-0 group-hover:bg-[#003399] group-hover:text-white transition-colors">
+                                                            <i className="fas fa-location-dot text-sm"></i>
+                                                        </div>
+                                                        <p className="text-sm text-gray-600 leading-relaxed font-regular">{branch.address}</p>
+                                                    </div>
 
-                                        <div className="grid grid-cols-1 gap-4 pt-2">
-                                            <div className="flex items-center gap-3">
-                                                <i className="fas fa-phone-volume text-[#E61111] text-xs"></i>
-                                                <span className="text-sm font-bold text-gray-700">{branch.contact}</span>
-                                            </div>
-                                            <div className="flex items-center gap-3">
-                                                <i className="fas fa-envelope-open-text text-[#E61111] text-xs"></i>
-                                                <a href={`mailto:${branch.email}`} className="text-sm font-medium text-gray-600 hover:text-[#003399] transition truncate">{branch.email}</a>
-                                            </div>
-                                        </div>
+                                                    <div className="grid grid-cols-1 gap-4 pt-2">
+                                                        <div className="flex items-center gap-3">
+                                                            <i className="fas fa-phone-volume text-[#E61111] text-xs"></i>
+                                                            <span className="text-sm font-bold text-gray-700">{branch.contact}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3">
+                                                            <i className="fas fa-envelope-open-text text-[#E61111] text-xs"></i>
+                                                            <a href={`mailto:${branch.email}`} className="text-sm font-medium text-gray-600 hover:text-[#003399] transition truncate">{branch.email}</a>
+                                                        </div>
+                                                    </div>
 
-                                        <div className="bg-gray-50/50 rounded-lg p-4 grid grid-cols-2 gap-4 mt-2 border border-gray-100/50">
-                                            <div className="border-r border-gray-200 pr-2">
-                                                <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">IFSC Code</span>
-                                                <span className="block text-sm font-bold text-[#003399] font-mono">{branch.ifsc}</span>
-                                            </div>
-                                            <div className="pl-2">
-                                                <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">MICR Code</span>
-                                                <span className="block text-sm font-bold text-gray-800 font-mono">{branch.micr}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                    <div className="bg-gray-50/50 rounded-lg p-4 grid grid-cols-2 gap-4 mt-2 border border-gray-100/50">
+                                                        <div className="border-r border-gray-200 pr-2">
+                                                            <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">IFSC Code</span>
+                                                            <span className="block text-sm font-bold text-[#003399] font-mono">{branch.ifsc}</span>
+                                                        </div>
+                                                        <div className="pl-2">
+                                                            <span className="block text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">MICR Code</span>
+                                                            <span className="block text-sm font-bold text-gray-800 font-mono">{branch.micr}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                    <div className="p-4 bg-gray-50/30 border-t border-gray-50 mt-auto">
-                                        <a
-                                            href={branch.google_maps_link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center justify-center w-full py-3 rounded-lg bg-white border border-gray-200 text-[#003399] font-bold text-sm hover:bg-[#003399] hover:text-white hover:border-[#003399] transition shadow-sm"
-                                        >
-                                            <i className="fas fa-directions mr-2"></i> Directions
-                                        </a>
+                                                <div className="p-4 bg-gray-50/30 border-t border-gray-50 mt-auto">
+                                                    <a
+                                                        href={branch.google_maps_link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center justify-center w-full py-3 rounded-lg bg-white border border-gray-200 text-[#003399] font-bold text-sm hover:bg-[#003399] hover:text-white hover:border-[#003399] transition shadow-sm"
+                                                    >
+                                                        <i className="fas fa-directions mr-2"></i> Directions
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             ))}
